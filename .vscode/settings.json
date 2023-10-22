@@ -1,0 +1,41 @@
+{
+    "markdown.extension.katex.macros": {
+        "\\bra": "\\langle #1 |",
+        "\\ket": "| #1 \\rangle",
+        "\\braket": "\\langle #1 | #2 \\rangle",
+        "\\mel": "\\langle #1 | #2 | #3 \\rangle",
+        "\\expval": "\\langle #1 \\rangle",
+        "\\dyad": "\\ket{#1} \\bra{#2}",
+        "\\trace": "\\mathrm{tr}\\ ",
+        "\\comm": "\\left[#1, #2 \\right]",
+    
+        "\\ee": "\\mathrm{e}",
+        "\\ii": "\\mathrm{i}",
+    
+        "\\abs": "|#1|",
+        
+        "\\grad": "\\boldsymbol{\\nabla} #1",
+        "\\div": "\\boldsymbol{\\nabla} \\cdot #1",
+        "\\dd": "\\mathrm{d}",
+        "\\dv": "\\frac{\\mathrm{d} #1}{\\mathrm{d} #2}",
+        "\\pdv": "\\frac{\\partial #1}{\\partial #2}",
+        "\\laplacian": "\\nabla^2",
+    
+        "\\Re": "\\mathrm{Re}",
+        "\\Im": "\\mathrm{Im}",
+    
+        // Non standard notations, but quite useful
+        "\\bigO": "\\mathcal{O}(#1)",
+        "\\pair": "\\langle #1 \\rangle",
+        "\\vb": "\\bold{#1}",
+        "\\vu": "\\hat{\\bold{#1}}",
+    
+        // Frequent variables in physics 
+        "\\eF": "\\epsilon_{\\text{F}}",
+        "\\EF": "E_{\\text{F}}",
+        "\\kB": "k_{\\text{B}}",
+    
+        "\\eqqcolon": "=:",
+        "\\coloneqq": ":="
+    }
+}
