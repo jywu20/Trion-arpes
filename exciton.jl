@@ -66,7 +66,7 @@ p = let σ = 20fs, # Note that here σ tells us the width of the pulse; it shoul
     ϵ = 6.4, 
     E_B = -0.1,
     w = 0.7,
-    β = 100,
+    β = 10,
     broadening(x) = exp(- σ^2 * x^2),
     k_points = LinRange(-0.5, 1.2, 500),
     ω_points = LinRange(-0.4, 1.2, 500),
