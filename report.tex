@@ -1,0 +1,396 @@
+\documentclass[t]{beamer}
+\usepackage{physics}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{mathdots}
+\usepackage{yhmath}
+\usepackage{cancel}
+\usepackage{color}
+\usepackage{siunitx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[version=4]{mhchem}
+\usepackage{amssymb}
+\usepackage{textcomp, gensymb}
+\usepackage{mathtools}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\usepackage{fontawesome5}
+\usepackage{tabularx}
+\usepackage{extarrows}
+\usepackage{booktabs}
+\usetikzlibrary{fadings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{shadows.blur}
+\usetikzlibrary{shapes}
+\usepackage[style=authoryear,backend=bibtex]{biblatex}
+\addbibresource{gw.bib}
+\renewcommand{\footnotesize}{\scriptsize}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\newcommand{\pair}[1]{\langle #1 \rangle}
+\DeclareMathOperator{\ee}{e}
+\DeclareMathOperator{\ii}{i}
+\DeclareMathOperator{\sgn}{sgn}
+
+\newcommand{\concept}[1]{\textbf{#1}}
+\newcommand*{\abinitio}{\textit{ab initio}}
+\newcommand{\shortcode}[1]{\texttt{#1}}
+\newcommand*{\const}{\text{const}}
+
+%region Theme 
+
+\usetheme{madrid}
+
+% Show section in foot
+\makeatletter
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertsection
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatother
+
+%endregion
+
+%region  Disable unsupported commands in bookmark titles 
+\pdfstringdefDisableCommands{%
+  \def\\{}%
+  \def\texttt#1{<#1>}%
+  \def\mathbb#1{#1}%
+}
+\pdfstringdefDisableCommands{\def\eqref#1{(\ref{#1})}}
+
+\makeatletter
+\pdfstringdefDisableCommands{\let\HyPsd@CatcodeWarning\@gobble}
+\makeatother
+
+%endregion
+
+%Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+%Remove frame continuation numbering
+\setbeamertemplate{frametitle continuation}{}
+
+
+%Information to be included in the title page:
+\title{Trion in time-resolved ARPES}
+\author{Jinyuan Wu}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}[allowframebreaks]
+\frametitle{Theory of TR-ARPES}
+
+{\color{gray} The most generic theory requires Keldysh formalism 
+but let's spare ourselves the burden\dots}
+
+\vspace{1cm}
+
+\textbf{Ingredients of our model of ARPES}
+\begin{itemize}
+    \item Electric dipole interaction only
+    \item Sudden approximation 
+    \item \emph{Separation between pump and probe}:
+    system \emph{not} driven when probed; 
+    pump prepares an initial state and nothing more
+    \item Fermi's golden rule in probing 
+\end{itemize}
+
+\framebreak
+
+\textbf{Main result} Output intensity $I_{\vb{k}}(t) \propto \sum_c P^{c}_{\vb{k}}(t)$,
+\[
+    \scriptstyle
+    P^c_{\vb{k}}(t) = \sum_{n, \vb{k}'}
+    {\color{green} \rho_n }
+    {\color{red} \abs*{M^{fc}_{\vb{k} \vb{k}'}}^2 }
+    \int_{t_0}^t \dd{t_1} \int_{t_0}^t \dd{t_2}
+    {\color{magenta} \ee^{-\ii (E_n - \omega ) (t_1 - t_2)}} 
+    {\color{purple} \mel{\Psi_n(t_0)}{c^\dagger_{\vb{k}'} 
+    U(t_2, t_1) c_{\vb{k}'}}{\Psi_n(t_0)}}
+    {\color{teal} s(t_1) s(t_2)}.
+\]
+
+\begin{enumerate}
+    \item $\color{green} \rho_n$: 
+    distribution of the final state of pumping 
+    (initial state of probing).
+    \item Probe field is $\vb{E} = 
+        s(t) 
+        {\color{red} \vb{E}_0} 
+        {\color{magenta} \ee^{- \ii \omega_0 t}} + \text{c.c.}$, and 
+    the transition matrix is $\color{red}
+    M^{fc}_{\vb{k} \vb{k}'} = \mel**{f \vb{k}}{- \vb{d} \cdot \vb{E}_0}{c \vb{k}'} $; 
+    here $c$ is the band that is interacting with light, 
+    $f$ is the out-going state.
+    \item The $\color{magenta} \ee^{- \ii (E_n - \omega) (t_1 - t_2)}$ factor 
+    gives half of energy conservation condition; 
+    $\omega$ is driving frequency $\omega_0$ shifted by work function.
+    \item $\color{purple} \mel**{\Psi_n}{\cdots}{\Psi_n}$: 
+    electron Green function with excited state background $\ket*{\Psi_n}$; 
+    it gives the structure of $\ket*{\Psi_n}$ in electron basis, 
+    and the second half of energy conservation condition 
+    (energy after one electron being kicked out);
+    \item $\color{teal} s(t_1) s(t_2)$: shape of probe pulse; 
+    broadening $\delta(E_n - \omega - E_{\text{after}})$
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{Successful example: exciton}
+
+\begin{itemize}
+    \item Below we work with 2D material $\Rightarrow$ $\vb{k}^{\text{out}}_\parallel = \vb{k}'$; 
+    we refer to $\vb{k}^{\text{out}}_\parallel$ as $\vb{k}$
+    \item Only consider valence band top and conduction band valley:
+    parabolic bands
+\end{itemize}
+
+\vspace{1cm}
+
+\textbf{ARPES response of an exciton (besides valence band electron)}
+\[
+    \scriptstyle
+    P(t) = \sum_{S, \vb{Q}} \rho_{S \vb{Q}} \abs{A_{\vb{k}'}^{S \vb{Q}}}^2 \abs{M^{fc}_{\vb{k} \vb{k}'}}^2 
+    \int_{t_0}^t \dd{t_1} \int_{t_0}^t \dd{t_2}
+    \ee^{-\ii (E_{S \vb{Q}} + \epsilon_{v \vb{k}' - \vb{Q}} - \omega ) (t_1 - t_2)} 
+    s(t_1) s(t_2) .
+\] 
+
+\begin{itemize}
+    \item Detection of $\abs*{A^{S \vb{Q}}_{\vb{k}}}^2$ 
+    \item $\vb{Q} = 0$ $\Rightarrow$ dispersion relation $\omega = \epsilon_{v \vb{k}}$
+    (energy conservation)
+    \item $\vb{Q}$ obeys $\ee^{- \beta E_{\vb{Q}}}$ distribution:
+    dispersion relation is $\omega = E_{\text{g}} + E_{\text{B}} + \frac{\vb{k}^2}{2 m_{\text{e}}} $
+    (energy conservation; 
+    $\abs*{A^{S \vb{Q}}_{\vb{k}}}^2$ reaches peak when $\vb{v}_{\text{e}} = \vb{v}_{\text{h}}$)
+\end{itemize}
+
+
+\framebreak
+
+\begin{columns}
+
+\begin{column}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/exciton-Q-0.0.png}
+    Single exciton, $\vb{Q} = \SI{0.0}{\angstrom^{-1}}$
+\end{column}
+    
+\begin{column}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/exciton-Q-0.5.png}
+    Single exciton, $\vb{Q} = \SI{0.5}{\angstrom^{-1}}$ 
+\end{column}
+
+\end{columns}
+
+\vspace{1cm}
+
+\begin{itemize}
+    \item The center of the signature is on  
+    a replica of the conduction band  
+    \item The shape of the signature is a replica of the valence band 
+\end{itemize}
+
+\framebreak
+
+\begin{columns}
+
+\begin{column}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/exciton-beta-10.png}
+    Thermalized exciton, $\beta = \SI{10}{eV}$
+\end{column}
+    
+\begin{column}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/exciton-beta-100.png}
+    Thermalized exciton, $\beta = \SI{100}{eV}$
+\end{column}
+
+\end{columns}
+
+\vspace{1cm}
+
+\begin{itemize}
+    \item The center of the signature is on 
+    a replica of the conduction band  
+    \item The shape of the signature is a replica of the valence band 
+    \item When excitons are hot, 
+    the dispersion relation is the conduction band; 
+    when they are cold, the dispersion relation is the valence band
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{Trion: some theoretical issues}
+
+In the current results:
+\begin{itemize}
+    \item Two holes, one electron (what likely happens in ARPES)
+    \item \emph{Two holes on one band} -- to simply analysis 
+    \item \emph{No scattering after the electron is kicked out} -- realistic or not?
+\end{itemize}    
+
+\textbf{Trion Hamiltonian} By some analysis:
+\begin{equation}
+    \begin{aligned}
+        H_{\text{T}} &=
+          \frac{\vb{k}_{\text{e}}^2}{2 m_{\text{e}}}
+        + \frac{\vb{k}_{\text{h1}}^2}{2 m_{\text{h}}}
+        + \frac{\vb{k}_{\text{h2}}^2}{2 m_{\text{h}}} 
+        + V(\vb{r}_{\text{h1}} - \vb{r}_{\text{h2}}) 
+        - V(\vb{r}_{\text{e}} - \vb{r}_{\text{h1}}) 
+        - V(\vb{r}_{\text{e}} - \vb{r}_{\text{h2}})  \\ 
+        &= \underbrace{
+        H_\text{X}(\vb{r}_1) + H_\text{X}(\vb{r}_2) 
+        - \frac{\hbar^2 \laplacian}{2 \mu} + V(\vb{r}_1 - \vb{r}_2) - E_{\text{g}}
+        }_{\text{causing $E_{\text{B}}$}}
+        + \frac{\vb{P}_{\text{T}}^2}{2 m_{\text{T}}} + E_{\text{g}},
+    \end{aligned}
+\end{equation}
+where 
+\begin{equation}
+    \scriptstyle
+    m_\text{T} = \underbrace{2 m_{\text{h}}}_{>0} + m_{\text{e}}, \quad 
+    \vb{k}_\text{h1} = \vb{k}_1 + \frac{m_{\text{h}}}{m_{\text{T}}} \vb{P}_{\text{T}}, \quad 
+    \vb{k}_\text{h2} = \vb{k}_2 + \frac{m_{\text{h}}}{m_{\text{T}}} \vb{P}_{\text{T}}, \quad 
+    \vb{k}_{\text{e}} = \frac{m_{\text{e}}}{m_{\text{T}}} \vb{P}_{\text{T}} - \vb{k}_1 - \vb{k}_2.
+\end{equation}
+
+\framebreak
+
+That's to say: a trion, when the two holes of it are of the same species, 
+can be seen as the bound state of two excitons.
+
+\textbf{Trion wave function} Thus in this specific case: 
+\begin{equation}
+    \phi_{\text{T}}(\vb{r}_{\text{e}}, \vb{r}_{\text{h1}}, \vb{r}_{\text{h2}})
+    = \sum_{S_1, S_2} \phi_{\text{X}}^S(\vb{r}_1) \phi_{\text{X}}^S(\vb{r}_2) \ee^{\ii \vb{P}_{\text{T}} \cdot \vb{R}},
+\end{equation}
+where $\vb{r}_{1, 2}$ are defined above.
+
+\vspace{1cm}
+
+\textbf{In the tentative plots below} We ignore spin and choose $S_1 = S_2 = \text{1s}$.
+The ARPES response (here $\epsilon_v$ are \emph{negative}):
+\begin{equation}
+    \begin{aligned}
+        \scriptstyle
+        P_{\vb{k}}(t) &= \sum_{\vb{P}_{\text{T}}} \rho_{\vb{P}_{\text{T}}} \sum_{\vb{k}_\text{h1}, \vb{k}_{\text{h2}}} 
+        \sum_{S_1, S_2} \abs*{M^{fc}_{\vb{k} \vb{k}_{\text{e}}}}^2 \abs*{A_{S_1 S_2}}^2
+        \abs*{\phi_{S_1}(\vb{k}_{\text{1}})}^2 
+        \abs*{\phi_{S_2}(\vb{k}_{\text{2}})}^2 \\
+        &\quad \times \int_{t_0}^t \dd{t_1} \int_{t_0}^t \dd{t_2}
+        \ee^{-\ii (E_{S \vb{P}_{\text{T}}} + \epsilon_{v \vb{k}_{\text{h1}}} + \epsilon_{v \vb{k}_{\text{h2}}} - \omega ) (t_1 - t_2)} 
+        s(t_1) s(t_2)
+    \end{aligned}
+\end{equation}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Trion: tentative results}
+
+\begin{columns}
+
+\begin{column}{0.45\textwidth}
+    
+\includegraphics[width=\textwidth]{images/trion-P-0.0.png}
+Single trion, $\vb{P} = \SI{0.0}{\angstrom^{-1}}$
+
+\end{column}
+
+\begin{column}{0.45\textwidth}
+    
+\includegraphics[width=\textwidth]{images/trion-P-0.5.png}
+Single trion, $\vb{P} = \SI{0.5}{\angstrom^{-1}}$
+
+\end{column}
+
+\end{columns}    
+
+\vspace{1cm}
+
+\begin{itemize}
+    \only<1>{\item The center of the signature is still sticked to a replica of the conduction band
+    (moved downwards by $E_{\text{B}}$):
+    the maximum of a signature is reached when $\vb{k}_1 = \vb{k}_2 = 0$
+    where $E_{\text{T}} = \epsilon_v - E_{\text{B}}$}
+    \only<2>{\item The analytic form of the shape of a single-trion signature is still not clear; 
+    I tried to set one of $\vb{k}_{1, 2}$ to zero, 
+    or $\vb{k}_1 = \vb{k}_2$; 
+    both of them seem to work, but not that well; 
+    the dispersion relation given by the first (but not the second) condition 
+    is also a replica of $\epsilon_\text{v}$.} 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Trion: tentative results}
+
+\begin{columns}
+
+\only<1>{\begin{column}{0.45\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/exciton-Q-0.0.png}
+    Exciton, $\vb{Q} = \SI{0.0}{\angstrom^{-1}}$
+\end{column}
+
+\begin{column}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/trion-P-0.0.png}
+    Trion, $\vb{P} = \SI{0.0}{\angstrom^{-1}}$
+\end{column}}
+
+\only<2>{\begin{column}{0.45\textwidth}
+\centering
+    \includegraphics[width=\textwidth]{images/exciton-Q-0.5.png}
+    Exciton, $\vb{Q} = \SI{0.5}{\angstrom^{-1}}$
+\end{column}
+
+\begin{column}{0.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/trion-P-0.5.png}
+    Trion, $\vb{P} = \SI{0.5}{\angstrom^{-1}}$
+\end{column}}
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusion}
+
+\begin{itemize}
+    \item Trion signature on ARPES spectrum looks similar to that of exciton 
+    \item The finite-$T$ induced ``upper'' dispersion of the two is the same 
+    \item But the shape and spread of a single trion mode is still different from   
+    those of an exciton mode, 
+    even with close $E_{\text{B}}$
+\end{itemize}
+
+\end{frame}
+
+\end{document}
