@@ -126,7 +126,7 @@ end
 # Finite momentum trion 
 @time let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
     m_v = 0.8184,
-    m_c = 0.8, #0.4794,
+    m_c = 0.4794,
     E_g = 0.7830,
     ϵ = 6.4, 
     E_B = -0.1,
@@ -142,7 +142,7 @@ end
         collect(Iterators.product(kx_points, ky_points))
     ),
     ω_points = LinRange(0, 1.5, 500),
-    P_Tx = 0.0,
+    P_Tx = 0.5,
     Q_point  = SVector{2, Float64}([P_Tx, 0.0]) 
 
     ϵ_v(k) =  - norm(k)^2 / 2m_v * eV
