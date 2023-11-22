@@ -187,26 +187,29 @@ end
         eV * norm.(k_points_near_valley).^2 * (m_T / (2 * m_c^2)) 
         .- eV * norm.(k_points_near_valley).^2 * (m_v / m_c^2)
         .+ E_B .+ E_g,
-        label = raw"Varying $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = \mathbf{k}_2 = 0$",
+        #label = raw"Varying $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = \mathbf{k}_2 = 0$",
+        label = raw"Varying $\mathbf{P}$, $\mathbf{k}_{\mathrm{h1}} = \mathbf{k}_{\mathrm{h2}} = - \frac{m_{\mathrm{h}}}{M} \mathbf{P}$",
         linestyle = :dot,
         c = colorant"firebrick2")
     # Dispersion relation when P_T is fixed to a constant 
     plot!(p, kx_near_valley, 
         ϵ_v.([(m_c + m_v) / m_T * Q_point] .- k_points_near_valley) 
         .- eV * norm(Q_point)^2 * (m_v / 2m_T^2) .+ eV * norm(Q_point)^2 / 2m_T .+ E_B .+ E_g,
-        label = raw"fixed $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = 0$ or $\mathbf{k}_2 = 0$",
+        #label = raw"fixed $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = 0$ or $\mathbf{k}_2 = 0$",
+        label = raw"fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{h1}}$ or $\mathbf{k}_{\mathrm{h2}}$ is $- \frac{m_{\mathrm{h}}}{M} \mathbf{P} $",
         linestyle = :dot, 
         c = colorant"aqua")
     plot!(p, kx_near_valley, 
         2 * ϵ_v.(([Q_point] .- k_points_near_valley) ./ 2) 
         .+ eV * norm(Q_point)^2 / 2m_T .+ E_B .+ E_g,
-        label = raw"fixed $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = \mathbf{k}_2 $",
+        label = raw"fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{h1}} = \mathbf{k}_{\mathrm{h2}} $",
         linestyle = :dot, 
         c = colorant"deepskyblue2")
     
     ylims!(p, (-0.8, 1.8))
     xlims!(p, (-0.8, 0.8))
-
+    xlabel!(p, raw"$k$ (Å)")
+    ylabel!(p, raw"$\omega$ (eV)")
 
     cb = heatmap(
         [1 0; 0 1], 

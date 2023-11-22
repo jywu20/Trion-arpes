@@ -119,8 +119,8 @@ p = let σ = 20fs, # Note that here σ tells us the width of the pulse; it shoul
     
     ylims!(p, (-0.8, 1.8))
     xlims!(p, (-0.8, 0.8)) 
-    xlabel!(p, raw"$k$ / Å")
-    ylabel!(p, raw"$\omega$ / eV")
+    xlabel!(p, raw"$k$ (Å)")
+    ylabel!(p, raw"$\omega$ (eV)")
     
     cb = heatmap(
         [1 0; 0 1], 
@@ -185,18 +185,18 @@ p = let σ = 20fs, # Note that here σ tells us the width of the pulse; it shoul
 
     k_points_near_valley = LinRange(-0.5, 0.5, 100)
     plot!(p, k_points_near_valley, ϵ_c.(k_points_near_valley) .+ E_B,
-        label = raw"Varying $\mathbf{Q}_\mathrm{X}$, max $\left|A_{\mathbf{k}}^{S \mathbf{Q}}\right|^2$",
+        label = raw"Varying $\mathbf{Q}$, max $\left|A_{\mathbf{k}}^{S \mathbf{Q}}\right|^2$",
         linestyle = :dot,
         c = colorant"firebrick2")
     plot!(p, k_points_near_valley, ϵ_v.(k_points_near_valley .- Q) .+ E_SQ(Q),
-        label = raw"fixed $\mathbf{Q}_\mathrm{X}$, varying $\mathbf{k}$",
+        label = raw"fixed $\mathbf{Q}$, varying $\mathbf{k}$",
         linestyle = :dot,
         c = colorant"deepskyblue2")
     
     ylims!(p, (-0.8, 1.8))
     xlims!(p, (-0.8, 0.8)) 
-    xlabel!(p, raw"$k$ / Å")
-    ylabel!(p, raw"$\omega$ / eV")
+    xlabel!(p, raw"$k$ (Å)")
+    ylabel!(p, raw"$\omega$ (eV)")
     
     cb = heatmap(
         [1 0; 0 1], 

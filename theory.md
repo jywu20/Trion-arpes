@@ -13,3 +13,8 @@ s(t_1) s(t_2)
 .
 \end{aligned}
 $$
+
+- Trion energy: Berkelboob's paper
+- Ignore the wave function for now 
+- Two electrons, or two holes?
+- What happens when we have series tetron?
