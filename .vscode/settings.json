@@ -1,5 +1,8 @@
 {
     "markdown.extension.katex.macros": {
+        "\\const": "\\mathrm{const}",
+        
+        // Physics symbols
         "\\bra": "\\langle #1 |",
         "\\ket": "| #1 \\rangle",
         "\\braket": "\\langle #1 | #2 \\rangle",
@@ -36,10 +39,29 @@
         "\\kB": "k_{\\text{B}}",
     
         "\\eqqcolon": "=:",
-        "\\coloneqq": ":="
+        "\\coloneqq": ":=",
+
+        // Currently KaTeX doesn't support equation numbering, 
+        // so we add some rudimentary shims here 
+        "\\label": "\\tag{#1}",
+        "\\eqref": "\\text{(#1)}",
+
+        // Symbols for two-band model
+        "\\me": "m_{\\text{e}}",
+        "\\mh": "m_{\\text{h}}",
+        "\\ke": "\\vb{k}_{\\text{e}}",
+        "\\kh": "\\vb{k}_{\\text{h}}",
+        "\\khi": "\\vb{k}_{\\text{h} {#1}}",
+        "\\re": "\\vb{r}_{\\text{e}}",
+        "\\rh": "\\vb{r}_{\\text{h}}",
+        "\\rhi": "\\vb{r}_{\\text{h} {#1}}",
+        "\\epsv": "\\epsilon_{\\text{v} {#1}}",
+        "\\epsc": "\\epsilon_{\\text{c} {#1}}",
+        "\\Eg": "E_{\\text{g}}"
     },
     "cSpell.words": [
         "ARPES",
+        "eqref",
         "trion"
     ]
 }
