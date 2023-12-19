@@ -5,7 +5,23 @@
 - Two electrons, or two holes?
 - What happens when we have series tetron?
 
+# Outline of the project 
 
+1. The peak positions are controlled by $\vb{w}$ and $\vb{P}$
+2. Decisive evidence for existence of trion: the position of the intensity peak.
+   The difference can be seen when $\vb{w} \neq 0$ or when $\vb{P} \neq 0$.
+3. The most robust criterion: the position of the center of the overall signature, 
+   (which is just the center of the trion mode with the lowest energy )
+   when the gap between the predominant valley and the predominant peak is indirect.
+4. Even when the 
+
+# Formalism of time-resolved ARPES 
+
+1. Most general theory: transition rate $P \propto G^<$
+2. Assuming that the pump stops before the probe starts 
+3. Ignoring "self-driven Floquet" and things like that:
+  the initial state of probing is assumed to be a real stationary state, 
+  or at least $\rho = \sum_n \rho_n \dyad{{\Psi_n}}{{\Psi_n}}$
 
 # Exciton 
 
@@ -23,7 +39,7 @@ s(t_1) s(t_2)
 \end{aligned}
 $$
 
-# Trion: one electron, two holes 
+# Trion: one electron, two holes on the same band 
 
 ## Brief analysis without considering the Hamiltonian
 
@@ -148,6 +164,8 @@ $$
 H = \frac{(\vb{P} - \vb{w})^2}{2M} + \cdots,
 $$
 and this is consistent with $\eqref{R-EOM-P-relation-with-w}$.
+Of course now the relation between $\vb{r}$ and $\vb{P}$ is not linear, 
+but this is just the consequence of the EOM given by an arbitrary $\epsilon_{\vb{k}}$. 
 
 Since $\eqref{R-def-direct}$ is still true even when $\vb{w} \neq 0$,
 Eqs. (6-9) in Variationally optimized orbital approach to trions in two-dimensional materials
@@ -172,5 +190,146 @@ first, there is a constant term containing $\vb{w}$,
 and second, the exciton Hamiltonian seems to be 
 $$
 H = \frac{\vb{k}_1^2}{2\mh} + \frac{(\vb{k}_1 + \vb{w})^2}{2\me} - V(\vb{r}_1).
+\label{exciton-ham-in-trion-finite-w} 
 $$
-It can be seen that  
+This should be double checked; it doesn't look very elegant because of the additional $\vb{w}^2 / 2\me$ term.
+The sign of $\vb{k}_1$ shouldn't be a particularly big problem 
+since we can always add a minus sign before $\vb{r}_{1, 2}$.
+
+Anyway if this Hamiltonian is correct, 
+what does it mean to the intensity peak of $\phi_{\vb{k}_{1, 2}}$?
+We can again try to minimize $\eqref{exciton-ham-in-trion-finite-w}$:
+the result is 
+$$
+\underbrace{
+    \left( \frac{1}{\me} + \frac{1}{\mh}\right) 
+}_{1 / \mu} \vb{k}_1 + \frac{\vb{w}}{\me} = 0, \quad 
+\vb{k}_1 = - \frac{\mh}{\me + \mh} \vb{w},
+$$
+and therefore at the brightest spot in the ARPES signature of a single $\vb{P}$ mode, we have 
+$$
+\ke = \frac{\me}{M} \vb{P} + \frac{2 \mh}{\me + \mh} \vb{w}.
+$$
+The center of the overall signature is at 
+$$
+\ke = \frac{\me}{M} \vb{w} + \frac{2 \mh}{\me + \mh} \vb{w} .
+$$
+Anyway it's not the same as $\vb{w}$.
+
+
+This prediction disagrees with the [[theory#Brief analysis without considering the Hamiltonian|naive analysis]]:
+the reason is we have an additional $\vb{k}_1 \cdot \vb{k}_2 / \me$ term, 
+which is of the same order of magnitude of $H(\vb{k}_1)$ and $H(\vb{k}_2)$.
+Therefore the "perturbation" is not small at all; 
+this might be seen as evidence for the correctness of [[theory#Brief analysis without considering the Hamiltonian|naive analysis]];
+what analysis is closer to the truth is not clear.
+
+# Trion, one electron and two holes; two holes are on two peaks 
+
+$$
+H_{\text{free}} = \frac{\ke^2}{2 \me} + \Eg + \frac{\khi{1}^2}{2\mh} + \frac{(\khi{2} - \vb{w})^2}{2 \mh} 
+$$
+The constraint is (here to keep $\epsv{}$ consistent with the form in band diagrams,
+no additional minus sign is placed before $\vb{k}$ of hole)
+$$
+\vb{P} = \ke - \khi{1} - \khi{2}.
+$$
+Again, minimizing the energy (this energy minimization condition should be verified more carefully: maybe by really solving a trion Hamiltonian?), we find the peak intensity in the signature of one exciton mode appears when  
+$$
+\frac{\ke}{\me} + \frac{\khi{1}}{\mh} = 0, \quad
+\frac{\ke}{\me} + \frac{\khi{2} - \vb{w}}{\mh} = 0,
+$$
+and therefore 
+$$
+\ke = \frac{\me (\vb{P} + \vb{w})}{\me + 2 \mh}, \quad 
+\khi{1} = - \frac{\mh (\vb{P} + \vb{w})}{\me + 2 \mh}, \quad 
+\khi{2} = - \frac{\mh \vb{P} - \me \vb{w} - \mh \vb{w}}{\me + 2 \mh}.
+$$
+Since the energy is globally minimized at $\vb{P} = - \vb{w}$,  
+the overall position of the light spot should be 
+$$
+\ke  = 0. 
+$$
+
+Does this mean that in order to observe obvious distinction between excitons and trions, 
+there should be at least some sort of indirect band gap in the system?
+
+
+
+# Trion, two electrons 
+
+Assuming that the two electrons are in different valleys, 
+the interference between the two is non-existent, 
+and we find 
+$$
+P(t) \propto \int_0^{t} \dd{t_1} \int_0^{t} \dd{t_2} s(t_1) s(t_2) \left(
+    \ee^{- \ii (t_1 - t_2) (E_n - \epsc{2} + \epsv{} - \omega) \abs{A_{\vb{k}' c_2 v}}} + 
+    \ee^{- \ii (t_1 - t_2) (E_n - \epsc{1} + \epsv{} - \omega) \abs{A_{c_1 \vb{k}'  v}}}
+\right).
+$$
+And 
+
+# Challenges 
+
+- [ ] commutation relation for holes - still $[x, p] = \ii \hbar$?
+- [ ] The 1BZ: what to do in the hexagonal case?
+- [ ] Real space or momentum space? 
+
+Current procedure: 
+1. Prove $\vb{P} = \ke + \khi{1} + \khi{2}$ is a constant (always the case from the form of Coulomb interaction)
+2. Define $\vb{R}$ that is the corresponding coordinate variable of $\vb{P}$ - 
+   here is a subtlety: if $\comm{x}{p}.= \ii \hbar$, then so is $\comm{x + \const}{p}$.
+   But I believe 
+   $$
+   \vb{R} = \frac{\mh \rhi{1} + \mh \rhi{2} + \me \re}{2\mh + \me}
+   $$
+   is always a good choice, regardless of the positions of the maxima and minima of the valleys and peaks: 
+   we always have 
+   $$
+   \dv{\vb{R}}{t} = \frac{1}{\ii \hbar} \frac{\vb{P} - \sum \vb{w}}{\sum m},
+   $$
+   which is desirable.
+   Note that since $\partial_{\vb{R}}$ is not well-defined when the other variables are not specified, 
+   we can explicitly *define* that $\vb{P} = -\ii \hbar \partial_{\vb{R}}$; 
+   this equation can be used below to finally settle down the definitions of the other variables.
+3. Use $\vb{r}_{1, 2} = \rhi{1, 2} - \re$ as coordinates
+4. Write $\ke, \khi{1}, \khi{2}$ in terms of $\partial_{\vb{r}_{1, 2}}$ and $\partial_{\vb{R}}$ - the constant in $\vb{R}$ should disappear here; note that the momentum variables corresponding to $\vb{r}_{1, 2}$ may differ from $\partial_{1, 2}$ by constants.
+   Now since the form of $\vb{R}$ doesn't depend on the positions of the valleys and peaks, 
+   we *always* have 
+   $$
+   \ke = \ii \hbar \partial_{\vb{r}_1} + \ii \hbar \partial_{\vb{r}_2} + \frac{\me}{M} \vb{P}, \quad 
+   \khi{1, 2} = - \ii \hbar \partial_{\vb{r}_{1, 2}} + \frac{\mh}{M} \vb{P}.
+   $$
+5. Write the kinetic energy in terms of $\partial_{1, 2}$; decide the definition of $\vb{p}_{1, 2}$, that is, the constant differences between them and $\partial_{\vb{r}_{1, 2}}$
+6. The resulting problem about $\vb{r}_{1, 2}$ and $\vb{p}_{1, 2}$ should have nothing different from a problem about two coupled "ordinary" electrons (i.e. electrons whose energy minimum appears at $\vb{k} = 0$)
+
+For convenience, we use $\vb{k}_{1, 2}$ to refer to $- \ii \hbar \partial_{\vb{r}_{1, 2}}$.
+We want to find the minimum of 
+$$
+H_0 = \frac{(\vb{P} - \vb{w})^2}{2 M} + \Eg 
++ \frac{\vb{k}_1^2}{2\mh} + \frac{\vb{k}_2^2}{2\mh}
+- \frac{\vb{w}^2}{2M} + \frac{(\vb{k}_1 + \vb{k}_2 + \vb{w})^2}{2\me}
+$$
+w.r.t. $\vb{k}_{1, 2}$ so that we can redefine $\vb{k}_{1, 2}$.
+Then we see indeed that the peaks in the ARPES signature can be found by minimizing terms containing $\vb{k}_1$ in $H_0$ and terms containing $\vb{k}_2$ independently. 
+
+# Note on applying Lagrangian multiplier 
+
+The optimization problem 
+$$
+\min f(x) + g(y) \quad \text{  s.t. } \abs{h(x, y)} = 0
+$$
+can be solved by 
+$$
+\partial_{x, y, \lambda} (f(x) + g(y) - \lambda h(x, y)^2) = 0.
+$$
+Thus we get 
+$$
+\partial_x f - 2 \lambda h \partial_h = 0, \quad \partial_y g - 2 \lambda h \partial_y h = 0, \quad h = 0.
+$$
+The problem is, the expression $\partial_x f - 2 \lambda h \partial_h = 0$
+is intended to mean that the gradient of $f$ and $h^2$ are parallel, 
+and when the gradient of $h^2$ is zero, 
+the condition that the gradient of $f$ and $h^2$ are parallel is trivially true, 
+but the equation $\partial_x f - 2 \lambda h \partial_h h = 0$ is no longer true; 
+we may want to put $\lambda$ before $\partial_x f$ in this case.
