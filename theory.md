@@ -224,6 +224,49 @@ Therefore the "perturbation" is not small at all;
 this might be seen as evidence for the correctness of [[theory#Brief analysis without considering the Hamiltonian|naive analysis]];
 what analysis is closer to the truth is not clear.
 
+The kinetic part of the Hamiltonian looks like 
+$$
+H_0 = \frac{\vb{k}_1^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{w}}{\me} + \frac{\vb{k}_2^2}{2\mu} + \frac{\vb{k}_2 \cdot \vb{w}}{\me} 
++ \frac{\vb{k}_1 \cdot \vb{k}_2}{\me} + \const
+$$
+we want to rewrite this into something like 
+$$
+\frac{(\vb{k}_1 - \vb{u})^2}{\const} + \frac{(\vb{k}_2 - \vb{u})^2}{\const} + \frac{(\vb{k}_1 - \vb{u}) \cdot (\vb{k}_2 - \vb{u})}{\const} 
+$$
+It seems we can have 
+$$
+H_0 = \frac{(\vb{k}_1 - \vb{u})^2}{2\mu} + \frac{(\vb{k}_2 - \vb{u})^2}{2\mu} + \frac{(\vb{k}_1 - \vb{u}) \cdot (\vb{k}_2 - \vb{u})}{\me} + \const, \quad 
+\vb{u} = - \frac{\vb{w}}{1 + \frac{\me}{\mu}}.
+$$
+The energy minimum therefore appears at 
+$$
+\vb{k}_1 = \vb{k}_2 = \vb{u}, 
+$$
+which leads to 
+$$
+\ke = \frac{\me}{M} \vb{P} + \frac{2 \mh}{M} \vb{w}.
+$$
+It seems this is also the result we obtain from 
+$$
+\min E_{\text{trion, bare}} =  
+\Eg + \frac{(\ke - \vb{w})^2}{2 \me} + \frac{\khi{1}^2}{2 \mh} + \frac{\khi{2}^2}{2 \mh}
+\quad \text{s.t.} \quad 
+\vb{P} = \ke - \khi{1} - \khi{2}.
+$$
+The problem can be alternatively written as 
+$$
+\min \frac{(\ke - \vb{w})^2}{2 \me} + \frac{(\ke - \vb{P})^2}{4 \mh}.
+$$
+The maximum is achieved when 
+$$
+\ke = \frac{\frac{\vb{w}}{\me} + \frac{\vb{P}}{2\mh}}{\frac{1}{\me} + \frac{1}{2\mh}} = \frac{\me}{M} \vb{P} + \frac{2 \mh}{M} \vb{w},
+$$
+the same as the one we obtained in the first approach.
+
+The problem however is whether $\phi(\vb{k}_1 - \vb{u}, \vb{k}_2 - \vb{u})$ 
+really has its peak at $\vb{k}_{1, 2} = \vb{u}$.
+This however is a clear, well-defined question.
+
 # Trion, one electron and two holes; two holes are on two peaks 
 
 $$
