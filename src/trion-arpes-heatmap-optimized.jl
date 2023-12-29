@@ -2,8 +2,8 @@ using ProgressMeter
 include("trion-solver.jl")
 include("arpes.jl")
 
-# Finite momentum trion 
-@time let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
+# Finite momentum trion, slow version 
+@profview let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
     m_h = 0.8184,
     m_e = 0.4794,
     E_g = 0.7830,
@@ -11,7 +11,6 @@ include("arpes.jl")
     E_B = -0.1,
     w = 0.7,
     β = 10,
-    broadening(x) = exp(- σ^2 * x^2),
     kx_points = LinRange(-1.2, 1.2, 100),
     ky_points = LinRange(-1.2, 1.2, 100),
     dkx = step(kx_points), 
@@ -31,8 +30,9 @@ include("arpes.jl")
 
     ham = IndirectTwoBandModel2D(m_e, m_h, E_g, SVector{2, Float64}([w, 0.0]))
     dielectric = Dielectric2D(ϵ)
+    broadening(x) = @fastmath exp(- σ^2 * x^2)
 
-    A_kω_Q = single_trion_arpes_signature(
+    A_kω_Q = single_trion_arpes_signature_thread(
         ham, E_B, 
         ground_state_1s(ham, dielectric), 
         Q_point, 
@@ -71,7 +71,7 @@ include("arpes.jl")
         .- inv_eV * norm.(k_points_near_valley .- [[w, 0.0]]).^2 * (m_h / m_e^2)
         .+ E_B .+ E_g,
         #label = raw"Varying $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = \mathbf{k}_2 = 0$",
-        label = raw"Varying $\mathbf{P}$, $\mathbf{k}_{\mathrm{h1}} = \mathbf{k}_{\mathrm{h2}} = - \frac{m_{\mathrm{h}}}{M} \mathbf{P}$",
+        label = raw"Varying $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}} = \mathbf{k}_{\mathrm{2}} = 0$",
         linestyle = :dot,
         c = colorant"firebrick2")
     # Dispersion relation when P_T is fixed to a constant 
@@ -79,13 +79,13 @@ include("arpes.jl")
         ϵ_v.([(m_e + m_h) / M * Q_point + m_h * [w, 0.0] / M] .- k_points_near_valley) 
         .+ inv_eV * norm(Q_point - [w, 0.0])^2 / 2M .+ E_B .+ E_g,
         #label = raw"fixed $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = 0$ or $\mathbf{k}_2 = 0$",
-        label = raw"fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{h1}}$ or $\mathbf{k}_{\mathrm{h2}}$ is $- \frac{m_{\mathrm{h}}}{M} \mathbf{P} $",
+        label = raw"Fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}}$ or $\mathbf{k}_{\mathrm{2}}$ is $0$",
         linestyle = :dot, 
         c = colorant"aqua")
     plot!(p, kx_near_valley, 
         2 * ϵ_v.(([Q_point] .- k_points_near_valley) ./ 2) 
         .+ inv_eV * norm(Q_point - [w, 0.0])^2 / 2M .+ E_B .+ E_g,
-        label = raw"fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{h1}} = \mathbf{k}_{\mathrm{h2}} $",
+        label = raw"Fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}} = \mathbf{k}_{\mathrm{2}} $",
         linestyle = :dot, 
         c = colorant"deepskyblue2")
     
