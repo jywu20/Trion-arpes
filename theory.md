@@ -1,3 +1,25 @@
+# Units 
+
+1. Unit of length: Å. Thus the length of wave vector is 1/Å.
+2. Unit of energy: eV. 
+3. Unit of time: by setting $\hbar = 1$. 
+   Thus 1fs × $n$ eV / $\hbar$ = $n$ × the time quantity corresponding to 1fs, 
+   and we find 1fs is equivalent to 
+   $$
+   10^{-15} \cdot \frac{e}{\hbar} = 1.5193 \text{ time unit here}.
+   $$
+4. Unit of mass: the electron mass. 
+   Thus an effective mass dispersion relation, in SI, is 
+   $$
+   E = \frac{\hbar^2 \vb{k}^2}{2\me^*} 
+   = \underbrace{\frac{\hbar^2 (1 Å^{-1})^2}{2 \me \cdot 1 \mathrm{eV}}}_{3.80998 \mathrm{eV}} \cdot \frac{(\vb{k} / 1 Å^{-1})^2}{2 \me^* / \me},
+   $$
+   and therefore when the unit of $\vb{k}$ is set to $Å^{-1}$ and the unit of the effective mass is set to $\me$,
+   the dispersion relation, in eV, becomes 
+   $$
+   E = 3.80998 \frac{\vb{k}^2}{2\me^*}.
+   $$ 
+
 # Discussion 
 
 - Trion energy: Berkelboob's paper

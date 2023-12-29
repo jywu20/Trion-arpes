@@ -1,0 +1,242 @@
+\documentclass[hyperref, a4paper]{article}
+
+\usepackage{textgreek}
+\usepackage{geometry}
+\usepackage{titling}
+\usepackage{titlesec}
+\usepackage{footnote}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{bbm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{physics}
+\usepackage{tensor}
+\usepackage{siunitx}
+\usepackage[version=4]{mhchem}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{autobreak}
+\usepackage[colorlinks,unicode]{hyperref} % , linkcolor=black, anchorcolor=black, citecolor=black, urlcolor=black, filecolor=black
+\usepackage{xurl}
+\usepackage[most]{tcolorbox}
+\usepackage[backend=bibtex,sorting=none,doi=false,isbn=false,url=false]{biblatex}
+\addbibresource{trion.bib}
+\addbibresource{arpes.bib}
+
+\usepackage{prettyref}
+
+% Page style; to be removed when this article is placed in another template
+\geometry{left=3.18cm,right=3.18cm,top=2.54cm,bottom=2.54cm}
+\titlespacing{\paragraph}{0pt}{1pt}{10pt}[20pt]
+\setlength{\droptitle}{-5em}
+
+
+% Math operators
+\DeclareMathOperator{\timeorder}{\mathcal{T}}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\legpoly}{P}
+\DeclareMathOperator{\primevalue}{P}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand*{\ii}{\mathrm{i}}
+\newcommand*{\ee}{\mathrm{e}}
+\newcommand*{\const}{\mathrm{const}}
+\newcommand*{\suchthat}{\quad \text{s.t.} \quad}
+\newcommand*{\argmin}{\arg\min}
+\newcommand*{\argmax}{\arg\max}
+\newcommand*{\normalorder}[1]{: #1 :}
+\newcommand*{\pair}[1]{\langle #1 \rangle}
+\newcommand*{\fd}[1]{\mathcal{D} #1}
+\DeclareMathOperator{\bigO}{\mathcal{O}}
+
+
+% Embedded codes
+\lstdefinestyle{console}{
+    basicstyle=\footnotesize\ttfamily,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
+}
+
+% Reference formatting
+\newrefformat{fig}{Fig.~\ref{#1}}
+\newrefformat{tbl}{Table~\ref{#1}}
+
+% TiKZ settings
+\usetikzlibrary{calc}
+\tikzset{every picture/.style={line width=0.3pt}} 
+
+% Displaying chemical formula in bookmarkers
+
+\pdfstringdefDisableCommands{%
+  \def\\{}%
+  \def\ce#1{<#1>}%
+}
+
+\pdfstringdefDisableCommands{%
+  \def\texttt#1{<#1>}%
+  \def\mathbb#1{#1}%
+}
+\pdfstringdefDisableCommands{\def\eqref#1{(\ref{#1})}}
+
+\makeatletter
+\pdfstringdefDisableCommands{\let\HyPsd@CatcodeWarning\@gobble}
+\makeatother
+
+
+
+\newcommand{\citetime}[1]{item \ref{#1} in \prettyref{sec:timeline}}
+\newcommand{\address}[1]{\href{#1}{\url{#1}}}
+\newcommand{\shortcode}[1]{\texttt{#1}}
+
+\DeclareSIUnit{\au}{a.u.}
+
+\lstset{style = console}
+
+% Labels 
+\newcommand*{\ke}{\vb{k}_{\text{e}}}
+\newcommand*{\khi}[1]{\vb{k}_{\text{h#1}}}
+\newcommand*{\re}{\vb{r}_{\text{e}}}
+\newcommand*{\rhi}[1]{\vb{r}_{\text{h#1}}}
+\newcommand*{\me}{m_{\text{e}}}
+\newcommand*{\mh}{m_{\text{h}}}
+\newcommand*{\Eg}{E_{\text{g}}}
+
+\title{Trion ARPES signature}
+\author{Jinyuan Wu, someone else, Diana Y. Qiu}
+
+\begin{document}
+
+\maketitle
+
+\section{ARPES theory}
+
+When the probe is much weaker than the pump 
+and does not itself influence the electronic structure,
+the most generic theory of driven ARPES is based on the  
+pumped single-electron lesser Green function, 
+to which the pump adds a self-energy correction,
+\cite{freericks2009theoretical,schuler2021theory};
+the theory reduced to the usual Fermi golden rule 
+when the pump itself is weak \cite{sobota2021angle,freericks2021two}.
+When the pump pulse is strong at its peak but has faded away at the probing time, 
+the main effect of pumping is preparing an initial state, 
+and the ARPES intensity can be evaluated from 
+pure-state first-order time dependent perturbation theory,
+which gives a Fermi golden rule-like final result \cite{rustagi2018photoemission}.
+Here we generalize the methodology in \cite{rustagi2018photoemission} 
+to all possible exciton states caused by the pump and not just excitons.
+
+
+\section{Two-band model for trion}
+
+In this work, we generalize the two-band model approach to trions \cite{chang2021variationally}
+to the indirect band gap case.
+We start with the following example.
+\begin{equation}
+    H = \frac{(\ke - \vb{w})^2}{2\me} + \Eg 
+    + \frac{\khi{1}^2}{2\mh} + \frac{\khi{2}^2}{2\mh} 
+    + V(\rhi{1} - \rhi{2}) - V(\re - \rhi{1}) - V(\re - \rhi{2}).
+    \label{eq:two-band-w}
+\end{equation}
+Here $\khi{i}$ is the crystal momentum of the quantum state containing hole $i$ only, 
+which is the opposite of the momentum of the corresponding electron state of the hole;
+similarly, $\vb{k}^2/2\mh$ is the opposite of the dispersion relation of the valence band top,
+and therefore $\mh > 0$.
+
+It can be easily seen that the total momentum of the trion 
+\begin{equation}
+    \vb{P} = \ke + \khi{1} + \khi{2}
+\end{equation}
+is conserved, and we are to rewrite the Hamiltonian in terms of 
+the total momentum, which should only appear in the total kinetic energy term,
+and two internal degrees of freedom.
+Following the procedure in \cite{chang2021variationally},
+we define 
+\begin{equation}
+    \vb{r}_1 = \rhi{1} - \re, \quad \vb{r}_2 = \rhi{2} - \re 
+\end{equation}
+as the internal degrees of freedom.
+To separate the Hamiltonian into terms about $\vb{P}$ and terms about the internal degrees of freedom,
+we need to find the canonical coordinate corresponding to $\vb{P}$
+and the canonical momenta corresponding to $\vb{r}_{1, 2}$.
+
+Regarding the canonical coordinate corresponding to $\vb{P}$, 
+intuitively we may choose the center of mass 
+\begin{equation}
+    \vb{R} = \frac{\me \re + \mh \rhi{1} + \mh \rhi{2}}{M}, \quad M = \me + 2 \mh
+\end{equation}
+as the canonical coordinate corresponding to $\vb{P}$;
+this correctness of this choice can be directly verified by  
+writing $\vb{R}, \vb{r}_1, \vb{r}_2$ as functions of $\re, \rhi{1}, \rhi{2}$
+and verifying that $\partial_{\vb{R}}$ is the sum of 
+$\partial_{\re}$, $\partial_{\rhi{1}}$ and $\partial_{\rhi{2}}$,
+and hence $\vb{P} = - \ii \hbar \partial_{\vb{R}}$ 
+is indeed the total momentum.
+
+We can define the canonical momenta of $\vb{r}_{1,2}$, 
+hereafter referred to as $\vb{k}_{1,2}$, 
+as $- \ii \hbar_{\vb{r}_{1, 2}}$;
+in this way 
+\begin{equation}
+    \ke = \frac{\me}{M} \vb{P} - \vb{k}_1 - \vb{k}_2, \quad 
+    \khi{1,2} = \vb{k}_{1, 2} + \frac{\mh}{M} \vb{P},
+\end{equation}
+and the kinetic energy part of the \eqref{eq:two-band-w} now reads 
+\begin{equation}
+    H_{\text{kin}} = \frac{(\vb{P} - \vb{w})^2}{2 M} + \Eg 
+    + \frac{\vb{k}_1^2}{2\mh} + \frac{\vb{k}_2^2}{2\mh}
+    - \frac{\vb{w}^2}{2M} + \frac{(\vb{k}_1 + \vb{k}_2 + \vb{w})^2}{2\me}.
+\end{equation}
+We however want to shift the definitions of $\vb{k}$ 
+so that the kinetic part resembles the kinetic energy in a direct band gap system.
+By redefining 
+\begin{equation}
+    \vb{k}_{1,2} = - \ii \hbar \vb{r}_{1, 2} + \frac{\vb{w}}{1 + \me / \mu}, \quad 
+    \mu = \frac{\me \mh}{\me + \mh},
+\end{equation}
+and therefore 
+\begin{equation}
+    \ke = \frac{\me}{M} \vb{P} + \frac{2 \mh \vb{w}}{M} - \vb{k}_1 - \vb{k}_2, \quad 
+    \khi{1,2} = \vb{k}_{1,2} - \frac{\mh \vb{w}}{M} + \frac{\mh}{M} \vb{P},
+\end{equation}
+the total Hamiltonian now reads
+\begin{equation}
+    H =  \frac{(\vb{P} - \vb{w})^2}{2 M} + \Eg 
+    + \frac{\vb{k}_1^2}{2\mh} + \frac{\vb{k}_2^2}{2\mh} + \frac{\vb{k}_1 \cdot \vb{k}_2}{2\me}
+    + V(\vb{r}_1 - \vb{r}_2) - V(\vb{r}_1) - V(\vb{r}_2).
+\end{equation}
+The redefinition of $\vb{k}_{1, 2}$ does not change the commutation relation 
+between $\vb{r}_{1, 2}$ and $\vb{k}_{1, 2}$.
+We find that the internal part of the Hamiltonian has the same form 
+as the Hamiltonian in \cite{chang2021variationally}. 
+
+\section{Variational wave function}
+
+The spin part is in a singlet state, 
+and therefore the orbital part of the wave function is symmetric.
+
+An immediate consequence of this fact is that
+since at the ground state 
+\begin{equation}
+    \ke = \frac{\me}{M} \vb{P} + \frac{2 \mh}{M} \vb{w}.
+\end{equation}
+
+The same procedure can be applied to other configurations of peaks and valleys.
+
+\section{ARPES signatures}
+
+When $\vb{k}_1$ is set to zero, we find 
+\begin{equation}
+    \khi{2} = \frac{\me + \mh}{M} \vb{P} + \frac{\mh}{M} \vb{w} - \ke,
+\end{equation}
+
+and when $\vb{k}_1 = \vb{k}_2$, we have 
+
+\printbibliography
+
+\end{document}
