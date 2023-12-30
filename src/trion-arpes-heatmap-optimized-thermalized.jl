@@ -3,7 +3,7 @@ include("trion-solver.jl")
 include("arpes.jl")
 
 # Finite momentum trion, slow version 
-@profview let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
+@time let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
     m_h = 0.8184,
     m_e = 0.4794,
     E_g = 0.7830,
@@ -21,7 +21,11 @@ include("arpes.jl")
     ),
     ω_points = LinRange(0, 1.5, 500),
     P_Tx = 0.5,
-    Q_point  = SVector{2, Float64}([P_Tx, 0.0]) 
+    Qx_points =  LinRange(w - 0.1, w + 0.1, 10),
+    Qy_points =  LinRange(- 0.1, 0.1, 10),
+    Q_points = map(t -> SVector{2, Float64}(collect(t)), 
+        collect(Iterators.product(Qx_points, Qy_points))
+    ) 
 
     ϵ_v(k) =  - norm(k)^2 / 2m_h * inv_eV
     ϵ_c(k) =    norm(k - w)^2 / 2m_e * inv_eV + E_g
@@ -32,18 +36,26 @@ include("arpes.jl")
     dielectric = Dielectric2D(ϵ)
     broadening(x) = @fastmath exp(- σ^2 * x^2)
 
-    A_kω_Q = single_trion_arpes_signature_thread(
-        ham, E_B, 
-        ground_state_1s(ham, dielectric), 
-        Q_point, 
-        k_points, ω_points, 
-        map(kx -> SVector{2, Float64}([kx, 0.0]), 
-            kx_points
-        ),
-        broadening
-    )     
+    Z_partition = sum(Q_points) do Q_point
+        exp(-β * (Q_point - [w, 0.0])' * (Q_point - [w, 0.0]) / 2M)
+    end
+    progress = Progress(length(Q_points)) 
+    A_kω_β = sum(Q_points) do Q_point
+        next!(progress)
+        A_kω_Q = single_trion_arpes_signature_thread(
+            ham, E_B, 
+            ground_state_1s(ham, dielectric), 
+            Q_point, 
+            k_points, ω_points, 
+            map(kx -> SVector{2, Float64}([kx, 0.0]), 
+                kx_points
+            ),
+            broadening
+        )   
+        exp(-β * (Q_point - [w, 0.0])' * (Q_point - [w, 0.0]) / 2M) * A_kω_Q / Z_partition
+    end  
     
-    p = heatmap(kx_points, ω_points, A_kω_Q', 
+    p = heatmap(kx_points, ω_points, A_kω_β', 
         c = arpes_colormap(transparency_gradience),
         colorbar = false, 
         legend_foreground_color = :transparent,
@@ -74,20 +86,6 @@ include("arpes.jl")
         label = raw"Varying $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}} = \mathbf{k}_{\mathrm{2}} = 0$",
         linestyle = :dot,
         c = colorant"firebrick2")
-    # Dispersion relation when P_T is fixed to a constant 
-    plot!(p, kx_near_valley, 
-        ϵ_v.([(m_e + m_h) / M * Q_point + m_h * [w, 0.0] / M] .- k_points_near_valley) 
-        .+ inv_eV * norm(Q_point - [w, 0.0])^2 / 2M .+ E_B .+ E_g,
-        #label = raw"fixed $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = 0$ or $\mathbf{k}_2 = 0$",
-        label = raw"Fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}}$ or $\mathbf{k}_{\mathrm{2}}$ is $0$",
-        linestyle = :dot, 
-        c = colorant"aqua")
-    plot!(p, kx_near_valley, 
-        2 * ϵ_v.(([Q_point] .- k_points_near_valley) ./ 2) 
-        .+ inv_eV * norm(Q_point - [w, 0.0])^2 / 2M .+ E_B .+ E_g,
-        label = raw"Fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}} = \mathbf{k}_{\mathrm{2}} $",
-        linestyle = :dot, 
-        c = colorant"deepskyblue2")
     
     ylims!(p, (-0.8, 1.8))
     xlims!(p, (-0.8, 1.2))
@@ -104,5 +102,4 @@ include("arpes.jl")
     )
 
     p = custom_colorbar(p, cb)
-    #savefig(p, "trion-P-$(Q_point[1]).png")
 end

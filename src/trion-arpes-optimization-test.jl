@@ -20,7 +20,7 @@ include("arpes.jl")
         collect(Iterators.product(kx_points, ky_points))
     ),
     ω_points = LinRange(0, 1.5, 500),
-    P_Tx = 0.5,
+    P_Tx = 0.8,
     Q_point  = SVector{2, Float64}([P_Tx, 0.0]) 
 
     ϵ_v(k) =  - norm(k)^2 / 2m_h * inv_eV
@@ -32,7 +32,7 @@ include("arpes.jl")
     dielectric = Dielectric2D(ϵ)
     broadening(x) = @fastmath exp(- σ^2 * x^2)
 
-    A_kω_Q = single_trion_arpes_signature_thread(
+    @time A_kω_Q = single_trion_arpes_signature_thread(
         ham, E_B, 
         ground_state_1s(ham, dielectric), 
         Q_point, 
@@ -43,7 +43,7 @@ include("arpes.jl")
         broadening
     )     
     
-    A_kω_Q_def = single_trion_arpes_signature_def(
+    @time A_kω_Q_def = single_trion_arpes_signature_def(
         ham, E_B, 
         ground_state_1s(ham, dielectric), 
         Q_point, 
