@@ -100,6 +100,7 @@
 % Labels 
 \newcommand*{\ke}{\vb{k}_{\text{e}}}
 \newcommand*{\khi}[1]{\vb{k}_{\text{h#1}}}
+\newcommand*{\kh}{\vb{k}_{\text{h}}}
 \newcommand*{\re}{\vb{r}_{\text{e}}}
 \newcommand*{\rhi}[1]{\vb{r}_{\text{h#1}}}
 \newcommand*{\me}{m_{\text{e}}}
@@ -214,6 +215,17 @@ The redefinition of $\vb{k}_{1, 2}$ does not change the commutation relation
 between $\vb{r}_{1, 2}$ and $\vb{k}_{1, 2}$.
 We find that the internal part of the Hamiltonian has the same form 
 as the Hamiltonian in \cite{chang2021variationally}. 
+This can also be seen as generalization of the indirect band gap exciton two-band model to the trion;
+for the former we have \cite{rustagi2018photoemission} 
+\begin{equation}
+    H = \frac{(\vb{Q} - \vb{w})^2}{2M} + \Eg + \frac{\vb{k}^2}{2\mu} - V(\vb{r}), 
+\end{equation}
+where 
+\begin{equation}
+    M = \me + \me, \quad 
+    \ke = \frac{\me}{M} \vb{Q} + \vb{k} + \frac{\mh}{M} \vb{w}, \quad 
+    \kh = \frac{\mh}{M} \vb{Q} - \vb{k} - \frac{\mh}{M} \vb{w}.
+\end{equation}
 
 \section{Variational wave function}
 

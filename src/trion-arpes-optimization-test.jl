@@ -34,7 +34,7 @@ include("arpes.jl")
 
     @time A_kω_Q = single_trion_arpes_signature_thread(
         ham, E_B, 
-        ground_state_1s(ham, dielectric), 
+        ground_state_1s(IndirectTwoBandTrion2D(ham, dielectric)), 
         Q_point, 
         k_points, ω_points, 
         map(kx -> SVector{2, Float64}([kx, 0.0]), 
@@ -45,7 +45,7 @@ include("arpes.jl")
     
     @time A_kω_Q_def = single_trion_arpes_signature_def(
         ham, E_B, 
-        ground_state_1s(ham, dielectric), 
+        ground_state_1s(IndirectTwoBandTrion2D(ham, dielectric)), 
         Q_point, 
         k_points, ω_points, 
         map(kx -> SVector{2, Float64}([kx, 0.0]), 

@@ -3,7 +3,7 @@ include("trion-solver.jl")
 include("arpes.jl")
 
 # Finite momentum trion, slow version 
-@profview let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
+@time let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
     m_h = 0.8184,
     m_e = 0.4794,
     E_g = 0.7830,
@@ -34,7 +34,7 @@ include("arpes.jl")
 
     A_kω_Q = single_trion_arpes_signature_def(
         ham, E_B, 
-        ground_state_1s(ham, dielectric), 
+        ground_state_1s_def(IndirectTwoBandTrion2D(ham, dielectric)), 
         Q_point, 
         k_points, ω_points, 
         map(kx -> SVector{2, Float64}([kx, 0.0]), 

@@ -1,20 +1,7 @@
 using StaticArrays
 using ThreadTools
 
-const fs = 1.5193    
-const inv_eV = 3.80998
-
-struct IndirectTwoBandModel2D
-    m_e :: Float64     # Conduction band effective mass
-    m_h :: Float64     # Valance band effective mass (positive)
-    E_g :: Float64     # Single particle band gap
-    w   :: SVector{2, Float64} # k_{valley} - k_{peak}
-end
-
-struct Dielectric2D 
-    ϵ :: Float64
-    # TODO
-end
+include("two-band.jl")
 
 
 function single_trion_arpes_signature_def(
@@ -100,10 +87,17 @@ function single_trion_arpes_signature_thread(
     A_kω
 end
 
-ϕ_1s_def(k::SVector{2, Float64}, a_ex::Float64) = 1 / (1 + norm(k)^2 * a_ex^2 / 4)^2
-@inline ϕ_1s(k::SVector{2, Float64}, a_ex::Float64) = @fastmath 1 / (1 + k' * k * a_ex^2 / 4)^2
 
-function ground_state_1s_def(ham::IndirectTwoBandModel2D, dielectric::Dielectric2D)
+
+struct IndirectTwoBandTrion2D 
+    ham::IndirectTwoBandModel2D
+    dielectric::Dielectric2D
+end
+
+function ground_state_1s_def(trion_spec::IndirectTwoBandTrion2D)
+    ham = trion_spec.ham
+    dielectric = trion_spec.dielectric
+
     m_c = ham.m_e
     m_v = ham.m_h
     ϵ = dielectric.ϵ
@@ -116,7 +110,10 @@ function ground_state_1s_def(ham::IndirectTwoBandModel2D, dielectric::Dielectric
     A_SQ_k1k2
 end
 
-function ground_state_1s(ham::IndirectTwoBandModel2D, dielectric::Dielectric2D)
+function ground_state_1s(trion_spec::IndirectTwoBandTrion2D)
+    ham = trion_spec.ham
+    dielectric = trion_spec.dielectric
+
     m_c = ham.m_e
     m_v = ham.m_h
     ϵ = dielectric.ϵ
