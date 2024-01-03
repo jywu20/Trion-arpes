@@ -1,7 +1,7 @@
 using StaticArrays
 using ThreadTools
-using Symbolics
 
+include("real-space.jl")
 include("two-band.jl")
 
 
@@ -140,5 +140,3 @@ function ground_state_1sab_radii(trion_spec::IndirectTwoBandTrion2D)
 
     ψ = ϕ_1s_def()  
 end
-
-@variables 
