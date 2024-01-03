@@ -52,7 +52,7 @@ function ground_state_1s(exciton_spec::IndirectTwoBandExciton2D)
     ϵ = dielectric.ϵ
 
     μ = m_c * m_v / (m_c + m_v)
-    a_ex = 0.529 * ϵ / μ
+    a_ex = a_Bohr * ϵ / μ
 
     x -> ϕ_1s(x, a_ex)    
 end

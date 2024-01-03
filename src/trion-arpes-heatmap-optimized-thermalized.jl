@@ -10,9 +10,9 @@ include("arpes.jl")
     ϵ = 6.4, 
     E_B = -0.1,
     w = 0.7,
-    β = 10,
-    kx_points = LinRange(-1.2, 1.2, 100),
-    ky_points = LinRange(-1.2, 1.2, 100),
+    β = 1000,
+    kx_points = LinRange(-1.2, 1.5, 100),
+    ky_points = LinRange(-1.2, 1.5, 100),
     dkx = step(kx_points), 
     dky = step(ky_points),
     dk = dkx * dky,
@@ -86,6 +86,20 @@ include("arpes.jl")
         label = raw"Varying $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}} = \mathbf{k}_{\mathrm{2}} = 0$",
         linestyle = :dot,
         c = colorant"firebrick2")
+    # Dispersion relation when P_T is fixed to a constant 
+    plot!(p, kx_near_valley, 
+        ϵ_v.([[w, 0.0]] .- k_points_near_valley) 
+        .+ E_B .+ E_g,
+        #label = raw"fixed $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = 0$ or $\mathbf{k}_2 = 0$",
+        label = raw"Fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}}$ or $\mathbf{k}_{\mathrm{2}}$ is $0$",
+        linestyle = :dot, 
+        c = colorant"aqua")
+    plot!(p, kx_near_valley, 
+        2 * ϵ_v.(([[w, 0.0]] .- k_points_near_valley) ./ 2) 
+        .+ E_B .+ E_g,
+        label = raw"Fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}} = \mathbf{k}_{\mathrm{2}} $",
+        linestyle = :dot, 
+        c = colorant"deepskyblue2")
     
     ylims!(p, (-0.8, 1.8))
     xlims!(p, (-0.8, 1.2))

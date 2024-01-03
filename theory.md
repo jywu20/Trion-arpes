@@ -1,6 +1,9 @@
 # Units 
 
 1. Unit of length: Å. Thus the length of wave vector is 1/Å.
+   The Bohr radius is therefore 0.529 in this unit system.
+   
+   But in the variational solver it's much better to just use $a_{\text{Bohr}}$ as the length unit.
 2. Unit of energy: eV. 
 3. Unit of time: by setting $\hbar = 1$. 
    Thus 1fs × $n$ eV / $\hbar$ = $n$ × the time quantity corresponding to 1fs, 

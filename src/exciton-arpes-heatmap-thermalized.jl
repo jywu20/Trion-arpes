@@ -2,7 +2,9 @@ using ProgressMeter
 include("exciton-solver.jl")
 include("arpes.jl")
 
-# Collective exciton signature, with several possible exciton branches
+# Interestingly, when I average over the 2D grid, 
+# the resulting signature loos less like the signature in Photoemission signature of excitons
+# I don't know: is the latter obtained by confining the problem on a 1D line?
 p = let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
     m_v = 0.8184,
     m_c = 0.4794,
@@ -26,8 +28,6 @@ p = let σ = 20fs, # Note that here σ tells us the width of the pulse; it shoul
     M = m_c + m_v
     α = m_c / M
     μ = m_c * m_v / (m_c + m_v)
-    a_ex = 0.529 * ϵ / μ
-    A_SQ(Q, k) = 1 / (1 + norm(k - (w + α * (Q - w)))^2 * a_ex^2 / 4)^2
     E_SQ(Q) = E_g + E_B + (Q - w)^2/2M * inv_eV
 
     ham = IndirectTwoBandModel2D(m_c, m_v, E_g, SVector{2, Float64}([w, 0.0]))

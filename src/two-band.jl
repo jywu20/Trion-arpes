@@ -1,5 +1,6 @@
 const fs = 1.5193    
 const inv_eV = 3.80998
+const a_Bohr = 0.529
 
 struct IndirectTwoBandModel2D
     m_e :: Float64     # Conduction band effective mass

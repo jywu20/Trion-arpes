@@ -1,5 +1,6 @@
 using StaticArrays
 using ThreadTools
+using Symbolics
 
 include("two-band.jl")
 
@@ -103,7 +104,7 @@ function ground_state_1s_def(trion_spec::IndirectTwoBandTrion2D)
     ϵ = dielectric.ϵ
 
     μ = m_c * m_v / (m_c + m_v)
-    a_ex = 0.529 * ϵ / μ
+    a_ex = a_Bohr * ϵ / μ
 
     A_SQ_k1k2(k_1, k_2) = ϕ_1s_def(k_1, a_ex) * ϕ_1s_def(k_2, a_ex)
     
@@ -119,9 +120,25 @@ function ground_state_1s(trion_spec::IndirectTwoBandTrion2D)
     ϵ = dielectric.ϵ
 
     μ = m_c * m_v / (m_c + m_v)
-    a_ex = 0.529 * ϵ / μ
+    a_ex = a_Bohr * ϵ / μ
 
     @inline A_SQ_k1k2(k_1, k_2) = ϕ_1s(k_1, a_ex) * ϕ_1s(k_2, a_ex)
     
     A_SQ_k1k2
 end
+
+function ground_state_1sab_radii(trion_spec::IndirectTwoBandTrion2D)
+    ham = trion_spec.ham
+    dielectric = trion_spec.dielectric
+
+    m_c = ham.m_e
+    m_v = ham.m_h
+    ϵ = dielectric.ϵ
+
+    μ = m_c * m_v / (m_c + m_v)
+    a_ex = a_Bohr * ϵ / μ
+
+    ψ = ϕ_1s_def()  
+end
+
+@variables 

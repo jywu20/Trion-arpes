@@ -232,6 +232,39 @@ where
 The spin part is in a singlet state, 
 and therefore the orbital part of the wave function is symmetric.
 
+It should be noted that since $\vb{k}$ is confined on the two-dimensional place, 
+so is $\vb{r}$, 
+which is the canonical coordinate corresponding to the crystal momentum $\vb{k}$
+instead of the free-space momentum, 
+and therefore differs from the free-space position;
+the wave function in terms of the free-space position does have $z$-directional distribution,
+but the wave function in terms of $\vb{r}$ does not.
+The spatial part of the wave function 
+therefore is to be solved on the 2D plane.
+On the other hand, electromagnetism in a two-dimensional system 
+is still inherently three-dimensional, 
+and the Coulomb force retains its inverse-square form,
+leading to the $\sim 1/r$ form of $V(r)$.
+
+\begin{equation}
+    \Psi(\vb{r}_1, \vb{r}_2) = 
+    \psi_{\text{1s,$a$}}(\vb{r}_1) 
+    \psi_{\text{1s,$b$}}(\vb{r}_2)
+    + \psi_{\text{1s,$b$}}(\vb{r}_1) 
+    \psi_{\text{1s,$a$}}(\vb{r}_2)
+\end{equation}
+
+\begin{equation}
+    \braket*{\text{1s,$a$}}{\text{1s,$b$}} = \frac{4ab}{(a+b)^2}.
+\end{equation}
+\begin{equation}
+    \mel*{\text{1s,$a$}}{-\laplacian}{\text{1s,$b$}} = \frac{4}{(a+b)^2}.
+\end{equation}
+
+\begin{equation}
+    \mel*{\text{1s, $a$}}{\frac{1}{r}}{\text{1s, $b$}} = \frac{4}{a+b}
+\end{equation}
+
 An immediate consequence of this fact is that
 since at the ground state 
 \begin{equation}
@@ -239,6 +272,14 @@ since at the ground state
 \end{equation}
 
 The same procedure can be applied to other configurations of peaks and valleys.
+
+Variational wave function: TODO list 
+\begin{enumerate}
+    \item We should work in the real space, because the form of $V$ can be complicated.
+    \item The kinetic term should be evaluated analytically.
+    \item Normalization??? Why the factor is $1 / \sqrt{2}$?
+    \item The structure of the three-particle wave function.
+\end{enumerate}
 
 \section{ARPES signatures}
 
@@ -248,6 +289,10 @@ When $\vb{k}_1$ is set to zero, we find
 \end{equation}
 
 and when $\vb{k}_1 = \vb{k}_2$, we have 
+
+It can be seen that the trion ARPES signature shows a significantly smaller variance with respect to the trion temperature
+than the exciton ARPES signature does.
+
 
 \printbibliography
 
