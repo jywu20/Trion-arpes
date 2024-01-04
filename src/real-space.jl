@@ -34,7 +34,7 @@ function UniformGrid2D(Lx, Ly, Nx, Ny)
     UniformGrid2D(Lx, Ly, dx, dy, points)
 end
 
-ϕ_r_1s_def(r::SVector, a_ex::Float64) = sqrt(2 / (π * a_ex)) * exp(- norm(r) / a_ex)
+ϕ_r_1s_def(r::SVector, a_ex::Float64) = sqrt(2 / (π * a_ex^2)) * exp(- norm(r) / a_ex)
 
 function overlap_numerical(ψ_1, ψ_2, grid::UniformGrid2D)
     dA = grid.dx * grid.dy

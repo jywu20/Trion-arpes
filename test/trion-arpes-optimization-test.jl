@@ -1,6 +1,6 @@
 using ProgressMeter
-include("trion-solver.jl")
-include("arpes.jl")
+include("../src/trion-solver.jl")
+include("../src/arpes.jl")
 
 # Finite momentum trion, slow version 
 @time let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
