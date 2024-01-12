@@ -197,7 +197,7 @@ We however want to shift the definitions of $\vb{k}$
 so that the kinetic part resembles the kinetic energy in a direct band gap system.
 By redefining 
 \begin{equation}
-    \vb{k}_{1,2} = - \ii \hbar \vb{r}_{1, 2} + \frac{\vb{w}}{1 + \me / \mu}, \quad 
+    \vb{k}_{1,2} = - \ii \hbar \partial_{\vb{r}_{1, 2}} + \frac{\vb{w}}{1 + \me / \mu}, \quad 
     \mu = \frac{\me \mh}{\me + \mh},
 \end{equation}
 and therefore 
@@ -209,9 +209,10 @@ the total Hamiltonian now reads
 \begin{equation}
     H =  \frac{(\vb{P} - \vb{w})^2}{2 M} + \Eg +
     \underbrace{
-        \frac{\vb{k}_1^2}{2\mh} + \frac{\vb{k}_2^2}{2\mh} + \frac{\vb{k}_1 \cdot \vb{k}_2}{2\me}
+        \frac{\vb{k}_1^2}{2\mu} + \frac{\vb{k}_2^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{k}_2}{2\me}
         + V(\vb{r}_1 - \vb{r}_2) - V(\vb{r}_1) - V(\vb{r}_2)
     }_{H_{\text{internal}}}.
+    \label{eq:internal-ham}
 \end{equation}
 The redefinition of $\vb{k}_{1, 2}$ does not change the commutation relation 
 between $\vb{r}_{1, 2}$ and $\vb{k}_{1, 2}$.
@@ -228,6 +229,19 @@ where
     \ke = \frac{\me}{M} \vb{Q} + \vb{k} + \frac{\mh}{M} \vb{w}, \quad 
     \kh = \frac{\mh}{M} \vb{Q} - \vb{k} - \frac{\mh}{M} \vb{w}.
 \end{equation}
+
+Similarly for 
+\begin{equation}
+    H = \frac{\ke^2}{2\me} + \Eg 
+    + \frac{\khi{1}^2}{2\mh} + \frac{(\khi{2} - \vb{w})^2}{2\mh} 
+    + V(\rhi{1} - \rhi{2}) - V(\re - \rhi{1}) - V(\re - \rhi{2}),
+\end{equation}
+by defining 
+\begin{equation}
+    \vb{k}_1 = - \ii \hbar \partial_{\vb{r}_{1, 2}} + \frac{\mh}{M} \vb{w}, \quad 
+    \vb{k}_2 = - \ii \hbar \partial_{\vb{r}_{1, 2}} - \frac{\me + \mh}{M} \vb{w},
+\end{equation}
+we get exact the same Hamiltonian in \eqref{eq:internal-ham}.
 
 \section{Variational wave function}
 

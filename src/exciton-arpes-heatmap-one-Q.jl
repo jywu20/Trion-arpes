@@ -12,7 +12,7 @@ p = let σ = 20fs, # Note that here σ tells us the width of the pulse; it shoul
     ϵ = 6.4, 
     E_B = -0.1,
     w = 0.7, # The value used in the literature: 0.7,
-    β = 1,
+    β = 10,
     broadening(x) = exp(- σ^2 * x^2),
     kx_points = LinRange(-1.2, 1.5, 100),
     ky_points = LinRange(-1.2, 1.5, 100),
@@ -20,7 +20,8 @@ p = let σ = 20fs, # Note that here σ tells us the width of the pulse; it shoul
         collect(Iterators.product(kx_points, ky_points))
     ),
     ω_points = LinRange(-1.2, 1.2, 100),
-    Q_points = k_points
+    Q = 0.7,
+    Q_point = SVector{2, Float64}([Q, 0.0])
 
     ϵ_v(k) = - norm(k)^2 / 2m_v * inv_eV
     ϵ_c(k) = E_g + norm(k - w)^2 / 2m_c * inv_eV
@@ -32,26 +33,19 @@ p = let σ = 20fs, # Note that here σ tells us the width of the pulse; it shoul
 
     ham = IndirectTwoBandModel2D(m_c, m_v, E_g, SVector{2, Float64}([w, 0.0]))
     dielectric = Dielectric2D(ϵ)
-    Z_partition = sum(Q_points) do Q_point
-        exp(-β * (Q_point - [w, 0.0])' * (Q_point - [w, 0.0]) / 2M)
-    end
-    progress = Progress(length(Q_points)) 
-    A_kω_β = sum(Q_points) do Q_point
-        next!(progress)
-        A_kω_Q = single_exciton_arpes_signature_def(
-            ham, E_B, 
-            ground_state_1s(IndirectTwoBandExciton2D(ham, dielectric)), 
-            Q_point, 
-            ω_points, 
-            map(kx -> SVector{2, Float64}([kx, 0.0]), 
-                kx_points
-            ),
-            broadening
-        )   
-        exp(-β * (Q_point - [w, 0.0])' * (Q_point - [w, 0.0]) / 2M) * A_kω_Q / Z_partition
-    end  
+
+    A_kω_Q = single_exciton_arpes_signature_def(
+        ham, E_B, 
+        ground_state_1s(IndirectTwoBandExciton2D(ham, dielectric)), 
+        Q_point, 
+        ω_points, 
+        map(kx -> SVector{2, Float64}([kx, 0.0]), 
+            kx_points
+        ),
+        broadening
+    )   
     
-    p = heatmap(kx_points, ω_points, A_kω_β', 
+    p = heatmap(kx_points, ω_points, A_kω_Q', 
         c = arpes_colormap(transparency_gradience),
         colorbar = false,
         legend_foreground_color = :transparent,
@@ -73,7 +67,7 @@ p = let σ = 20fs, # Note that here σ tells us the width of the pulse; it shoul
         label = raw"Varying $\mathbf{Q}$",
         linestyle = :dot,
         c = colorant"firebrick2")
-    plot!(p, k_points_near_valley, ϵ_v.(k_points_near_valley .- w) .+ E_B .+ E_g,
+    plot!(p, k_points_near_valley, ϵ_v.(k_points_near_valley .- Q_point[1]) .+ E_SQ(Q),
         label = raw"Fixed $\mathbf{Q}$",
         linestyle = :dot,
         c = colorant"aqua")
@@ -93,5 +87,5 @@ p = let σ = 20fs, # Note that here σ tells us the width of the pulse; it shoul
     )
 
     p = custom_colorbar(p, cb)
-    savefig(p, "exciton-β-$β-w-$w.png")
+    savefig(p, "exciton-Q-$Q-w-$w.png")
 end

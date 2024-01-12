@@ -127,7 +127,7 @@ function ground_state_1s(trion_spec::IndirectTwoBandTrion2D)
     A_SQ_k1k2
 end
 
-function ground_state_1sab_radii(trion_spec::IndirectTwoBandTrion2D)
+function ground_state_1s_double_radii(trion_spec::IndirectTwoBandTrion2D, a::Float64, b::Float64)
     ham = trion_spec.ham
     dielectric = trion_spec.dielectric
 
@@ -138,5 +138,11 @@ function ground_state_1sab_radii(trion_spec::IndirectTwoBandTrion2D)
     μ = m_c * m_v / (m_c + m_v)
     a_ex = a_Bohr * ϵ / μ
 
-    ψ = ϕ_1s_def()  
+    @inline ϕ_1s_a(k) = ϕ_1s(k, a)  
+    @inline ϕ_1s_b(k) = ϕ_1s(k, b)
+    @inline A_SQ_k1k2(k_1, k_2) = 1/sqrt(2) * (
+        ϕ_1s_a(k_1) * ϕ_1s_b(k_2) + ϕ_1s_a(k_2) * ϕ_1s_b(k_1)
+    )
+    
+    A_SQ_k1k2
 end

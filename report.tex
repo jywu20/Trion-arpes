@@ -1,4 +1,4 @@
-\documentclass[t]{beamer}
+\documentclass[t,aspectratio=169]{beamer}
 \usepackage{physics}
 \usepackage{amsmath}
 \usepackage{tikz}
@@ -42,7 +42,7 @@
 
 %region Theme 
 
-\usetheme{madrid}
+\usetheme{metropolis}
 
 % Show section in foot
 \makeatletter
@@ -85,6 +85,15 @@
 %Remove frame continuation numbering
 \setbeamertemplate{frametitle continuation}{}
 
+% Macros for two-band model
+\newcommand*{\ke}{\vb{k}_{\text{e}}}
+\newcommand*{\khi}[1]{\vb{k}_{\text{h#1}}}
+\newcommand*{\kh}{\vb{k}_{\text{h}}}
+\newcommand*{\re}{\vb{r}_{\text{e}}}
+\newcommand*{\rhi}[1]{\vb{r}_{\text{h#1}}}
+\newcommand*{\me}{m_{\text{e}}}
+\newcommand*{\mh}{m_{\text{h}}}
+\newcommand*{\Eg}{E_{\text{g}}}
 
 %Information to be included in the title page:
 \title{Trion in time-resolved ARPES}
@@ -115,8 +124,8 @@ but let's spare ourselves the burden\dots}
 \framebreak
 
 \textbf{Main result} Output intensity $I_{\vb{k}}(t) \propto \sum_c P^{c}_{\vb{k}}(t)$,
-\[
-    \scriptstyle
+\scriptsize
+\[ 
     P^c_{\vb{k}}(t) = \sum_{n, \vb{k}'}
     {\color{green} \rho_n }
     {\color{red} \abs*{M^{fc}_{\vb{k} \vb{k}'}}^2 }
@@ -126,6 +135,11 @@ but let's spare ourselves the burden\dots}
     U(t_2, t_1) c_{\vb{k}'}}{\Psi_n(t_0)}}
     {\color{teal} s(t_1) s(t_2)}.
 \]
+\normalsize
+
+\vspace{-0.5cm}
+
+\small
 
 \begin{enumerate}
     \item $\color{green} \rho_n$: 
@@ -137,7 +151,7 @@ but let's spare ourselves the burden\dots}
         {\color{magenta} \ee^{- \ii \omega_0 t}} + \text{c.c.}$, and 
     the transition matrix is $\color{red}
     M^{fc}_{\vb{k} \vb{k}'} = \mel**{f \vb{k}}{- \vb{d} \cdot \vb{E}_0}{c \vb{k}'} $; 
-    here $c$ is the band that is interacting with light, 
+    $c$ is the probed electron, 
     $f$ is the out-going state.
     \item The $\color{magenta} \ee^{- \ii (E_n - \omega) (t_1 - t_2)}$ factor 
     gives half of energy conservation condition; 
@@ -150,6 +164,8 @@ but let's spare ourselves the burden\dots}
     \item $\color{teal} s(t_1) s(t_2)$: shape of probe pulse; 
     broadening $\delta(E_n - \omega - E_{\text{after}})$
 \end{enumerate}
+
+\normalsize
 
 \end{frame}
 
@@ -166,13 +182,14 @@ but let's spare ourselves the burden\dots}
 \vspace{1cm}
 
 \textbf{ARPES response of an exciton (besides valence band electron)}
+\scriptsize
 \[
-    \scriptstyle
     P(t) = \sum_{S, \vb{Q}} \rho_{S \vb{Q}} \abs{A_{\vb{k}'}^{S \vb{Q}}}^2 \abs{M^{fc}_{\vb{k} \vb{k}'}}^2 
     \int_{t_0}^t \dd{t_1} \int_{t_0}^t \dd{t_2}
     \ee^{-\ii (E_{S \vb{Q}} + \epsilon_{v \vb{k}' - \vb{Q}} - \omega ) (t_1 - t_2)} 
     s(t_1) s(t_2) .
 \] 
+\normalsize
 
 \begin{itemize}
     \item Detection of $\abs*{A^{S \vb{Q}}_{\vb{k}}}^2$ 
@@ -203,7 +220,6 @@ but let's spare ourselves the burden\dots}
 
 \end{columns}
 
-\vspace{1cm}
 
 \begin{itemize}
     \item The center of the signature is on  
@@ -215,13 +231,13 @@ but let's spare ourselves the burden\dots}
 
 \begin{columns}
 
-\begin{column}{0.45\textwidth}
+\begin{column}{0.4\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/exciton-beta-10.png}
     Thermalized exciton, $\beta = \SI{10}{eV}$
 \end{column}
     
-\begin{column}{0.45\textwidth}
+\begin{column}{0.4\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/exciton-beta-100.png}
     Thermalized exciton, $\beta = \SI{100}{eV}$
@@ -229,7 +245,6 @@ but let's spare ourselves the burden\dots}
 
 \end{columns}
 
-\vspace{1cm}
 
 \begin{itemize}
     \item The center of the signature is on 
@@ -243,39 +258,47 @@ but let's spare ourselves the burden\dots}
 \end{frame}
 
 \begin{frame}[allowframebreaks]
-\frametitle{Trion: some theoretical issues}
+\frametitle{Trion in two-band model}
 
-In the current results:
+Configuration of trion structure
 \begin{itemize}
     \item Two holes, one electron (what likely happens in ARPES)
-    \item \emph{Two holes on one band} -- to simply analysis 
-    \item \emph{No scattering after the electron is kicked out} -- realistic or not?
+    \item \emph{Two holes on one band} -- to simplify analysis 
+    \item \emph{No hole scattering after the electron is kicked out} -- realistic or not?
 \end{itemize}    
 
-\textbf{Trion Hamiltonian} By some analysis:
 \begin{equation}
-    \begin{aligned}
-        H_{\text{T}} &=
-          \frac{\vb{k}_{\text{e}}^2}{2 m_{\text{e}}}
-        + \frac{\vb{k}_{\text{h1}}^2}{2 m_{\text{h}}}
-        + \frac{\vb{k}_{\text{h2}}^2}{2 m_{\text{h}}} 
-        + V(\vb{r}_{\text{h1}} - \vb{r}_{\text{h2}}) 
-        - V(\vb{r}_{\text{e}} - \vb{r}_{\text{h1}}) 
-        - V(\vb{r}_{\text{e}} - \vb{r}_{\text{h2}})  \\ 
-        &= \underbrace{
-        H_\text{X}(\vb{r}_1) + H_\text{X}(\vb{r}_2) 
-        - \frac{\hbar^2 \laplacian}{2 \mu} + V(\vb{r}_1 - \vb{r}_2) - E_{\text{g}}
-        }_{\text{causing $E_{\text{B}}$}}
-        + \frac{\vb{P}_{\text{T}}^2}{2 m_{\text{T}}} + E_{\text{g}},
-    \end{aligned}
+    H =
+          \frac{(\vb{k}_{\text{e}} - \vb{w})^2}{2 m_{\text{e}}}
+    + \Eg
+    + \frac{\vb{k}_{\text{h1}}^2}{2 m_{\text{h}}}
+    + \frac{\vb{k}_{\text{h2}}^2}{2 m_{\text{h}}} 
+    + V(\vb{r}_{\text{h1}} - \vb{r}_{\text{h2}}) 
+    - V(\vb{r}_{\text{e}} - \vb{r}_{\text{h1}}) 
+    - V(\vb{r}_{\text{e}} - \vb{r}_{\text{h2}}) .
 \end{equation}
-where 
+
+\textbf{Redefining coordinates} What we want: $\vb{k}_{\text{e}, \text{h1}, \text{h2}}$ $\to$ $\vb{P}, \vb{k}_1, \vb{k}_2$, following these constraints:
+\[
+    \vb{k}_{1, 2} = - \ii \hbar \partial_{\vb{r}_{1,2}} = \const, \quad \vb{r}_{1,2} = \vb{r}_{\text{h1,2}} - \vb{r}_{\text{e}}, \quad 
+    \vb{R} = \ii \partial_{\vb{P}} = \frac{m_{\text{h}} \vb{r}_{\text{h1}} + m_{\text{h}} \vb{r}_{\text{h2}} + m_{\text{e}} \vb{r}_{\text{e}}}{2m_{\text{h}} + m_{\text{e}}}.
+\]
+
+It can be verified that with 
 \begin{equation}
-    \scriptstyle
-    m_\text{T} = \underbrace{2 m_{\text{h}}}_{>0} + m_{\text{e}}, \quad 
-    \vb{k}_\text{h1} = \vb{k}_1 + \frac{m_{\text{h}}}{m_{\text{T}}} \vb{P}_{\text{T}}, \quad 
-    \vb{k}_\text{h2} = \vb{k}_2 + \frac{m_{\text{h}}}{m_{\text{T}}} \vb{P}_{\text{T}}, \quad 
-    \vb{k}_{\text{e}} = \frac{m_{\text{e}}}{m_{\text{T}}} \vb{P}_{\text{T}} - \vb{k}_1 - \vb{k}_2.
+    \vb{P} = \ke + \khi{1} + \khi{2}, \quad 
+    \vb{k}_{1,2} = - \ii \hbar \partial_{\vb{r}_{1, 2}} + \frac{\mh}{2\mh + \me} \vb{w},
+\end{equation}
+\begin{equation}
+    M = 2\mh + \me , \quad \mu = \frac{\me \mh}{\me + \mh} , \quad 
+    H_\text{X} = - \frac{\laplacian}{2\mu} + V(\vb{r}),
+\end{equation}
+\begin{equation}
+    H = \underbrace{
+    H_\text{X}(\vb{r}_1) + H_\text{X}(\vb{r}_2) 
+    - \frac{\hbar^2 \laplacian}{2 \me} + V(\vb{r}_1 - \vb{r}_2) 
+    }_{\text{causing $E_{\text{B}}$}}
+    + \frac{\vb{P}^2}{2 m_{\text{T}}} + E_{\text{g}}
 \end{equation}
 
 \framebreak
@@ -286,9 +309,16 @@ can be seen as the bound state of two excitons.
 \textbf{Trion wave function} Thus in this specific case: 
 \begin{equation}
     \phi_{\text{T}}(\vb{r}_{\text{e}}, \vb{r}_{\text{h1}}, \vb{r}_{\text{h2}})
-    = \sum_{S_1, S_2} \phi_{\text{X}}^S(\vb{r}_1) \phi_{\text{X}}^S(\vb{r}_2) \ee^{\ii \vb{P}_{\text{T}} \cdot \vb{R}},
+    = \sum_{S_1, S_2} \phi_{\text{X}}^S(\vb{r}_1) \phi_{\text{X}}^S(\vb{r}_2) \ee^{\ii \vb{P} \cdot \vb{R}},
 \end{equation}
 where $\vb{r}_{1, 2}$ are defined above.
+
+The below ansatz is frequently used:
+\begin{equation}
+    \phi_\text{T}(\vb{r}_1, \vb{r}_2) \propto 
+    \phi_{\text{1s}}(\vb{r}_1; a) \phi_{\text{1s}}(\vb{r}_2; b) +  \phi_{\text{1s}}(\vb{r}_1; b) \phi_{\text{1s}}(\vb{r}_2; a)
+\end{equation}
+where $a, b$ are exciton radii.
 
 \vspace{1cm}
 
@@ -297,86 +327,61 @@ The ARPES response (here $\epsilon_v$ are \emph{negative}):
 \begin{equation}
     \begin{aligned}
         \scriptstyle
-        P_{\vb{k}}(t) &= \sum_{\vb{P}_{\text{T}}} \rho_{\vb{P}_{\text{T}}} \sum_{\vb{k}_\text{h1}, \vb{k}_{\text{h2}}} 
+        P_{\vb{k}}(t) &= \sum_{\vb{P}} \rho_{\vb{P}} \sum_{\vb{k}_\text{h1}, \vb{k}_{\text{h2}}} 
         \sum_{S_1, S_2} \abs*{M^{fc}_{\vb{k} \vb{k}_{\text{e}}}}^2 \abs*{A_{S_1 S_2}}^2
         \abs*{\phi_{S_1}(\vb{k}_{\text{1}})}^2 
         \abs*{\phi_{S_2}(\vb{k}_{\text{2}})}^2 \\
         &\quad \times \int_{t_0}^t \dd{t_1} \int_{t_0}^t \dd{t_2}
-        \ee^{-\ii (E_{S \vb{P}_{\text{T}}} + \epsilon_{v \vb{k}_{\text{h1}}} + \epsilon_{v \vb{k}_{\text{h2}}} - \omega ) (t_1 - t_2)} 
+        \ee^{-\ii (E_{S \vb{P}} + \epsilon_{v \vb{k}_{\text{h1}}} + \epsilon_{v \vb{k}_{\text{h2}}} - \omega ) (t_1 - t_2)} 
         s(t_1) s(t_2)
     \end{aligned}
 \end{equation}
 
+Signature maximum: $\vb{k}_1 = 0$ or $\vb{k}_2 = 0$, or $\vb{k}_1 = \vb{k}_2$?
+
 \end{frame}
 
 \begin{frame}
-\frametitle{Trion: tentative results}
+\frametitle{Trion and exciton: $\vb{Q} = \vb{w}$}
 
-\begin{columns}
+\begin{center}
+    \includegraphics[width=0.4\textwidth]{images/exciton-Q-0.7-w-0.7.png}
+    \includegraphics[width=0.4\textwidth]{images/trion-P-0.7-w-0.7.png}
+\end{center}    
 
-\begin{column}{0.45\textwidth}
-    
-\includegraphics[width=\textwidth]{images/trion-P-0.0.png}
-Single trion, $\vb{P} = \SI{0.0}{\angstrom^{-1}}$
+Main difference: curvature. In trion the signature partially has the shape of $2\epsilon_{\text{v}, \vb{k}/2}$
 
-\end{column}
+\end{frame}
 
-\begin{column}{0.45\textwidth}
-    
-\includegraphics[width=\textwidth]{images/trion-P-0.5.png}
-Single trion, $\vb{P} = \SI{0.5}{\angstrom^{-1}}$
+\begin{frame}
+\frametitle{Exciton and trion: finite $\vb{Q} - \vb{w}$}
 
-\end{column}
-
-\end{columns}    
-
-\vspace{1cm}
+\begin{center}
+    \includegraphics[width=0.4\textwidth]{images/exciton-Q-1.2-w-0.7.png}
+    \includegraphics[width=0.4\textwidth]{images/trion-P-1.2-w-0.7.png}
+\end{center}
 
 \begin{itemize}
-    \only<1>{\item The center of the signature is still sticked to a replica of the conduction band
-    (moved downwards by $E_{\text{B}}$):
-    the maximum of a signature is reached when $\vb{k}_1 = \vb{k}_2 = 0$
-    where $E_{\text{T}} = \epsilon_v - E_{\text{B}}$}
-    \only<2>{\item The analytic form of the shape of a single-trion signature is still not clear; 
-    I tried to set one of $\vb{k}_{1, 2}$ to zero, 
-    or $\vb{k}_1 = \vb{k}_2$; 
-    both of them seem to work, but not that well; 
-    the dispersion relation given by the first (but not the second) condition 
-    is also a replica of $\epsilon_\text{v}$.} 
+    \item The signature curvature difference is more obvious.
+    \item The positions of the signatures are different! 
+    \begin{equation*}
+        \vb{k}_{\text{exciton, max}} = \frac{\me \vb{Q} + \mh \vb{w}}{\me + \mh}, \quad 
+        \vb{k}_{\text{trion, max}} = \frac{\me}{2\mh + \me} \vb{P} + \frac{2\mh}{2\mh + \me} \vb{w}.
+    \end{equation*}
 \end{itemize}
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Trion: tentative results}
+\frametitle{Exciton and trion: thermalized, $\beta = 10$}
 
-\begin{columns}
+\begin{center}
+    \includegraphics[width=0.4\textwidth]{images/exciton-β-10-w-0.7.png}
+    \includegraphics[width=0.4\textwidth]{images/trion-β-10-w-0.7.png}
+\end{center}    
 
-\only<1>{\begin{column}{0.45\textwidth}
-\centering
-    \includegraphics[width=\textwidth]{images/exciton-Q-0.0.png}
-    Exciton, $\vb{Q} = \SI{0.0}{\angstrom^{-1}}$
-\end{column}
-
-\begin{column}{0.43\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{images/trion-P-0.0.png}
-    Trion, $\vb{P} = \SI{0.0}{\angstrom^{-1}}$
-\end{column}}
-
-\only<2>{\begin{column}{0.45\textwidth}
-\centering
-    \includegraphics[width=\textwidth]{images/exciton-Q-0.5.png}
-    Exciton, $\vb{Q} = \SI{0.5}{\angstrom^{-1}}$
-\end{column}
-
-\begin{column}{0.43\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{images/trion-P-0.5.png}
-    Trion, $\vb{P} = \SI{0.5}{\angstrom^{-1}}$
-\end{column}}
-
-\end{columns}
+The trion calculation is not well-conserved: the sampling grid of $\vb{P}$ is too small; 
+I don't expect to see any large difference because the shape of the two signatures should both follow $\epsilon_{\text{c}}$.
 
 \end{frame}
 
@@ -386,9 +391,8 @@ Single trion, $\vb{P} = \SI{0.5}{\angstrom^{-1}}$
 \begin{itemize}
     \item Trion signature on ARPES spectrum looks similar to that of exciton 
     \item The finite-$T$ induced ``upper'' dispersion of the two is the same 
-    \item But the shape and spread of a single trion mode is still different from   
-    those of an exciton mode, 
-    even with close $E_{\text{B}}$
+    \item The trion and exciton binding energies are different 
+    \item With finite momenta, exciton and trion signatures are different in shape and position. 
 \end{itemize}
 
 \end{frame}
