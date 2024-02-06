@@ -1,11 +1,26 @@
-\documentclass[hyperref, a4paper]{article}
+\documentclass[%
+ reprint,
+superscriptaddress,
+%groupedaddress,
+%unsortedaddress,
+%runinaddress,
+%frontmatterverbose, 
+%preprint,
+%preprintnumbers,
+%nofootinbib,
+%nobibnotes,
+%bibnotes,
+ amsmath,amssymb,
+ aps,
+%pra,
+prb,
+%rmp,
+%prstab,
+%prstper,
+%floatfix,
+]{revtex4-2}
 
 \usepackage{textgreek}
-\usepackage{geometry}
-\usepackage{titling}
-\usepackage{titlesec}
-\usepackage{footnote}
-\usepackage[colorinlistoftodos]{todonotes}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{multirow}
@@ -13,7 +28,6 @@
 \usepackage{mathtools}
 \usepackage{bbm}
 \usepackage{graphicx}
-\usepackage{subcaption}
 \usepackage{physics}
 \usepackage{tensor}
 \usepackage{siunitx}
@@ -25,16 +39,9 @@
 \usepackage[colorlinks,unicode]{hyperref} % , linkcolor=black, anchorcolor=black, citecolor=black, urlcolor=black, filecolor=black
 \usepackage{xurl}
 \usepackage[most]{tcolorbox}
-\usepackage[backend=bibtex,sorting=none,doi=false,isbn=false,url=false]{biblatex}
-\addbibresource{trion.bib}
-\addbibresource{arpes.bib}
+
 
 \usepackage{prettyref}
-
-% Page style; to be removed when this article is placed in another template
-\geometry{left=3.18cm,right=3.18cm,top=2.54cm,bottom=2.54cm}
-\titlespacing{\paragraph}{0pt}{1pt}{10pt}[20pt]
-\setlength{\droptitle}{-5em}
 
 
 % Math operators
@@ -90,7 +97,6 @@
 
 
 \newcommand{\citetime}[1]{item \ref{#1} in \prettyref{sec:timeline}}
-\newcommand{\address}[1]{\href{#1}{\url{#1}}}
 \newcommand{\shortcode}[1]{\texttt{#1}}
 
 \DeclareSIUnit{\au}{a.u.}
@@ -99,39 +105,87 @@
 
 % Labels 
 \newcommand*{\ke}{\vb{k}_{\text{e}}}
+\newcommand*{\kei}[1]{\vb{k}_{\text{e#1}}}
 \newcommand*{\khi}[1]{\vb{k}_{\text{h#1}}}
 \newcommand*{\kh}{\vb{k}_{\text{h}}}
+\newcommand*{\kp}{\vb{k}_\parallel}
 \newcommand*{\re}{\vb{r}_{\text{e}}}
+\newcommand*{\rh}{\vb{r}_{\text{h}}}
 \newcommand*{\rhi}[1]{\vb{r}_{\text{h#1}}}
+\newcommand*{\rei}[1]{\vb{r}_{\text{e#1}}}
 \newcommand*{\me}{m_{\text{e}}}
 \newcommand*{\mh}{m_{\text{h}}}
 \newcommand*{\Eg}{E_{\text{g}}}
 
-\title{Trion ARPES signature}
-\author{Jinyuan Wu, someone else, Diana Y. Qiu}
 
 \begin{document}
+
+\title{Trion ARPES signature}
+\author{Jinyuan Wu}
+\email{jinyuan.wu@yale.edu}
+\affiliation{Department of Mechanical Engineering and Materials Science, Yale University, New Haven, CT 06520}
+\author{Diana Y. Qiu}
+\email{diana.qiu@yale.edu}
+\affiliation{Department of Mechanical Engineering and Materials Science, Yale University, New Haven, CT 06520}
 
 \maketitle
 
 \section{ARPES theory}
 
-When the probe is much weaker than the pump 
+In most driven ARPES settings, the probe is much weaker than the pump 
 and does not itself influence the electronic structure,
-the most generic theory of driven ARPES is based on the  
-pumped single-electron lesser Green function, 
-to which the pump adds a self-energy correction,
+and the generic theory of ARPES can be formulated by 
+treating the pump as a non-equilibrium self-energy, 
+while the effect of the probe can be captured by the first order perturbation  
+and hence the final ARPES intensity is proportional to the electron dipole and 
+the pumped single-electron lesser Green function
 \cite{freericks2009theoretical,schuler2021theory};
 the theory reduced to the usual Fermi golden rule 
-when the pump itself is weak \cite{sobota2021angle,freericks2021two}.
+when the pump is turned off \cite{sobota2021angle,freericks2021two}.
 When the pump pulse is strong at its peak but has faded away at the probing time, 
 the main effect of pumping is preparing an initial state, 
 and the ARPES intensity can be evaluated from 
 pure-state first-order time dependent perturbation theory,
-which gives a Fermi golden rule-like final result \cite{rustagi2018photoemission}.
-Here we generalize the methodology in \cite{rustagi2018photoemission} 
-to all possible exciton states caused by the pump and not just excitons.
-
+which gives a Fermi golden rule-like expression of the probability of an electron being pumped out of the sample~\cite{rustagi2018photoemission}.
+Ref.~\cite{rustagi2018photoemission} is focused on excitons;
+here we generalize its methodology to all excitations and have  
+\begin{widetext}
+    \begin{equation}
+        I_{\vb{k}}(\omega, t) \propto \sum_{n_1, n_2} \sum_{n}
+        \rho_n (M^{fn_2}_{\vb{k} \vb{k}_\parallel})^* M^{fn_1}_{\vb{k} \vb{k}_\parallel} 
+        \int_{t_0}^t \dd{t_1} \int_{t_0}^t \dd{t_2}
+        \ee^{-\ii (E_n - \omega ) (t_1 - t_2)}
+        \mel{\Psi_n}{c^\dagger_{n_2 \vb{k}_\parallel} 
+        U(t_2, t_1) c_{n_1 \vb{k}_\parallel}}{\Psi_n} s(t_1) s(t_2),
+        \label{eq:exciton-response}
+    \end{equation}
+\end{widetext}
+where $t$ is the observation time, 
+$t_0$ is the starting time of the probe pulse,
+$s(t)$ is the envelope function of the probe,
+$\omega$ is the output electron energy shifted by the frequency of the probe pulse 
+and the work function of the sample, 
+$\vb{k}$ is the momentum of the outgoing electron 
+and $\vb{k}_\parallel$ is its projection on the two-dimensional plane,  
+$n_{1, 2}$ are electron band indices, 
+$n = (S, \vb{Q})$ is the index of exciton modes, 
+$\rho_n$ is the effective density matrix of excitons, 
+$\ket*{\Psi_n}$ is the many-body wave function of the exciton state at $t=t_0$,
+and $U(t_2, t_1)$ is the time evolution operator.
+The $c^\dagger U c \ee^{- \ii E_n t}$ 
+factor comes from the electron lesser Green function; 
+the $\ee^{- \ii E_n t}$ factor comes from the time evolution of the excitation states, 
+while the time evolution operator $U(t_2, t_1)$ 
+instructs the time evolution of the residue of the excitation after one electron is driven out; 
+time oscillation from the two factors together gives us the energy conservation relation.
+For three-dimensional systems, the momenta of $c$ and $c^\dagger$ in the $c^\dagger U c$ factor can be different \cite{freericks2009theoretical},  
+but for two-dimensional materials however, since by momentum conservation  
+the crystal momentum of the band electron that is driven out by the external field 
+can only be the parallel component of $\vb{k}$, and we refer it as $\vb{k}_\parallel$ in \eqref{eq:exciton-response}.
+As below we are mostly dealing with the ARPES spectrum of a single mode
+In principle, the $\mel{\Psi_n}{c^\dagger_{n_2 \vb{k}_\parallel} U(t_2, t_1) c_{n_1 \vb{k}_\parallel}}{\Psi_n}$ matrix can be non-diagonal with an excited initial state;
+frequently, however, because of energy conservation, the signature at given $(\omega, \vb{k})$
+can only come from a single band, and in this case $n_1 = n_2$.
 
 \section{Two-band model for trion}
 
@@ -139,15 +193,31 @@ In this work, we generalize the two-band model approach to trions \cite{chang202
 to the indirect band gap case.
 We start with the following example.
 \begin{equation}
-    H = \frac{(\ke - \vb{w})^2}{2\me} + \Eg 
-    + \frac{\khi{1}^2}{2\mh} + \frac{\khi{2}^2}{2\mh} 
-    + V(\rhi{1} - \rhi{2}) - V(\re - \rhi{1}) - V(\re - \rhi{2}).
+    \begin{aligned}
+        H &= \frac{(\ke - \vb{w})^2}{2\me} + \Eg 
+        + \frac{\khi{1}^2}{2\mh} + \frac{\khi{2}^2}{2\mh} \\
+        &\quad+ V(\rhi{1} - \rhi{2}) - V(\re - \rhi{1}) - V(\re - \rhi{2}).
+    \end{aligned}
     \label{eq:two-band-w}
 \end{equation}
-Here $\khi{i}$ is the crystal momentum of the quantum state containing hole $i$ only, 
+Here $\khi{$i$}$ is the crystal momentum of the quantum state containing hole $i$ only, 
 which is the opposite of the momentum of the corresponding electron state of the hole;
 similarly, $\vb{k}^2/2\mh$ is the opposite of the dispersion relation of the valence band top,
-and therefore $\mh > 0$.
+and therefore $\mh > 0$, 
+and under this Hamiltonian we treat holes as ordinary particles with positive masses and positive charges and ordinary momentum conservation relations without minus signs. 
+
+The ARPES signature of trion mode $(S, \vb{P})$ comes solely from the electron in the trion.
+Therefore, the energy conservation relation hidden in \eqref{eq:exciton-response} means 
+the dispersion relation of the ARPES signature should always have the form of 
+\begin{equation}
+    \omega = E_n - \frac{\khi{1}^2}{2\mh} - \frac{\khi{2}^2}{2\mh}, 
+\end{equation}
+where $\khi{1, 2}$ are implicit functions of $\kp = \ke$ and $\vb{P}$.
+Unlike the case for excitons, however, 
+momentum conservation does not give a one-to-one mapping from $\ke$ and $\vb{P}$ to $\khi{1, 2}$; 
+we still need one additional constraint to pin down $\khi{1, 2}$, 
+which is to be given by the position of the trion wave function maximum when $\vb{P}$ and $\ke$ are given, 
+which, in turn, needs us to decompose \eqref{eq:two-band-w} into an external part that solely depends on the total momentum of the trion and an internal part that decides the structure of the trion wave function.
 
 It can be easily seen that the total momentum of the trion 
 \begin{equation}
@@ -188,11 +258,11 @@ in this way
     \khi{1,2} = \vb{k}_{1, 2} + \frac{\mh}{M} \vb{P},
 \end{equation}
 and the kinetic energy part of the \eqref{eq:two-band-w} now reads 
-\begin{equation}
+\[
     H_{\text{kin}} = \frac{(\vb{P} - \vb{w})^2}{2 M} + \Eg 
-    + \frac{\vb{k}_1^2}{2\mh} + \frac{\vb{k}_2^2}{2\mh}
+    + \frac{\vb{k}_1^2 + \vb{k}_2^2}{2\mh} 
     - \frac{\vb{w}^2}{2M} + \frac{(\vb{k}_1 + \vb{k}_2 + \vb{w})^2}{2\me}.
-\end{equation}
+\]
 We however want to shift the definitions of $\vb{k}$ 
 so that the kinetic part resembles the kinetic energy in a direct band gap system.
 By redefining 
@@ -202,16 +272,20 @@ By redefining
 \end{equation}
 and therefore 
 \begin{equation}
-    \ke = \frac{\me}{M} \vb{P} + \frac{2 \mh \vb{w}}{M} - \vb{k}_1 - \vb{k}_2, \quad 
-    \khi{1,2} = \vb{k}_{1,2} - \frac{\mh \vb{w}}{M} + \frac{\mh}{M} \vb{P},
+    \begin{aligned}
+        &\ke = \frac{\me}{M} \vb{P} + \frac{2 \mh \vb{w}}{M} - \vb{k}_1 - \vb{k}_2, \\ 
+        &\khi{1,2} = \vb{k}_{1,2} - \frac{\mh \vb{w}}{M} + \frac{\mh}{M} \vb{P},
+    \end{aligned}
 \end{equation}
 the total Hamiltonian now reads
 \begin{equation}
-    H =  \frac{(\vb{P} - \vb{w})^2}{2 M} + \Eg +
-    \underbrace{
-        \frac{\vb{k}_1^2}{2\mu} + \frac{\vb{k}_2^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{k}_2}{2\me}
-        + V(\vb{r}_1 - \vb{r}_2) - V(\vb{r}_1) - V(\vb{r}_2)
-    }_{H_{\text{internal}}}.
+    \begin{aligned}
+        H &=  \frac{(\vb{P} - \vb{w})^2}{2 M} + \Eg, \\ 
+        &\ \  + \underbrace{
+            \frac{\vb{k}_1^2}{2\mu} + \frac{\vb{k}_2^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{k}_2}{2\me}
+            + V(\vb{r}_1 - \vb{r}_2) - V(\vb{r}_1) - V(\vb{r}_2)
+        }_{H_{\text{internal}}}.
+    \end{aligned}
     \label{eq:internal-ham}
 \end{equation}
 The redefinition of $\vb{k}_{1, 2}$ does not change the commutation relation 
@@ -225,23 +299,113 @@ for the former we have \cite{rustagi2018photoemission}
 \end{equation}
 where 
 \begin{equation}
-    M = \me + \me, \quad 
-    \ke = \frac{\me}{M} \vb{Q} + \vb{k} + \frac{\mh}{M} \vb{w}, \quad 
-    \kh = \frac{\mh}{M} \vb{Q} - \vb{k} - \frac{\mh}{M} \vb{w}.
+    \begin{aligned}
+        &M = \me + \me, \\
+        &\ke = \frac{\me}{M} \vb{Q} + \vb{k} + \frac{\mh}{M} \vb{w}, \\
+        &\kh = \frac{\mh}{M} \vb{Q} - \vb{k} - \frac{\mh}{M} \vb{w}.
+    \end{aligned}
 \end{equation}
+
+The trion wave function therefore assumes the following form: 
+\begin{equation}
+    \psi_{S \vb{P}}(\vb{R}, \vb{r}_1, \vb{r}_2) = \ee^{\ii \vb{P} \cdot \vb{R}} \sum_{s_1, s_2} A_{s_1 s_2}^{S \vb{P}} \phi_{s_1}(\vb{r}_1) \phi_{s_2}(\vb{r}_2), 
+\end{equation}
+where $\phi_{s}(\vb{r})$ is an eigenfunction of the hydrogenic Hamiltonian $\frac{\vb{k}^2}{2\mu} - V(\vb{r})$, 
+and $A_{s_1 s_2}^{S \vb{P}}$ reflects the mixing of the modes by interactive Hamiltonian $V(\vb{r}_1 - \vb{r}_2)$ and $\vb{k}_1 \cdot \vb{k}_2 / 2\me$.
+Working in the momentum space we can also write 
+\begin{equation}
+    \psi_{S \vb{P}}(\vb{R}, \vb{p}_1, \vb{p}_2) = \ee^{\ii \vb{P} \cdot \vb{R}} \sum_{s_1, s_2} A_{s_1 s_2}^{S \vb{P}} \phi_{s_1}(\vb{p}_1) \phi_{s_2}(\vb{p}_2), 
+\end{equation}
+where $\phi_{s}(\vb{p})$ is the Fourier transform of $\phi_s(\vb{r})$.
+The additional constraint required to pin down the relation between $\khi{1,2}$ and $\ke, \vb{P}$ is maximization of $\psi_{S \vb{P}}(\vb{R}, \vb{p}_1, \vb{p}_2)$.
+
+\section{Two peak model}
 
 Similarly for 
 \begin{equation}
-    H = \frac{\ke^2}{2\me} + \Eg 
-    + \frac{\khi{1}^2}{2\mh} + \frac{(\khi{2} - \vb{w})^2}{2\mh} 
-    + V(\rhi{1} - \rhi{2}) - V(\re - \rhi{1}) - V(\re - \rhi{2}),
+    \begin{aligned}
+        H &= \frac{\ke^2}{2\me} + \Eg 
+        + \frac{\khi{1}^2}{2\mh} + \frac{(\khi{2} - \vb{w})^2}{2\mh} \\
+        &\ \ + V(\rhi{1} - \rhi{2}) - V(\re - \rhi{1}) - V(\re - \rhi{2}),
+    \end{aligned}
 \end{equation}
 by defining 
 \begin{equation}
-    \vb{k}_1 = - \ii \hbar \partial_{\vb{r}_{1, 2}} + \frac{\mh}{M} \vb{w}, \quad 
-    \vb{k}_2 = - \ii \hbar \partial_{\vb{r}_{1, 2}} - \frac{\me + \mh}{M} \vb{w},
+    \vb{k}_1 = - \ii \hbar \partial_{\vb{r}_{1}} + \frac{\mh}{M} \vb{w}, \quad 
+    \vb{k}_2 = - \ii \hbar \partial_{\vb{r}_{2}} - \frac{\me + \mh}{M} \vb{w},
+\end{equation}
+and hence 
+\begin{equation}
+    \begin{aligned}
+        &\ke = \frac{\me}{M} (\vb{P} - \vb{w}) - \vb{k}_1 - \vb{k}_2, \\ 
+        &\khi{1} = \vb{k}_1 - \frac{\mh}{M} \vb{w} + \frac{\mh}{M} \vb{P}, \\ 
+        &\khi{2} = \vb{k}_2 + \frac{\me + \mh}{M} \vb{w} + \frac{\mh}{M} \vb{P},
+    \end{aligned}
 \end{equation}
 we get exact the same Hamiltonian in \eqref{eq:internal-ham}.
+
+When $\vb{k}_1 = \vb{k}_2$, we have 
+\begin{equation}
+    \khi{1} = \frac{1}{2} (\vb{P} - \vb{w} - \ke), \quad 
+    \khi{2} = \frac{1}{2} (\vb{P} + \vb{w} - \ke), 
+\end{equation}
+and the dispersion relation is 
+\begin{equation}
+    \omega = E_{S\vb{P}} + \Eg + \frac{(\vb{P} - \vb{w} - \ke)^2}{4\mh}.
+\end{equation}
+
+In conclusion, the ARPES signature of any electron-hole-hole trion mode
+has two major differences from that of an exciton mode with a comparable momentum:
+the center and the curvature of the signature. 
+
+\section{Two-electron case}
+
+The shifts of the center and the curvature of ARPES signatures are even more clearly 
+when the trion mode has two electrons and one hole.
+A typical setting of such a trion mode can be described by the following two-band model, 
+where the two electrons reside at different valleys:
+\begin{equation}
+    \begin{aligned}
+    H &= \frac{\kei{1}^2}{2\me} + \frac{(\kei{2} - \vb{w})^2}{2\me} + \frac{\kh^2}{2\mh} \\
+    &\quad + V(\rei{1} - \rei{2}) - V(\rh - \rei{1}) - V(\rh - \rei{2}).
+    \end{aligned}
+\end{equation}
+The decomposition of the Hamiltonian into internal and external terms 
+follows exactly the same procedure as in the two-peak model; 
+we only need to swap the positions of electrons and holes. 
+Therefore we get 
+\begin{equation}
+    \begin{aligned}
+        \vb{r}_1 &= \rei{1} - \rh, \quad 
+        \vb{r}_2 = \rei{2} - \rh, \\
+        \vb{k}_1 &= - \ii \partial_{\vb{r}_1} + \frac{\me}{M} \vb{w}, \quad 
+        \vb{k}_2 = - \ii \partial_{\vb{r}_2} - \frac{\me + \mh}{M} \vb{w}, 
+    \end{aligned}
+\end{equation}
+and conversely 
+\begin{equation}
+    \begin{aligned}
+        &\kh = \frac{\mh}{M} (\vb{P} - \vb{w}) - \vb{k}_1 - \vb{k}_2, \\
+        &\kei{1} = \vb{k}_1 - \frac{\me}{M} \vb{w} + \frac{\me}{M} \vb{P}, \\
+        &\kei{2} = \vb{k}_2 + \frac{\me + \mh}{M} \vb{w} + \frac{\me}{M} \vb{P} .
+    \end{aligned}
+\end{equation}
+Now when one electron is driven out by the probe, 
+it can be e1 or e2, so $\kp = \kei{1, 2}$, 
+momentum conservation blocks any block terms between the two valleys, 
+so we can evaluate the ARPES signature contributed by the two valleys separately.
+This drastically changes the dispersion relation of the ARPES signature, 
+but the structure of trion wave function is intact.
+Therefore, the curvature of the ARPES signature can still be found by either postulating $\vb{k}_1 = \vb{k}_2$ or by postulating that one of the momenta vanishes.
+When $\vb{k}_1 = \vb{k}_2$ and $\kp = \kei{1}$, we have 
+\begin{equation}
+    \kei{2} - \vb{w} = \kp, \quad \kh = \vb{P} - \vb{w} - 2 \kp, 
+\end{equation}
+and the dispersion relation is 
+\begin{equation}
+    \omega = E_{\text{bind}} - \frac{\kp^2}{2\me} - \frac{(2 \kp + \vb{w} - \vb{P})^2}{2\mh}, 
+\end{equation}
+while the effective mass is 
 
 \section{Variational wave function}
 
@@ -320,7 +484,7 @@ and when $\vb{k}_1 = \vb{k}_2$, we have
 It can be seen that the trion ARPES signature shows a significantly smaller variance with respect to the trion temperature
 than the exciton ARPES signature does.
 
+\bibliography{arpes,trion}
 
-\printbibliography
 
 \end{document}
