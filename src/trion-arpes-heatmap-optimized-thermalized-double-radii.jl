@@ -44,9 +44,9 @@ include("arpes.jl")
     progress = Progress(length(Q_points)) 
     A_kω_β = sum(Q_points) do Q_point
         next!(progress)
-        A_kω_Q = single_trion_arpes_signature_thread(
+        A_kω_Q = trionarpes_e2h1h1_thread(
             ham, E_B, 
-            ground_state_1s_double_radii(IndirectTwoBandTrion2D(ham, dielectric), a, b), 
+            phi1sa1sb(IndirectTwoBandMat2D(ham, dielectric), a, b), 
             Q_point, 
             k_points, ω_points, 
             map(kx -> SVector{2, Float64}([kx, 0.0]), 

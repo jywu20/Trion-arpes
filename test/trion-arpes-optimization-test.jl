@@ -1,6 +1,9 @@
 using ProgressMeter
+using Test
 include("../src/trion-solver.jl")
 include("../src/arpes.jl")
+
+const TOL_SMALL = 1e-10
 
 # Finite momentum trion, slow version 
 @time let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
@@ -32,9 +35,9 @@ include("../src/arpes.jl")
     dielectric = Dielectric2D(ϵ)
     broadening(x) = @fastmath exp(- σ^2 * x^2)
 
-    @time A_kω_Q = single_trion_arpes_signature_thread(
+    @time A_kω_Q = trionarpes_e2h1h1_thread(
         ham, E_B, 
-        ground_state_1s(IndirectTwoBandTrion2D(ham, dielectric)), 
+        phi1s(IndirectTwoBandMat2D(ham, dielectric)), 
         Q_point, 
         k_points, ω_points, 
         map(kx -> SVector{2, Float64}([kx, 0.0]), 
@@ -43,9 +46,9 @@ include("../src/arpes.jl")
         broadening
     )     
     
-    @time A_kω_Q_def = single_trion_arpes_signature_def(
+    @time A_kω_Q_def = trionarpes_e2h1h1_def(
         ham, E_B, 
-        ground_state_1s(IndirectTwoBandTrion2D(ham, dielectric)), 
+        phi1s(IndirectTwoBandMat2D(ham, dielectric)), 
         Q_point, 
         k_points, ω_points, 
         map(kx -> SVector{2, Float64}([kx, 0.0]), 
@@ -54,5 +57,5 @@ include("../src/arpes.jl")
         broadening
     )     
     
-    sum(abs.(A_kω_Q_def - A_kω_Q)) 
+    @test sum(abs.(A_kω_Q_def - A_kω_Q)) < TOL_SMALL
 end

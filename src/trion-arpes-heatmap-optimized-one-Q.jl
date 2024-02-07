@@ -32,9 +32,9 @@ include("arpes.jl")
     dielectric = Dielectric2D(ϵ)
     broadening(x) = @fastmath exp(- σ^2 * x^2)
 
-    A_kω_Q = single_trion_arpes_signature_thread(
+    A_kω_Q = trionarpes_e2h1h1_thread(
         ham, E_B, 
-        ground_state_1s(IndirectTwoBandTrion2D(ham, dielectric)), 
+        phi1s(IndirectTwoBandMat2D(ham, dielectric)), 
         Q_point, 
         k_points, ω_points, 
         map(kx -> SVector{2, Float64}([kx, 0.0]), 
