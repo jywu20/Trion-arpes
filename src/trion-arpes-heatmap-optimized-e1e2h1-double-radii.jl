@@ -21,13 +21,14 @@ include("arpes.jl")
     k_points = map(t -> SVector{2, Float64}(collect(t)), 
         collect(Iterators.product(kx_points, ky_points))
     ),
-    ω_points = LinRange(0, 1.5, 500),
-    P_Tx = 0.7,
-    P_point  = SVector{2, Float64}([P_Tx, 0.0]) 
+    ω_points = LinRange(-1, 1.5, 500),
+    P_x = 0.7,
+    P_point  = SVector{2, Float64}([P_x, 0.0]) 
 
     ϵ_v2(k) =  - norm(k - w)^2 / 2m_h * inv_eV
     ϵ_v1(k) =  - norm(k)^2     / 2m_h * inv_eV
-    ϵ_c(k)  =    norm(k)^2     / 2m_e * inv_eV + E_g
+    ϵ_c1(k) =    norm(k)^2     / 2m_e * inv_eV + E_g
+    ϵ_c2(k) =    norm(k - w)^2 / 2m_e * inv_eV + E_g
     E_SP(P) = inv_eV * norm(P .- w)^2 / 2M .+ E_B .+ E_g
     
     M = 2m_h + m_e
@@ -61,21 +62,22 @@ include("arpes.jl")
         label = "",
         linestyle = :dash,
         c = colorant"lightskyblue3")
-    plot!(p, kx_points, ϵ_v2.(kx_points), 
+    plot!(p, kx_points, ϵ_c1.(kx_points), 
         label = "",
         linestyle = :dash,
         c = colorant"lightskyblue3")
-    plot!(p, kx_points, ϵ_c.(kx_points), 
+    plot!(p, kx_points, ϵ_c2.(kx_points), 
         label = "",
         linestyle = :dash,
         c = colorant"lightskyblue3")
         
     kx_near_valley = LinRange(-0.7, 0.7, 100)
     k_points_near_valley = map(x -> [x, 0.0], kx_near_valley)
-    # k_1 when k_1 = k_2
-    k1_near_valley_equal   = 1/2 * ((P_Tx - w) * m_e / M .- kx_near_valley)
+    # k_1 when e1 is out  
+    k1_near_valley_e1 = kx_near_valley .+ m_e / M * (w - P_x) 
+    k2_near_valley_e2 = kx_near_valley .- m_e / M * P_x .- (m_e + m_h) / M * w
     # K_1 when k_2 = 0
-    k1_near_valley_extreme = (P_Tx - w) * m_e / M .- kx_near_valley
+    k1_near_valley_extreme = (P_x - w) * m_e / M .- kx_near_valley
     # When k1, k2 = 0, the values of kh1 and kh2 w.r.t. Q 
     Q_wrt_ke = w .+ M / m_e * kx_near_valley
     kh1_k1k2max = m_h / M * Q_wrt_ke .- m_h / M * w 
@@ -83,29 +85,52 @@ include("arpes.jl")
 
     # Position of intensity peak: the brightest spot in one signature, 
     # with varying P_T 
-    plot!(p, kx_near_valley, 
-        ϵ_v1.(kh1_k1k2max) + ϵ_v2.(kh2_k1k2max) .+ E_SP.(Q_wrt_ke),
-        #label = raw"Varying $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = \mathbf{k}_2 = 0$",
-        label = raw"Varying $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}} = \mathbf{k}_{\mathrm{2}} = 0$",
-        linestyle = :dot,
-        c = colorant"firebrick2")
-    println(ϵ_v1.(kh1_k1k2max) + ϵ_v2.(kh2_k1k2max) .+ E_SP(Q_wrt_ke))
+#    plot!(p, kx_near_valley, 
+#        ϵ_v1.(kh1_k1k2max) + ϵ_v2.(kh2_k1k2max) .+ E_SP.(Q_wrt_ke),
+#        #label = raw"Varying $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = \mathbf{k}_2 = 0$",
+#        label = raw"Varying $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}} = \mathbf{k}_{\mathrm{2}} = 0$",
+#        linestyle = :dot,
+#        c = colorant"firebrick2")
+        
     # Dispersion relation when P_T is fixed to a constant 
+    #
+    # e1 is driven out, leaving e2 and h; 
+    # k1 = k2
     plot!(p, kx_near_valley, 
-        ϵ_v1.(k1_near_valley_extreme .- (w - P_Tx) * m_h / M) 
-        .+ ϵ_v2((m_e + m_h) / M * w + m_h / M * P_Tx)
-        .+ E_SP(P_Tx),
-        #label = raw"fixed $\mathbf{P}_\mathrm{T}$, $\mathbf{k}_1 = 0$ or $\mathbf{k}_2 = 0$",
+        - ϵ_c2.(k1_near_valley_e1 .+ (m_e + m_h) / M * w .+ m_e / M * P_x) 
+        .+ ϵ_v1.(m_h / M * (P_x - w) .- 2k1_near_valley_e1)
+        .+ E_SP(P_x), 
         label = raw"Fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}}$ or $\mathbf{k}_{\mathrm{2}}$ is $0$",
         linestyle = :dot, 
         c = colorant"aqua")
+    # e1 is driven out, leaving e2 and h; 
+    # k2 is set to zero.
     plot!(p, kx_near_valley, 
-        2 * ϵ_v1.(k1_near_valley_equal) 
-        .+ E_SP(P_Tx),
+        - ϵ_c2.((m_e + m_h) / M * w .+ m_e / M * P_x) 
+        .+ ϵ_v1.(m_h / M * (P_x - w) .- k1_near_valley_e1)
+        .+ E_SP(P_x), 
         label = raw"Fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}} = \mathbf{k}_{\mathrm{2}} $",
         linestyle = :dot, 
         c = colorant"deepskyblue2")
-    
+    # e2 is driven out, leaving e1 and h; 
+    # k1 = k2 
+    plot!(p, kx_near_valley, 
+        - ϵ_c1.(k2_near_valley_e2 .- m_e / M * w .+ m_e / M * P_x) 
+        .+ ϵ_v1.(m_h / M * (P_x - w) .- 2k2_near_valley_e2)
+        .+ E_SP(P_x), 
+        label = raw"Fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}}$ or $\mathbf{k}_{\mathrm{2}}$ is $0$",
+        linestyle = :dot, 
+        c = colorant"aqua")
+    # e2 is driven out, leaving e1 and h; 
+    # k1 is set to zero 
+    plot!(p, kx_near_valley, 
+        - ϵ_c1.( -m_e / M * w .+ m_e / M * P_x) 
+        .+ ϵ_v1.(m_h / M * (P_x - w) .- k2_near_valley_e2)
+        .+ E_SP(P_x), 
+        label = raw"Fixed $\mathbf{P}$, $\mathbf{k}_{\mathrm{1}} = \mathbf{k}_{\mathrm{2}} $",
+        linestyle = :dot, 
+        c = colorant"deepskyblue2")
+
     ylims!(p, (-0.8, 1.8))
     xlims!(p, (-0.8, 1.2))
     xlabel!(p, raw"$k$ (Å)")

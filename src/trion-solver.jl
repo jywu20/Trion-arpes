@@ -150,10 +150,10 @@ function trionarpes_e1e2h1_thread(
     A_kω_1 = tmap(heatmap_points) do (k_e1, ω)
         sum(k_points) do k_e2
             k_h = P_T - k_e1 - k_e2
-            ϵ_c2 =   inv_eV * (k_e2 - w)' * (k_e2 - w) / 2m_e
-            ϵ_v  = - inv_eV * k_h' * k_h / 2m_h
+            ϵ_c2 =  inv_eV * (k_e2 - w)' * (k_e2 - w) / 2m_e
+            ϵ_v  =  inv_eV * k_h' * k_h / 2m_h
 
-            δ_factor = broadening(ω - E_S_PT - ϵ_c2 - ϵ_v - E_B - E_g)
+            δ_factor = broadening(ω - E_S_PT + ϵ_c2 + ϵ_v - E_B)
             
             k_1 = k_e1 + m_e / M * w - m_e / M * P_T
             k_2 = k_e2 - (m_e + m_h) / M * w - m_e / M * P_T
@@ -166,10 +166,10 @@ function trionarpes_e1e2h1_thread(
     A_kω_2 = tmap(heatmap_points) do (k_e2, ω)
         sum(k_points) do k_e1
             k_h = P_T - k_e1 - k_e2
-            ϵ_c1 =   inv_eV * k_e1' * k_e1 / 2m_e
-            ϵ_v  = - inv_eV * k_h' * k_h / 2m_h
+            ϵ_c1 = inv_eV * k_e1' * k_e1 / 2m_e
+            ϵ_v  = inv_eV * k_h' * k_h / 2m_h
 
-            δ_factor = broadening(ω - E_S_PT - ϵ_c1 - ϵ_v - E_B - E_g)
+            δ_factor = broadening(ω - E_S_PT + ϵ_c1 + ϵ_v - E_B)
             
             k_1 = k_e1 + m_e / M * w - m_e / M * P_T
             k_2 = k_e2 - (m_e + m_h) / M * w - m_e / M * P_T
