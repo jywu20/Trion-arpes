@@ -153,7 +153,7 @@ function trionarpes_e1e2h1_thread(
             ϵ_c2 =  inv_eV * (k_e2 - w)' * (k_e2 - w) / 2m_e
             ϵ_v  =  inv_eV * k_h' * k_h / 2m_h
 
-            δ_factor = broadening(ω - E_S_PT + ϵ_c2 + ϵ_v - E_B)
+            δ_factor = broadening(ω - E_S_PT - E_B - E_g + ϵ_c2 + ϵ_v)
             
             k_1 = k_e1 + m_e / M * w - m_e / M * P_T
             k_2 = k_e2 - (m_e + m_h) / M * w - m_e / M * P_T
@@ -169,7 +169,7 @@ function trionarpes_e1e2h1_thread(
             ϵ_c1 = inv_eV * k_e1' * k_e1 / 2m_e
             ϵ_v  = inv_eV * k_h' * k_h / 2m_h
 
-            δ_factor = broadening(ω - E_S_PT + ϵ_c1 + ϵ_v - E_B)
+            δ_factor = broadening(ω - E_S_PT - E_B - E_g + ϵ_c1 + ϵ_v)
             
             k_1 = k_e1 + m_e / M * w - m_e / M * P_T
             k_2 = k_e2 - (m_e + m_h) / M * w - m_e / M * P_T

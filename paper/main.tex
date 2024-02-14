@@ -179,7 +179,7 @@ while the time evolution operator $U(t_2, t_1)$
 instructs the time evolution of the residue of the excitation after one electron is driven out; 
 time oscillation from the two factors together gives us the energy conservation relation
 \begin{equation}
-    \omega = E_n - E_{\text{remain}} , 
+    \omega = E_n - E_{\text{residue}} , 
 \end{equation}
 where $E_{\text{residue}}$ refers to the remaining energy of the system after
 one electron is driven out from $n_1, \kp$.
@@ -285,9 +285,9 @@ and therefore
 the total Hamiltonian now reads
 \begin{equation}
     \begin{aligned}
-        H &=  \frac{(\vb{P} - \vb{w})^2}{2 M} + \Eg, \\ 
+        H &=  \frac{(\vb{P} - \vb{w})^2}{2 M} + \Eg \\ 
         &\ \  + \underbrace{
-            \frac{\vb{k}_1^2}{2\mu} + \frac{\vb{k}_2^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{k}_2}{2\me}
+            \frac{\vb{k}_1^2 + \vb{k}_2^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{k}_2}{2\me}
             + V(\vb{r}_1 - \vb{r}_2) - V(\vb{r}_1) - V(\vb{r}_2)
         }_{H_{\text{internal}}}.
     \end{aligned}
@@ -296,9 +296,10 @@ the total Hamiltonian now reads
 The redefinition of $\vb{k}_{1, 2}$ does not change the commutation relation 
 between $\vb{r}_{1, 2}$ and $\vb{k}_{1, 2}$.
 We find that the internal part of the Hamiltonian has the same form 
-as the Hamiltonian in \cite{chang2021variationally}. 
+as the trion Hamiltonian in \cite{chang2021variationally}, 
+which includes no indirect band gap.
 This can also be seen as generalization of the indirect band gap exciton two-band model to the trion;
-for the former we have \cite{rustagi2018photoemission} 
+for the exciton case we have \cite{rustagi2018photoemission} 
 \begin{equation}
     H = \frac{(\vb{Q} - \vb{w})^2}{2M} + \Eg + \frac{\vb{k}^2}{2\mu} - V(\vb{r}), 
 \end{equation}
@@ -311,7 +312,12 @@ where
     \end{aligned}
 \end{equation}
 
-The trion wave function therefore assumes the following form: 
+After diagonalization of \eqref{eq:internal-ham}, we get a trion spectrum with the form of 
+\begin{equation}
+    E_{S \vb{P}} = \frac{(\vb{P} - \vb{w})^2}{2M} + \Eg + E^{\text{b}}_{S},
+\end{equation}
+where $E_S^{\text{b}}$ comes from diagonalization of $H_{\text{internal}}$.
+The trion wave function coming from diagonalization of  $H_{\text{internal}}$ assumes the following form: 
 \begin{equation}
     \psi_{S \vb{P}}(\vb{R}, \vb{r}_1, \vb{r}_2) = \ee^{\ii \vb{P} \cdot \vb{R}} \sum_{s_1, s_2} A_{s_1 s_2}^{S \vb{P}} \phi_{s_1}(\vb{r}_1) \phi_{s_2}(\vb{r}_2), 
 \end{equation}
@@ -371,14 +377,14 @@ A typical setting of such a trion mode can be described by the following two-ban
 where the two electrons reside at different valleys:
 \begin{equation}
     \begin{aligned}
-    H &= \frac{\kei{1}^2}{2\me} + \frac{(\kei{2} - \vb{w})^2}{2\me} + \frac{\kh^2}{2\mh} \\
+    H &= \frac{\kei{1}^2}{2\me} + \frac{(\kei{2} - \vb{w})^2}{2\me} + \frac{\kh^2}{2\mh} + 2 \Eg \\
     &\quad + V(\rei{1} - \rei{2}) - V(\rh - \rei{1}) - V(\rh - \rei{2}).
     \end{aligned}
 \end{equation}
 The decomposition of the Hamiltonian into internal and external terms 
 follows exactly the same procedure as in the two-peak model; 
 we only need to swap the positions of electrons and holes. 
-Therefore we get 
+Therefore we find that under 
 \begin{equation}
     \begin{aligned}
         \vb{r}_1 &= \rei{1} - \rh, \quad 
@@ -387,20 +393,42 @@ Therefore we get
         \vb{k}_2 = - \ii \partial_{\vb{r}_2} - \frac{\me + \mh}{M} \vb{w}, 
     \end{aligned}
 \end{equation}
-and conversely 
+or conversely 
 \begin{equation}
     \begin{aligned}
         &\kh = \frac{\mh}{M} (\vb{P} - \vb{w}) - \vb{k}_1 - \vb{k}_2, \\
         &\kei{1} = \vb{k}_1 - \frac{\me}{M} \vb{w} + \frac{\me}{M} \vb{P}, \\
-        &\kei{2} = \vb{k}_2 + \frac{\me + \mh}{M} \vb{w} + \frac{\me}{M} \vb{P} .
+        &\kei{2} = \vb{k}_2 + \frac{\me + \mh}{M} \vb{w} + \frac{\me}{M} \vb{P} ,
     \end{aligned}
 \end{equation}
+the Hamiltonian of the two-electron-one-hole trion is reduced to 
+% See src/two-electron.nb
+\begin{equation}
+    \begin{aligned}
+        H &=  \frac{(\vb{P} - \vb{w})^2}{2 M} + 2 \Eg, \\ 
+        &\ \  + \underbrace{
+            \frac{\vb{k}_1^2}{2\mu} + \frac{\vb{k}_2^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{k}_2}{2\mh}
+            + V(\vb{r}_1 - \vb{r}_2) - V(\vb{r}_1) - V(\vb{r}_2)
+        }_{H_{\text{internal}}},
+    \end{aligned}
+\end{equation}
+a form resembling \eqref{eq:internal-ham}, 
+the only differences being the coefficient of the $\vb{k}_1 \cdot \vb{k}_2$ term
+and the $2\Eg$ term due to the fact that there are two electrons now.
 Now when one electron is driven out by the probe, 
-it can be e1 or e2, so $\kp = \kei{1, 2}$, 
+it can be e1 or e2, so $\kp = \kei{1,2}$, 
 momentum conservation blocks any block terms between the two valleys, 
 so we can evaluate the ARPES signature contributed by the two valleys separately.
 This drastically changes the dispersion relation of the ARPES signature, 
 but the structure of trion wave function is intact.
+The most remarkable difference between the ARPES signature of a negative trion 
+and that of a positive trion
+is the former has a vertical ``tail'': 
+when $\kp = \kei{1}$ is chosen, $\vb{k}_2$ is allow to move freely, 
+and it continuously adjusts the energy of the remaining of the trion after e1 is driven out, 
+which means the ARPES signature will have a long, vertical component 
+that does not coincide with any dispersion relations. % TODO: rework the wording
+
 Therefore, the curvature of the ARPES signature can still be found by either postulating $\vb{k}_1 = \vb{k}_2$ or by postulating that one of the momenta vanishes.
 When $\vb{k}_1 = \vb{k}_2$ and $\kp = \kei{1}$, we have 
 \begin{equation}
@@ -408,7 +436,7 @@ When $\vb{k}_1 = \vb{k}_2$ and $\kp = \kei{1}$, we have
 \end{equation}
 and the dispersion relation is 
 \begin{equation}
-    \omega = E_{\text{bind}} - \frac{\kp^2}{2\me} - \frac{(2 \kp + \vb{w} - \vb{P})^2}{2\mh}, 
+    \omega = \Eg + E_{\text{b}} + \frac{\vb{P}^2}{2M} - \frac{\kp^2}{2\me} - \frac{(2 \kp + \vb{w} - \vb{P})^2}{2\mh}, 
 \end{equation}
 while the effective mass is 
 

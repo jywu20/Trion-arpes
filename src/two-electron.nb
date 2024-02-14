@@ -1,0 +1,132 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      3832,        124]
+NotebookOptionsPosition[      3336,        106]
+NotebookOutlinePosition[      3752,        123]
+CellTagsIndexPosition[      3709,        120]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"Collect", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         FractionBox[
+          SuperscriptBox["ke1", "2"], 
+          RowBox[{"2", "me"}]], "+", 
+         FractionBox[
+          SuperscriptBox[
+           RowBox[{"(", 
+            RowBox[{"ke2", " ", "-", " ", "w"}], ")"}], "2"], 
+          RowBox[{"2", "me"}]], "+", 
+         FractionBox[
+          SuperscriptBox["kh", "2"], 
+          RowBox[{"2", "mh"}]]}], " ", "/.", " ", 
+        RowBox[{"{", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"kh", " ", "->", " ", 
+           RowBox[{
+            RowBox[{
+             FractionBox["mh", "M"], 
+             RowBox[{"(", 
+              RowBox[{"P", "-", "w"}], ")"}]}], " ", "-", " ", "k1", " ", "-",
+             " ", "k2"}]}], ",", " ", "\[IndentingNewLine]", 
+          RowBox[{"ke1", " ", "->", " ", 
+           RowBox[{"k1", " ", "-", " ", 
+            RowBox[{
+             FractionBox["me", "M"], "w"}], "+", 
+            RowBox[{
+             FractionBox["me", "M"], "P"}]}]}], ",", " ", 
+          "\[IndentingNewLine]", 
+          RowBox[{"ke2", " ", "->", 
+           RowBox[{"k2", "+", " ", 
+            RowBox[{
+             FractionBox[
+              RowBox[{"me", " ", "+", " ", "mh"}], "M"], "w"}], "+", 
+            RowBox[{
+             FractionBox["me", "M"], "P"}]}]}]}], "\[IndentingNewLine]", 
+         "}"}]}], " ", "//", " ", "Expand"}], ")"}], " ", "/.", " ", 
+     RowBox[{"M", " ", "->", " ", 
+      RowBox[{
+       RowBox[{"2", "me"}], "+", "mh"}]}]}], " ", "//", " ", "FullSimplify"}],
+    ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"k1", ",", " ", "k2", ",", " ", 
+     RowBox[{"P", "-", "w"}]}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.9168664711250143`*^9, 3.916866503168533*^9}},
+ CellLabel->"In[19]:=",ExpressionUUID->"4a1a5c9a-907a-4f91-8a7f-dbef2a04eb88"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   FractionBox["1", "2"], " ", 
+   SuperscriptBox["k1", "2"], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     FractionBox["1", "me"], "+", 
+     FractionBox["1", "mh"]}], ")"}]}], "+", 
+  RowBox[{
+   FractionBox["1", "2"], " ", 
+   SuperscriptBox["k2", "2"], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     FractionBox["1", "me"], "+", 
+     FractionBox["1", "mh"]}], ")"}]}], "+", 
+  FractionBox[
+   RowBox[{"k1", " ", "k2"}], "mh"], "+", 
+  FractionBox[
+   SuperscriptBox[
+    RowBox[{"(", 
+     RowBox[{"P", "-", "w"}], ")"}], "2"], 
+   RowBox[{"2", " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"2", " ", "me"}], "+", "mh"}], ")"}]}]]}]], "Output",
+ CellChangeTimes->{{3.916866468554798*^9, 3.9168665038989654`*^9}},
+ CellLabel->"Out[19]=",ExpressionUUID->"fb06709a-d27b-4c20-bc46-f36aa2618948"]
+}, Open  ]]
+},
+WindowSize->{960, 478},
+WindowMargins->{{-5.5, Automatic}, {Automatic, -5.5}},
+FrontEndVersion->"13.1 for Microsoft Windows (64-bit) (2022\:5e748\:670822\
+\:65e5)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"8e1d9998-c89e-44e6-87b4-260a4f2b03cf"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 1911, 52, 237, "Input",ExpressionUUID->"4a1a5c9a-907a-4f91-8a7f-dbef2a04eb88"],
+Cell[2494, 76, 826, 27, 53, "Output",ExpressionUUID->"fb06709a-d27b-4c20-bc46-f36aa2618948"]
+}, Open  ]]
+}
+]
+*)
+
