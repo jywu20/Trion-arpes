@@ -1,0 +1,3 @@
+- [ ] Realistic band parameters
+- [ ] Criteria for the shape of signature 
+- [ ] Use Makie for all the plots

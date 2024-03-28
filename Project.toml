@@ -1,6 +1,8 @@
 [deps]
 CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
 Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 ThreadTools = "dbf13d8f-d36e-4350-8970-f3a99faba1a8"

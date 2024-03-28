@@ -122,7 +122,6 @@ prb,
 
 \title{Trion ARPES signature}
 \author{Jinyuan Wu}
-\email{jinyuan.wu@yale.edu}
 \affiliation{Department of Mechanical Engineering and Materials Science, Yale University, New Haven, CT 06520}
 \author{Diana Y. Qiu}
 \email{diana.qiu@yale.edu}
@@ -287,7 +286,7 @@ the total Hamiltonian now reads
     \begin{aligned}
         H &=  \frac{(\vb{P} - \vb{w})^2}{2 M} + \Eg \\ 
         &\ \  + \underbrace{
-            \frac{\vb{k}_1^2 + \vb{k}_2^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{k}_2}{2\me}
+            \frac{\vb{k}_1^2 + \vb{k}_2^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{k}_2}{\me}
             + V(\vb{r}_1 - \vb{r}_2) - V(\vb{r}_1) - V(\vb{r}_2)
         }_{H_{\text{internal}}}.
     \end{aligned}
@@ -407,7 +406,7 @@ the Hamiltonian of the two-electron-one-hole trion is reduced to
     \begin{aligned}
         H &=  \frac{(\vb{P} - \vb{w})^2}{2 M} + 2 \Eg, \\ 
         &\ \  + \underbrace{
-            \frac{\vb{k}_1^2}{2\mu} + \frac{\vb{k}_2^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{k}_2}{2\mh}
+            \frac{\vb{k}_1^2}{2\mu} + \frac{\vb{k}_2^2}{2\mu} + \frac{\vb{k}_1 \cdot \vb{k}_2}{\mh}
             + V(\vb{r}_1 - \vb{r}_2) - V(\vb{r}_1) - V(\vb{r}_2)
         }_{H_{\text{internal}}},
     \end{aligned}
@@ -439,6 +438,11 @@ and the dispersion relation is
     \omega = \Eg + E_{\text{b}} + \frac{\vb{P}^2}{2M} - \frac{\kp^2}{2\me} - \frac{(2 \kp + \vb{w} - \vb{P})^2}{2\mh}, 
 \end{equation}
 while the effective mass is 
+
+\begin{figure}
+    \includegraphics[width=0.4\textwidth]{figs/trion-e1e2h1-P-0.7-w-0.7-makie.png}
+    \caption{The simulated ARPES spectrum of the eeh trion. Effective masses and the band gap are from Ref.~\cite{qiu2013optical}.}
+\end{figure}
 
 \section{Variational wave function}
 
@@ -517,7 +521,7 @@ and when $\vb{k}_1 = \vb{k}_2$, we have
 It can be seen that the trion ARPES signature shows a significantly smaller variance with respect to the trion temperature
 than the exciton ARPES signature does.
 
-\bibliography{arpes,trion}
+\bibliography{arpes,trion,materials}
 
 
 \end{document}
