@@ -8,20 +8,21 @@ include("arpes-makie.jl")
     E_g = 2.84,
     ϵ = 6.4, 
     E_B = -0.1,
-    w = 0.7,
+    hexagonal_edge = 4π / (3 * 3.144817974),
+    w = hexagonal_edge,
     β = 1,
     a = 10.3,
     b = 25.2,
-    kx_points = LinRange(-1.2, 1.2, 200),
-    ky_points = LinRange(-1.2, 1.2, 200),
+    kx_points = LinRange(-0.35, 1.7, 200),
+    ky_points = LinRange(-0.35, 1.7, 200),
     dkx = step(kx_points), 
     dky = step(ky_points),
     dk = dkx * dky,
     k_points = map(t -> SVector{2, Float64}(collect(t)), 
         collect(Iterators.product(kx_points, ky_points))
     ),
-    ω_points = LinRange(-1, 3, 500),
-    P_x = 0.7,
+    ω_points = LinRange(0, 4, 500),
+    P_x = hexagonal_edge,
     P_point  = SVector{2, Float64}([P_x, 0.0]) 
 
     ϵ_v2(k) =  - norm(k - w)^2 / 2m_h * inv_eV
@@ -80,7 +81,7 @@ include("arpes-makie.jl")
         colorrange = (0, 10),
     )
         
-    kx_near_valley = LinRange(-0.7, 0.7, 100)
+    kx_near_valley = LinRange(minimum(kx_points), maximum(kx_points), 100)
     k_points_near_valley = map(x -> [x, 0.0], kx_near_valley)
     # k_1 when e1 is out  
     k1_near_valley_e1 = kx_near_valley .+ m_e / M * (w - P_x) 
@@ -154,13 +155,24 @@ include("arpes-makie.jl")
         colorrange = (0, 10),
     )
 
-    axislegend(ax_heatmap, backgroundcolor = RGBA(1, 1, 1, 0.5), framecolor = RGBA(1, 1, 1, 0.5), labelsize = 18)
+    axislegend(ax_heatmap, 
+        backgroundcolor = RGBA(1, 1, 1, 0.5), 
+        framecolor = RGBA(1, 1, 1, 0.5), 
+        labelsize = 18, 
+        position = :rb,
+    )
 
     ylims!(ax_heatmap, (-0.8, 4))
-    xlims!(ax_heatmap, (-0.8, 1.2))
+    xlims!(ax_heatmap, (minimum(kx_points), maximum(kx_points)))
     hidedecorations!(ax_heatmap, ticks = false, ticklabels = false, label = false)
     
-    save("trion-e1e2h1-P-$(P_point[1])-w-$w-makie.png", fig)
+    Colorbar(fig[1, 2], 
+        colormap = arpes_colormap(transparency_gradience),
+        colorrange = (minimum(A_kω_Q), maximum(A_kω_Q))
+    )
+    
+    save("trion-e1e2h1-P-$(round(P_point[1] / hexagonal_edge, digits = 3))-w-$(round(w / hexagonal_edge, digits = 3))-makie.png", fig)
+    save("trion-e1e2h1-P-$(round(P_point[1] / hexagonal_edge, digits = 3))-w-$(round(w / hexagonal_edge, digits = 3))-makie.pdf", fig)
     fig
 end
 
@@ -183,7 +195,7 @@ end
     k_points = map(t -> SVector{2, Float64}(collect(t)), 
         collect(Iterators.product(kx_points, ky_points))
     ),
-    ω_points = LinRange(-1, 1.5, 500),
+    ω_points = LinRange(-1, 4, 500),
     P_x = 0.7,
     P_point  = SVector{2, Float64}([P_x, 0.0]) 
 

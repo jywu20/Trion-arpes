@@ -22,6 +22,7 @@ prb,
 
 \usepackage{textgreek}
 \usepackage{booktabs}
+\usepackage{subcaption}
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{amsmath, amssymb, amsthm}
@@ -331,6 +332,19 @@ The additional constraint required to pin down the relation between $\khi{1,2}$ 
 
 \section{Two peak model}
 
+\begin{figure*}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/exciton-Q-0.2-w-0.0-makie.png}      
+        \subcaption{}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/trion-e1h1h2-P-1.2-w-1.0-makie.png}
+        \subcaption{}
+    \end{subfigure}
+    \caption{The simulated ARPES spectra of the exciton (a) and the ehh trion (b). Effective masses and the band gap are from Ref. \cite{qiu2013optical}.}
+\end{figure*}
+
 Similarly for 
 \begin{equation}
     \begin{aligned}
@@ -440,7 +454,7 @@ and the dispersion relation is
 while the effective mass is 
 
 \begin{figure}
-    \includegraphics[width=0.4\textwidth]{figs/trion-e1e2h1-P-0.7-w-0.7-makie.png}
+    \includegraphics[width=0.4\textwidth]{figs/trion-e1e2h1-P-1.0-w-1.0-makie.png}
     \caption{The simulated ARPES spectrum of the eeh trion. Effective masses and the band gap are from Ref.~\cite{qiu2013optical}.}
 \end{figure}
 
