@@ -192,11 +192,13 @@ In principle, the $\mel{\Psi_n}{c^\dagger_{n_2 \vb{k}_\parallel} U(t_2, t_1) c_{
 frequently, however, because of energy conservation, the signature at given $(\omega, \vb{k})$
 can only come from a single band, and in this case $n_1 = n_2$.
 
-\section{Two-band model for trion}
+\section{Two-band model for a positive trion}
 
 In this work, we generalize the two-band model approach to trions \cite{chang2021variationally}
 to the indirect band gap case.
-We start with the following example.
+We start with the following Hamiltonian of a negative trion, 
+i.e. a trion that contains one electron and two holes (ehh).
+The effective Hamiltonian reads
 \begin{equation}
     \begin{aligned}
         H &= \frac{(\ke - \vb{w})^2}{2\me} + \Eg 
@@ -342,7 +344,10 @@ The additional constraint required to pin down the relation between $\khi{1,2}$ 
         \includegraphics[width=\textwidth]{figs/trion-e1h1h2-P-1.2-w-1.0-makie.png}
         \subcaption{}
     \end{subfigure}
-    \caption{The simulated ARPES spectra of the exciton (a) and the ehh trion (b). Effective masses and the band gap are from Ref. \cite{qiu2013optical}.}
+    \caption{The simulated ARPES spectra of the exciton (a) and the ehh trion (b). 
+    Effective masses and the band gap are from Ref. \cite{qiu2013optical}.
+    The curvatures of the two signals are different, 
+    and so are the center of them.}
 \end{figure*}
 
 Similarly for 
@@ -377,6 +382,13 @@ and the dispersion relation is
 \begin{equation}
     \omega = E_{S\vb{P}} + \Eg + \frac{(\vb{P} - \vb{w} - \ke)^2}{4\mh}.
 \end{equation}
+We note that the effective mass of this dispersion relation is $2 \mh$ instead of $\mh$,
+meaning that the ARPES signature does not have a well-defined curvature corresponding to an effective mass of $\mh$.
+Moreover, the center of the ARPES signature is predicted to be 
+\begin{equation}
+    \ke = \frac{\me}{M} (\vb{P} - \vb{w}),
+\end{equation}
+different from 
 
 In conclusion, the ARPES signature of any electron-hole-hole trion mode
 has two major differences from that of an exciton mode with a comparable momentum:
@@ -451,7 +463,7 @@ and the dispersion relation is
 \begin{equation}
     \omega = \Eg + E_{\text{b}} + \frac{\vb{P}^2}{2M} - \frac{\kp^2}{2\me} - \frac{(2 \kp + \vb{w} - \vb{P})^2}{2\mh}, 
 \end{equation}
-while the effective mass is 
+while the effective mass is  TODO: an analytic expression giving the shape of the signature is still elusive
 
 \begin{figure}
     \includegraphics[width=0.4\textwidth]{figs/trion-e1e2h1-P-1.0-w-1.0-makie.png}

@@ -1,4 +1,5 @@
 using CairoMakie
+using MakieTeX
 using LinearAlgebra
 using Colors
 using ColorSchemes
