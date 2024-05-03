@@ -4,7 +4,8 @@ using Printf
 
 ##
 
-# Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
+# Note that here σ tells us the width of the pulse; 
+# it should be *large* to produce δ-function like ARPES spectrum
 σ = 20fs
 m_h = 0.21
 m_e = 0.37
@@ -38,7 +39,7 @@ M = 2m_h + m_e
 
 ham = IndirectTwoBandModel2D(m_e, m_h, E_g, SVector{2, Float64}([w, 0.0]))
 dielectric = Dielectric2D(ϵ)
-broadening(x) = @fastmath exp(- σ^2 * x^2)
+broadening = gaussian_broadening(σ) 
 
 A_kω_Q = trionarpes_e1h1h2_thread(
     ham, E_B,
@@ -62,7 +63,7 @@ w = ham.w
 E_S_PT = inv_eV * (P_T - w)' * (P_T - w) / 2M
 A_SQ_k1k2 = phi1sa1sb(IndirectTwoBandMat2D(ham, dielectric), a, b)
 
-k_e = SVector{2, Float64}([0.38, 0.0])
+k_e = SVector{2, Float64}([0.36, 0.0])
 
 # The contributions of (various values of) kh1 and ω to the ARPES spectrum
 # when ke is fixed to a given value.
@@ -98,6 +99,7 @@ fig = Figure(size=(1000,500))
 
 ax_arpes_ω = Axis(fig[1, 1],
     ylabel = L"$ω$ (eV)",
+    xlabel = L"A(k_\mathrm{e},\omega,k_\mathrm{h1})",
     xlabelsize = 20,
     ylabelsize = 20,
     xticklabelsize = 18,
@@ -146,10 +148,6 @@ if show_dispersion
     hlines!(ax_heatmap_single_kh1, ω_Amax, color = colorant"gray80")
 end
 
-heatmap!(ax_heatmap_single_kh1, kx_points, ω_points, Akh1ω_ke,
-    colormap = arpes_colormap(transparency_gradience),
-)
-
 let Ak1_SQ_ke = map(kx_points) do k1x
         k1 = SVector{2, Float64}([k1x, 0.0])
         k2 = m_e / M * (P_T - w) - k1 - k_e
@@ -159,12 +157,16 @@ let Ak1_SQ_ke = map(kx_points) do k1x
     kh1x_ke = kx_points .+ m_h / M * (P_Tx - w[1])
     lines!(ax_heatmap_single_kh1, 
         kh1x_ke, 
-        Ak1_SQ_ke * 20
+        Ak1_SQ_ke / maximum(Ak1_SQ_ke) 
     ) 
 
     sorted_indices = sortperm(Ak1_SQ_ke, rev=true)
     vlines!(ax_heatmap_single_kh1, kh1x_ke[sorted_indices[1:2]], color = colorant"gray80")
 end
+
+heatmap!(ax_heatmap_single_kh1, kx_points, ω_points, Akh1ω_ke,
+    colormap = arpes_colormap(transparency_gradience),
+)
 
 ylims!(ax_heatmap_single_kh1, (minimum(ω_points), maximum(ω_points)))
 hidedecorations!(ax_heatmap_single_kh1, ticks = false, ticklabels = false, label = false)
@@ -198,7 +200,7 @@ heatmap!(ax_heatmap_single, kx_points, ω_points, A_kω_Q,
 hidedecorations!(ax_heatmap_single, ticks = false, ticklabels = false, label = false)
 ylims!(ax_heatmap_single, (minimum(ω_points), maximum(ω_points)))
 
-save("trion-arpes-sigma-$(σ/fs)-nk-$nk_side.png", fig)
+save("trion-arpes-ke-$(@sprintf "%4.2f" k_e[1])-sigma-$(σ/fs)-nk-$nk_side.png", fig)
 
 fig
 
@@ -219,7 +221,8 @@ let fig = Figure()
         k2 = m_e / M * (P_T - w) - k1 - k_e
         A_SQ_k1k2(k1, k2)
     end
-    ax = Axis(fig[1, 1])
-    heatmap!(ax, kx_points, ky_points, Ak1_SQ_ke)
+    ax = Axis(fig[1, 1], aspect=1)
+    heatmap!(ax, kx_points .+ m_h / M * (P_Tx - w[1]), ky_points, Ak1_SQ_ke)
+    save("A-kh1-arpes-ke-$(@sprintf "%4.2f" k_e[1])-sigma-$(σ/fs)-nk-$nk_side.png", fig) 
     fig
 end
