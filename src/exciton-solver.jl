@@ -1,5 +1,6 @@
 using StaticArrays
 using ThreadTools
+using LinearAlgebra
 
 include("two-band.jl")
 
@@ -56,3 +57,4 @@ function ground_state_1s(exciton_spec::IndirectTwoBandExciton2D)
 
     x -> ϕ_1s(x, a_ex)    
 end
+
