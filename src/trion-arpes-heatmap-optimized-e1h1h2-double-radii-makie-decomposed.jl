@@ -206,6 +206,36 @@ fig
 
 ##
 
+let 
+    fig = Figure(size=(500,500))
+    
+    ax_heatmap_single = Axis(fig[1, 1], 
+        xlabel = L"$k_{\mathrm{e}}$ (Å)", 
+        ylabel = L"$ω$ (eV)",
+        xlabelsize = 20,
+        ylabelsize = 20,
+        xticklabelsize = 18,
+        yticklabelsize = 18,
+    )
+    
+    hlines!(
+        ax_heatmap_single, 
+        ωke_Amax(k_e[1]),
+        color = colorant"gray80",
+        linestyle = :dot 
+    )
+    lines!(ax_heatmap_single, kx_points, ωke_Amax.(kx_points), color = colorant"aqua")
+    heatmap!(ax_heatmap_single, kx_points, ω_points, A_kω_Q,
+        colormap = arpes_colormap(transparency_gradience),
+    )
+    hidedecorations!(ax_heatmap_single, ticks = false, ticklabels = false, label = false)
+    ylims!(ax_heatmap_single, (minimum(ω_points), maximum(ω_points)))
+    
+    fig
+end
+
+##
+
 let fig = Figure()
     idx_ke = argmin(abs.(kx_points .- k_e[1]))
     ax = Axis(fig[1, 1])

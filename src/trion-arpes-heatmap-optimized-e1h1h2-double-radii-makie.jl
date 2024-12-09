@@ -141,3 +141,73 @@ include("arpes-makie.jl")
     save("trion-e1h1h2-P-$(round(P_point[1] / hexagonal_edge, digits = 3))-w-$(round(w / hexagonal_edge, digits = 3))-makie.pdf", fig)
     fig
 end
+
+# Pure band plots, to be compared with ARPES
+@time let σ = 20fs, # Note that here σ tells us the width of the pulse; it should be *large* to produce δ-function like ARPES spectrum
+    m_h = 0.21,
+    m_e = 0.37,
+    E_g = 2.84,
+    ϵ = 6.4, 
+    E_B = -0.1,
+    hexagonal_edge = 4π / (3 * 3.144817974),
+    w = hexagonal_edge,
+    β = 1,
+    a = 10.3,
+    b = 25.2,
+    kx_points = LinRange(-1.2, 1.2, 200),
+    ky_points = LinRange(-1.2, 1.2, 200),
+    dkx = step(kx_points), 
+    dky = step(ky_points),
+    dk = dkx * dky,
+    k_points = map(t -> SVector{2, Float64}(collect(t)), 
+        collect(Iterators.product(kx_points, ky_points))
+    ),
+    ω_points = LinRange(0, 3, 500),
+    P_Tx = 1.2 * w,
+    P_point  = SVector{2, Float64}([P_Tx, 0.0]) 
+
+    ϵ_v2(k) =  - norm(k - w)^2 / 2m_h * inv_eV
+    ϵ_v1(k) =  - norm(k)^2     / 2m_h * inv_eV
+    ϵ_c(k)  =    norm(k)^2     / 2m_e * inv_eV + E_g
+    E_SP(P) = inv_eV * norm(P .- w)^2 / 2M .+ E_B .+ E_g
+    
+    M = 2m_h + m_e
+
+
+    fig = Figure()
+    ax_heatmap = Axis(fig[1, 1], 
+        xlabel = L"$k$ (Å)", 
+        ylabel = L"$ω$ (eV)",
+        xlabelsize = 20,
+        ylabelsize = 20,
+        xticklabelsize = 18,
+        yticklabelsize = 18,
+    )
+    
+    lines!(ax_heatmap, kx_points, ϵ_v1.(kx_points), 
+        linestyle = :dash,
+        colormap = [colorant"lightskyblue3"], 
+        color = 1, 
+        colorrange = (0, 10),
+    )
+    lines!(ax_heatmap, kx_points, ϵ_v2.(kx_points), 
+        linestyle = :dash,
+        colormap = [colorant"lightskyblue3"], 
+        color = 1, 
+        colorrange = (0, 10),
+    )
+    lines!(ax_heatmap, kx_points, ϵ_c.(kx_points), 
+        linestyle = :dash,
+        colormap = [colorant"lightskyblue3"], 
+        color = 1, 
+        colorrange = (0, 10),
+    )
+        
+    
+    ylims!(ax_heatmap, (-0.8, 1))
+    xlims!(ax_heatmap, (-0.8, 1.2))
+    hidedecorations!(ax_heatmap, ticks = false, ticklabels = false, label = false)
+
+
+    fig
+end
