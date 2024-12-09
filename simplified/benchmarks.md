@@ -1,4 +1,9 @@
-# Normalization and benchmark
+# Definition of broadening
+
+See [`broadening-display.jl`](broadening-display.jl) to make sure the line shape of the broadening function is right,
+and to see what's the correct broadening parameter to use.
+
+# Normalization of dispersion relation
 
 In [`units.jl`](units.jl), we define the `inv_eV` constant to
 make sure we can write $E = k^2/2m$ with the unit of $k$ being inverse angstrom
@@ -45,3 +50,8 @@ we get the follows:
 which looks reasonable.
 
 Therefore the way `inv_eV` is defined seems not too wrong.
+In the rest of the project, parameters from the $G_1 W_0$ band structure in [PRL 111,216805 (2013)](https://journals.aps.org/prl/pdf/10.1103/PhysRevLett.111.216805) are going to be used.
+
+# Numerical accelerations
+
+See [`wfn-test.jl`](wfn-test.jl) to see how calculation of the 1s wave function is accelerated by `@fastmath`, which may cause numerical instability.

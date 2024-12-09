@@ -16,3 +16,7 @@
 # inv_eV = ħ^2 Å^-2 / (electron mass * eV) = 7.61996422.
 const inv_eV = 7.61996422
 
+# How many time units based on eV are there in one femtosecond.
+# 1fs / (1eV / ħ) = 1.5193.
+# Therefore, n fs = 1.5193n (eV / ħ).
+const fs = 1.5193    

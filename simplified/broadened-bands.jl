@@ -47,11 +47,11 @@ k_list_GW = k_list_GW .* (w_side / (iK′ - iK))
 E_v_GW .-= maximum(E_v_GW)
 E_c_GW .-= minimum(E_c_GW) .- trion.E_g
 
-f = Figure()
+f = Figure(size=(300, 500))
 
 kx_list = LinRange(-0.35, 0.35, 250)
 k_list = [SA[kx, 0.0] for kx in kx_list]
-ω_list = LinRange(-2.2, 4.2, 100)
+ω_list = LinRange(-2.2, 4.2, 400)
 
 E_c1_list = E_c1.([trion], k_list)
 E_v1_list = E_v1.([trion], k_list)
@@ -61,18 +61,10 @@ broaden = gaussian_broadening(10.0)
 ax = Axis(f[1, 1])
 heatmap!(ax, kx_list, ω_list, map(Iterators.product(kx_list, ω_list)) do (k_x, ω)
     k_e = SA[k_x, 0.0]
-    broaden(ω - E_c1(trion, k_e))
+    broaden(ω - E_c1(trion, k_e)) + broaden(ω + E_v1(trion, k_e))
 end)
 lines!(ax, kx_list, E_c1_list)
 scatter!(ax, k_list_GW, E_c_GW, color=:green)
-xlims!(ax, (minimum(kx_list), maximum(kx_list)))
-hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
-
-ax = Axis(f[1, 2])
-heatmap!(ax, kx_list, ω_list, map(Iterators.product(kx_list, ω_list)) do (k_x, ω)
-    k_e = SA[k_x, 0.0]
-    broaden(ω + E_v1(trion, k_e))
-end)
 lines!(ax, kx_list, -E_v1_list)
 scatter!(ax, k_list_GW, E_v_GW, color=:green)
 xlims!(ax, (minimum(kx_list), maximum(kx_list)))
