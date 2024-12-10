@@ -46,7 +46,7 @@ A_kω_Q = trionarpes_e1h1h2_thread(
     phi1sa1sb(IndirectTwoBandMat2D(ham, dielectric), a, b), 
     SVector{2, Float64}([P_Tx, 0.0]), 
     k_points, ω_points, 
-    map(kx -> SVector{2, Float64}([kx, 0.0]), 
+    map(kx -> SVector{2, Float64}([kx, 0.0]),
         kx_points
     ),
     broadening

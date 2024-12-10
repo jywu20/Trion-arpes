@@ -44,7 +44,7 @@ so it's conceivable that self-consistency mode is more important in determining 
 which then means we shouldn't worry too much about convergence.
 
 Going back to the benchmark, by running [`broadened-bands.jl`](broadened-bands.jl) 
-we get the follows:
+we get the follows
 ![the effective band plot](effective-mass-benchmark.png)
 
 which looks reasonable.
@@ -58,7 +58,10 @@ See [`wfn-test.jl`](wfn-test.jl) to see how calculation of the 1s wave function 
 
 # Comparison with old codes
 
-The output plot of [`wfn-weight-single-k1-ehh-benchmark.jl`](wfn-weight-single-k1-ehh-benchmark.jl) 
+The output plot of [`ehh-k1-contribution-benchmark.jl`](ehh-k1-contribution-benchmark.jl) 
 is to be compared with the output of [the old `trion-arpes-heatmap-optimized-e1h1h2-double-radii-makie-decomposed.jl`](../src/trion-arpes-heatmap-optimized-e1h1h2-double-radii-makie-decomposed.jl),
 which is not written in a quite well structured way.
 The results should be consistent with each other.
+We note that the leftmost panel in the outputs is *not* truly $A(\vb{k}_{\text{e}}, \omega)$,
+because only a subset of possible $\vb{k}_1$ - that is, $\vb{k}_1$ whose $y$ coordinate vanishes - are summed over.
+The last panel in the output of [`ehh-k1-contribution-benchmark.jl`](ehh-k1-contribution-benchmark.jl) is also consistent with the ARPES plot with all $\vb{k}_1$ points (and not just those with zero $k_y$) in the output of [the old `trion-arpes-heatmap-optimized-e1h1h2-double-radii-makie-decomposed.jl`](../src/trion-arpes-heatmap-optimized-e1h1h2-double-radii-makie-decomposed.jl).
