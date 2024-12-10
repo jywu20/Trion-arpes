@@ -1,7 +1,7 @@
 using LinearAlgebra
 
 const fs = 1.5193    
-const inv_eV = 3.80998
+const inv_eV = 7.61996422 #3.80998
 const a_Bohr = 0.529
 
 struct IndirectTwoBandModel2D

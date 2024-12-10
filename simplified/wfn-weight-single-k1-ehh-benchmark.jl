@@ -21,13 +21,14 @@ trion = Intervalley2DChandraTrion(
 )
 
 P = 1.2w
-k = SA[0.1, 0.0]
+k = SA[0.36, 0.0]
 
-kx_list = LinRange(-0.35, 0.35, 250)
+M = 2trion.m_h + trion.m_e
+kx_list = LinRange(-0.7, 1.7, 150) .+ trion.m_h / M * w[1] .- trion.m_h / M * P[1]
 k1_list = [SA[kx, 0.0] for kx in kx_list]
-ω_list = LinRange(-8, 5, 200)
+ω_list = LinRange(0, 3, 500) #LinRange(-8, 5, 200)
 
-broaden = gaussian_broadening(10.0)
+broaden = gaussian_broadening(20fs)
 Ak1k2 = wfn(trion)
 
 intensity_from_k1 = map(Iterators.product(k1_list, ω_list)) do (k_1, ω)
@@ -35,7 +36,7 @@ intensity_from_k1 = map(Iterators.product(k1_list, ω_list)) do (k_1, ω)
     k_h1 = momentum_set.k_h1
     k_h2 = momentum_set.k_h2 
     k_2 = momentum_set.k_2
-    broaden(ω - E_trion(trion, P) + E_residue_ehh(trion, k_h1, k_h2)) * Ak1k2(k_1, k_2)
+    broaden(ω - E_trion(trion, P) + E_residue_ehh(trion, k_h1, k_h2)) * abs(Ak1k2(k_1, k_2))^2
 end
 
 intensity_from_k1_sum = sum(intensity_from_k1, dims=1)[1, :]
@@ -43,11 +44,11 @@ intensity_from_k1_sum = sum(intensity_from_k1, dims=1)[1, :]
 f = Figure()
 
 ax = Axis(f[1, 1])
-heatmap!(ax, kx_list, ω_list, intensity_from_k1, colormap=arpes_colormap(transparency_gradience))
+lines!(ax, intensity_from_k1_sum, ω_list)
 hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
 
 ax = Axis(f[1, 2])
-lines!(ax, intensity_from_k1_sum, ω_list)
+heatmap!(ax, kx_list, ω_list, intensity_from_k1, colormap=arpes_colormap(transparency_gradience))
 hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
 
 f

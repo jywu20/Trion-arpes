@@ -55,3 +55,10 @@ In the rest of the project, parameters from the $G_1 W_0$ band structure in [PRL
 # Numerical accelerations
 
 See [`wfn-test.jl`](wfn-test.jl) to see how calculation of the 1s wave function is accelerated by `@fastmath`, which may cause numerical instability.
+
+# Comparison with old codes
+
+The output plot of [`wfn-weight-single-k1-ehh-benchmark.jl`](wfn-weight-single-k1-ehh-benchmark.jl) 
+is to be compared with the output of [the old `trion-arpes-heatmap-optimized-e1h1h2-double-radii-makie-decomposed.jl`](../src/trion-arpes-heatmap-optimized-e1h1h2-double-radii-makie-decomposed.jl),
+which is not written in a quite well structured way.
+The results should be consistent with each other.
