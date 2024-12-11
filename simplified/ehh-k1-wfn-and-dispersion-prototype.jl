@@ -96,4 +96,6 @@ end
 
 println(sum(Asq_with_constraint))
 
+save("ehh-ring-and-peak-contribution-example.png", f)
+
 f
