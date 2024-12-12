@@ -53,7 +53,7 @@ dispersion_k_zero = map(k1_list) do k
     k_h1 = momentum_set.k_h1
     k_h2 = momentum_set.k_h2 
     k_2  = momentum_set.k_2
-    E_trion(trion, P) - E_residue_ehh(trion, k_h1, k_h2)
+    E_trion_ehh(trion, P) - E_residue_ehh(trion, k_h1, k_h2)
 end
 
 dispersion_k_equal = map(k1_list) do k
@@ -62,7 +62,7 @@ dispersion_k_equal = map(k1_list) do k
     momentum_set = momentum_calc_ehh(trion, P, k, k_1)
     k_h1 = momentum_set.k_h1
     k_h2 = momentum_set.k_h2 
-    E_trion(trion, P) - E_residue_ehh(trion, k_h1, k_h2)
+    E_trion_ehh(trion, P) - E_residue_ehh(trion, k_h1, k_h2)
 end
 
 #endregion

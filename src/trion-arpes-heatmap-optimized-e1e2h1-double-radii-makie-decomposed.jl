@@ -28,7 +28,7 @@ k_points = map(t -> SVector{2, Float64}(collect(t)),
 ω_points = LinRange(-1, 3, 500)
 P_x = hexagonal_edge * 0.8
 P_T  = SVector{2, Float64}([P_x, 0.0]) 
-M = 2m_h + m_e
+M = 2m_e + m_h
 k_e = SVector{2, Float64}([-m_e / M * (w - P_x) + 0.1, 0.0])
 
 ϵ_v2(k) =  - norm(k - w)^2 / 2m_h * inv_eV
@@ -37,7 +37,7 @@ k_e = SVector{2, Float64}([-m_e / M * (w - P_x) + 0.1, 0.0])
 ϵ_c2(k) =    norm(k - w)^2 / 2m_e * inv_eV + E_g
 E_SP(P) = inv_eV * norm(P .- w)^2 / 2M .+ E_B .+ 2E_g
 
-M = 2m_h + m_e
+M = 2m_e + m_h
 
 ham = IndirectTwoBandModel2D(m_e, m_h, E_g, SVector{2, Float64}([w, 0.0]))
 dielectric = Dielectric2D(ϵ)
@@ -304,7 +304,7 @@ heatmap!(ax_heatmap_single, kx_points, ω_points, A_kω_Q,
 hidedecorations!(ax_heatmap_single, ticks = false, ticklabels = false, label = false)
 ylims!(ax_heatmap_single, (minimum(ω_points), maximum(ω_points)))
 
-save("trion-arpes-eeh-ke2-$(@sprintf "%4.2f" k_e[1])-Px-$(@sprintf "%4.2f" P_Tx)-sigma-$(σ/fs)-nk-$nk_side.png", fig)
+save("trion-arpes-eeh-ke2-$(@sprintf "%4.2f" k_e[1])-Px-$(@sprintf "%4.2f" P_x)-sigma-$(σ/fs)-nk-$(length(kx_points)).png", fig)
 
 fig
 
@@ -333,7 +333,7 @@ k_points = map(t -> SVector{2, Float64}(collect(t)),
 ω_points = LinRange(-1, 3, 500)
 P_x = hexagonal_edge * 0.8
 P_T  = SVector{2, Float64}([P_x, 0.0]) 
-M = 2m_h + m_e
+M = 2m_e + m_h
 k_e = SVector{2, Float64}([-m_e / M * (w - P_x) + 0.1, 0.0])
 
 ϵ_v2(k) =  - norm(k - w)^2 / 2m_h * inv_eV
@@ -342,7 +342,7 @@ k_e = SVector{2, Float64}([-m_e / M * (w - P_x) + 0.1, 0.0])
 ϵ_c2(k) =    norm(k - w)^2 / 2m_e * inv_eV + E_g
 E_SP(P) = inv_eV * norm(P .- w)^2 / 2M .+ E_B .+ 2E_g
 
-M = 2m_h + m_e
+M = 2m_e + m_h
 
 ham = IndirectTwoBandModel2D(m_e, m_h, E_g, SVector{2, Float64}([w, 0.0]))
 dielectric = Dielectric2D(ϵ)

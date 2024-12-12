@@ -1,5 +1,6 @@
 include("model-data.jl")
 include("units.jl")
+include("qp-bands.jl")
 using ThreadTools
 
 """
@@ -58,7 +59,7 @@ function E_residue_ehh(
     E_v1(trion, k_h1) + E_v2(trion, k_h2)
 end
 
-function E_trion(
+function E_trion_ehh(
     trion::Intervalley2DChandraTrion,
     P::SVector{2, Float64}
 )
@@ -87,7 +88,7 @@ function trion_ARPES_ehh(
             k_h1 = momentum_set.k_h1
             k_h2 = momentum_set.k_h2 
             k_2  = momentum_set.k_2
-            broaden(ω - E_trion(trion, P) + E_residue_ehh(trion, k_h1, k_h2)) * abs(wfn(k_1, k_2))^2
+            broaden(ω - E_trion_ehh(trion, P) + E_residue_ehh(trion, k_h1, k_h2)) * abs(wfn(k_1, k_2))^2
         end
     end
 end

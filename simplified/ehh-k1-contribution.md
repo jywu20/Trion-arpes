@@ -1,4 +1,4 @@
-# Contribution of each $\vb{k}_1$ to the final ARPES heatmap
+# The contributions of $\vb{k}_1$s to the final ARPES heatmap
 
 Running [`ehh-heatmap-prototype.jl`](ehh-heatmap-prototype.jl), we get 
 ![Trion ARPES with $\vb{P} = 1.2 \vb{w}$](ehh-P-1.2.png)

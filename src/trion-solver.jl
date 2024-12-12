@@ -140,7 +140,7 @@ function trionarpes_e1e2h1_thread(
     m_e = ham.m_e
     m_h = ham.m_h
     E_g = ham.E_g
-    M = 2m_h + m_e
+    M = m_h + 2m_e
     w = ham.w
 
     E_S_PT = inv_eV * (P_T - w)' * (P_T - w) / 2M

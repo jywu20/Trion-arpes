@@ -40,7 +40,7 @@ intensity_from_k1 = map(Iterators.product(k1_list, ω_list)) do (k_1, ω)
     k_h1 = momentum_set.k_h1
     k_h2 = momentum_set.k_h2 
     k_2 = momentum_set.k_2
-    broaden(ω - E_trion(trion, P) + E_residue_ehh(trion, k_h1, k_h2)) * abs(Ak1k2(k_1, k_2))^2
+    broaden(ω - E_trion_ehh(trion, P) + E_residue_ehh(trion, k_h1, k_h2)) * abs(Ak1k2(k_1, k_2))^2
 end
 
 intensity_from_k1_sum = sum(intensity_from_k1, dims=1)[1, :]
@@ -49,7 +49,7 @@ dispersion_k1 = map(k1_list) do k_1
     momentum_set = momentum_calc_ehh(trion, P, k, k_1)
     k_h1 = momentum_set.k_h1
     k_h2 = momentum_set.k_h2 
-    E_trion(trion, P) - E_residue_ehh(trion, k_h1, k_h2)
+    E_trion_ehh(trion, P) - E_residue_ehh(trion, k_h1, k_h2)
 end
 
 Akω_total = trion_ARPES_ehh(trion, P, k1_grid, k1_list, ω_list, Ak1k2, broaden)

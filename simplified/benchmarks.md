@@ -65,3 +65,5 @@ The results should be consistent with each other.
 We note that the leftmost panel in the outputs is *not* truly $A(\vb{k}_{\text{e}}, \omega)$,
 because only a subset of possible $\vb{k}_1$ - that is, $\vb{k}_1$ whose $y$ coordinate vanishes - are summed over.
 The last panel in the output of [`ehh-k1-contribution-benchmark.jl`](ehh-k1-contribution-benchmark.jl) is also consistent with the ARPES plot with all $\vb{k}_1$ points (and not just those with zero $k_y$) in the output of [the old `trion-arpes-heatmap-optimized-e1h1h2-double-radii-makie-decomposed.jl`](../src/trion-arpes-heatmap-optimized-e1h1h2-double-radii-makie-decomposed.jl).
+
+Similarly, the output of [`eeh-heatmap-prototype.jl`](eeh-heatmap-prototype.jl) seems consistent with the rightmost panel of the output of the first graphic block in [`trion-arpes-heatmap-optimized-e1e2h1-double-radii-makie-decomposed.jl`](../src/trion-arpes-heatmap-optimized-e1e2h1-double-radii-makie-decomposed.jl).

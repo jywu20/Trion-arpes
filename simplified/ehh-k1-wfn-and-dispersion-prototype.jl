@@ -61,8 +61,7 @@ E_residue = map(k1_list) do (k_x, k_y)
     k_1 = SVector{2, Float64}([k_x, k_y])
     k_h1 = momentum_calc_ehh(trion, P, k, k_1).k_h1
     k_h2 = momentum_calc_ehh(trion, P, k, k_1).k_h2 
-    broaden(ω - E_trion(trion, P) + E_residue_ehh(trion, k_h1, k_h2))
-    #E_trion(trion, P) - E_residue_ehh(trion, k_h1, k_h2)
+    broaden(ω - E_trion_ehh(trion, P) + E_residue_ehh(trion, k_h1, k_h2))
 end
 
 heatmap!(ax, kx_list, ky_list, E_residue, 
