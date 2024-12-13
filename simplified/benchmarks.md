@@ -45,11 +45,28 @@ which then means we shouldn't worry too much about convergence.
 
 Going back to the benchmark, by running [`broadened-bands.jl`](broadened-bands.jl) 
 we get the follows
-![the effective band plot](effective-mass-benchmark.png)
+![the effective mass band plot](effective-mass-benchmark.png)
 
 which looks reasonable.
+To verify whether the number of bands influences the effective mass,
+we do a further benchmark in [`broadened-bands-convergence-comparison.jl`](broadened-bands-convergence-comparison.jl),
+the output of which is shown below:
+![the effective mass band plot, with difference numbers of bands](effective-mass-benchmark-convergence.png)
 
-Therefore the way `inv_eV` is defined seems not too wrong.
+This plot contains three $GW$ calculations: one with 96 bands, one with 4000 bands, and one with 4000 bands and then interpolated to a finer grid.
+The last corresponds to the scatter plot in [the last figure](effective-mass-benchmark.png).
+The band gaps have been shifted for spontaneous comparison of both the conduction band and the valence band.
+We can see that they clearly deviate when $\vb{k}$ is away from the valley and the peak,
+but they are almost identical at the valley.
+
+Therefore the way `inv_eV` is defined seems right,
+and we find that the effective mass is strongly influenced by the self-consistent mode.
+Indeed this is mentioned in [PRL 111,216805 (2013)](https://journals.aps.org/prl/pdf/10.1103/PhysRevLett.111.216805):
+> These SO and bandgap values at K are
+> in good agreement with a previous QSGW[13] and G0W0
+> [14] calculations. However, we find different values for
+> the effective mass of the charge carriers at K.
+
 In the rest of the project, parameters from the $G_1 W_0$ band structure in [PRL 111,216805 (2013)](https://journals.aps.org/prl/pdf/10.1103/PhysRevLett.111.216805) are going to be used.
 
 # Numerical accelerations
