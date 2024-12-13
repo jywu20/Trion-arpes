@@ -27,3 +27,22 @@ The image above fixes $\omega$, so that we can have a 2D representation of the d
 When we move $\omega$, the dispersion relation circle changes its size (but not position),
 and correspondingly the final contribution from one $\vb{k}_1$ changes its strength.
 Preferrably, the dispersion relation circle should go close to the peaks of the wave function structural factor.
+
+When $\vb{k}_1 = 0$ or $\vb{k}_2 = 0$, the dispersion relation circle almost passes one of the two peaks in the wave function structural factor (although the true peak is slightly off, because when one $\psi$ is maximized, another isn't).
+When $\vb{k}_1 = \vb{k}_2$, there is also one $\omega$ that agrees with the dispersion relation,
+and this is actually the maximal $\omega$ allowed.
+When the $\omega$ is set to this $\omega$, the dispersion relation circle reduces to a dot,
+which lies between the two peaks of the wave function structural factor, which is a saddle point, and therefore still has a significant ARPES intensity.
+The image below is from [`ehh-k1-wfn-and-dispersion-k12-equal-prototype.jl`](ehh-k1-wfn-and-dispersion-k12-equal-prototype.jl):
+
+![](ehh-ring-and-peak-contribution-k12-equal-example.png)
+
+So we expect the $\vb{k}_1 = \vb{k}_2$ dispersion relation to be the upper bound of the ARPES signature, which is indeed seen in the first image in this document.
+So basically, we find that the curvatures at the center of the signature and at the upper edge of the signature are quite different.
+Here we present the ARPES heatmap of the $\vb{P} = \vb{w}$ case,
+which is drawn by [`ehh-heatmap-zero-momentum-prototype.jl`](ehh-heatmap-zero-momentum-prototype.jl),
+and is shown here:
+
+![](ehh-zero-momentum.png)
+
+It's more clear that the curvatures of the edge and the peak are not the same.
