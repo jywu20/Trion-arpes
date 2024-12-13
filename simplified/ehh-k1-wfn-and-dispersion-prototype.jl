@@ -13,7 +13,7 @@ ky_list = LinRange(-0.5, 0.5, 200)
 
 k1_list = Iterators.product(kx_list, ky_list)
 w_side = 4π / (3 * 3.144817974)
-w = SVector{2, Float64}([w_side, 0.0]) + SA[0, 0.1]
+w = SVector{2, Float64}([w_side, 0.0]) 
 
 trion = Intervalley2DChandraTrion(
     m_h = 0.21,
@@ -27,7 +27,7 @@ trion = Intervalley2DChandraTrion(
 A_k1k2 = wfn(trion)
 
 k = SVector{2, Float64}([0.3, -0.1])
-P = 1.2w
+P = 1.2w + SA[0.0, 0.1]
 
 
 Asq = map(k1_list) do (k_x, k_y)
