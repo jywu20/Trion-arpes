@@ -21,3 +21,9 @@ function wfn(trion::Intervalley2DChandraTrion)
     
     A_SQ_k1k2
 end
+
+function wfn(exciton::IntraValley2DExciton)
+    a = exciton.a
+    @inline ϕ_1s_a(k) = ϕ_1s(k, a)
+    ϕ_1s_a
+end

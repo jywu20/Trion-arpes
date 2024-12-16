@@ -1,11 +1,15 @@
 Constants used in the calculation
 ===========
 
+# Quasiparticle band structure
+
 Parameters about the quasiparticle band structure are from [PRL 111,216805 (2013)](https://journals.aps.org/prl/pdf/10.1103/PhysRevLett.111.216805).
 From Table I, we find:
 - the effective mass of the electron: 0.37 electron mass
 - the effective mass of the hole: 0.21 electron mass
 - band gap:  2.84 eV
+
+# Trion and exciton BSE: energy levels
 
 Parameters about trion binding are from [Nat. Comm.  2117 (2017)](https://www.nature.com/articles/s41467-017-02286-6).
 In Table 1, we find:
@@ -35,5 +39,11 @@ You can see that the binding energy is just the difference
 between the exciton A mode and the trion A- mode,
 and we need to remove the Fermi energy. 
 
+# Trion variational ansatz
+
 The trion variational parameters are from [PRB 88,045318 (2013)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.88.045318).
 They are:  a = 10.3 Å and b = 25.2 Å.
+
+# Exciton 
+
+The exciton variational parameters is from [PRB 88,045318 (2013)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.88.045318). It is 10.4 Å.
