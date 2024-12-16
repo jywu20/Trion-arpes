@@ -24,3 +24,12 @@ end
 function E_v(exciton::IntraValley2DExciton, k_h::SVector{2, Float64})
     inv_eV * k_h' * k_h / 2exciton.m_h
 end
+
+function E_c(exciton::InterValley2DExciton, k_e::SVector{2, Float64})
+    w = exciton.w
+    inv_eV * (k_e - w)' * (k_e - w) / 2exciton.m_e + exciton.E_g
+end
+
+function E_v(exciton::InterValley2DExciton, k_h::SVector{2, Float64})
+    inv_eV * k_h' * k_h / 2exciton.m_h
+end

@@ -9,7 +9,7 @@ From Table I, we find:
 - the effective mass of the hole: 0.21 electron mass
 - band gap:  2.84 eV
 
-# Trion and exciton BSE: energy levels
+# Comparison of (unconverged) trion and exciton BSE in Nat. Comm.  2117 (2017)
 
 Parameters about trion binding are from [Nat. Comm.  2117 (2017)](https://www.nature.com/articles/s41467-017-02286-6).
 In Table 1, we find:
@@ -20,6 +20,9 @@ In Table 1, we find:
 
 These parameters listed above are calculated without a substrate.
 But the parameters with substrate are not too different.
+
+# Full convergence of exciton BSE in PRL 111,216805 (2013)
+
 There is probably a convergence issue:
 the lowest exciton energy reported in [PRL 111,216805 (2013)](https://journals.aps.org/prl/pdf/10.1103/PhysRevLett.111.216805)
 is 1.88 eV (see Table II).
@@ -27,9 +30,23 @@ The largest k-grid used in [Nat. Comm.  2117 (2017)](https://www.nature.com/arti
 the largest k-grid used in [PRL 111,216805 (2013)](https://journals.aps.org/prl/pdf/10.1103/PhysRevLett.111.216805) is 72 72 1,
 so the latter is more reliable.
 
-Note that the binding energy is defined differently in different places.
-In [PRB 88,045318 (2013)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.88.045318),
-for example, we find that the binding energy is reported to be 26 meV (see Table 1).
+# Comparison between direct and K-K' excitons in PRL 115, 176801
+
+In [PRL 115, 176801](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.115.176801),
+it is mentioned that the direct band gap is 2.67 eV
+and the binding energy of the unlike-spin transition state,
+which is the lowest, is 0.65 eV (in the main text).
+Furthermore, the lowest energy Q = K exciton is 5 meV lower in energy than the lowest Q = 0 exciton (see the supplementary material, below Fig. 1).
+
+# Variational ansatz of excitons and trions
+
+The trion variational parameters are from [PRB 88,045318 (2013)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.88.045318).
+They are:  a = 10.3 Å and b = 25.2 Å.
+
+The exciton variational parameters is from [PRB 88,045318 (2013)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.88.045318). It is 10.4 Å.
+
+Note that the binding energy is defined differently in [PRB 88,045318 (2013)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.88.045318),
+where we find that the binding energy is reported to be 26 meV (see Table 1).
 This data comes from [Nat. Mat. 12, pages207–211 (2013)](https://www.nature.com/articles/nmat3505),
 where the trion binding energy $E_{\text{A}^-}$ is defined in Eq. (1):
 $$
@@ -38,12 +55,3 @@ $$
 You can see that the binding energy is just the difference
 between the exciton A mode and the trion A- mode,
 and we need to remove the Fermi energy. 
-
-# Trion variational ansatz
-
-The trion variational parameters are from [PRB 88,045318 (2013)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.88.045318).
-They are:  a = 10.3 Å and b = 25.2 Å.
-
-# Exciton 
-
-The exciton variational parameters is from [PRB 88,045318 (2013)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.88.045318). It is 10.4 Å.

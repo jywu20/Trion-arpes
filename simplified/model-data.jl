@@ -41,3 +41,16 @@ end
     E_B::Float64
     a::Float64
 end
+
+@kwdef struct InterValley2DExciton
+    # The two-band model
+    m_e::Float64
+    m_h::Float64
+    w::SVector{2, Float64}
+    
+    # Info about the exciton modes;
+    # we assume the exciton wave function is quite like the 1s wave function
+    E_g::Float64
+    E_B::Float64
+    a::Float64
+end

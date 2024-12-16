@@ -27,3 +27,9 @@ function wfn(exciton::IntraValley2DExciton)
     @inline ϕ_1s_a(k) = ϕ_1s(k, a)
     ϕ_1s_a
 end
+
+function wfn(exciton::InterValley2DExciton)
+    a = exciton.a
+    @inline ϕ_1s_a(k) = ϕ_1s(k, a)
+    ϕ_1s_a
+end
