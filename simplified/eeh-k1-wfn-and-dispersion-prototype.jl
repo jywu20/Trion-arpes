@@ -18,7 +18,7 @@ trion = Intervalley2DChandraTrion(
     m_e = 0.37,
     w = w,
     E_g = 2.84,
-    E_B = 0.1,
+    E_B = 0.76,
     a = 10.3,
     b = 25.2
 )
@@ -46,7 +46,7 @@ let mom_report = momentum_calc_eeh_e2(trion, P, k, SA[0.0, 0.0])
     hlines!(ax, [k_1[2]], color=:white, linewidth=0.5)
 end
 
-ω = 2.0
+ω = 1.5
 σ = 20.0fs
 
 broaden = gaussian_broadening(σ)

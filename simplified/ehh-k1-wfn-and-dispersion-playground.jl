@@ -24,10 +24,11 @@ trion = Intervalley2DChandraTrion(
     a = 10.3,
     b = 25.2
 )
+M = trion.m_e + 2trion.m_h
 A_k1k2 = wfn(trion)
 
 k = SVector{2, Float64}([0.3, -0.1])
-P = 1.2w + SA[0.0, 0.1]
+P = 1.2w + SA[0.0, 0.2]
 
 
 Asq = map(k1_list) do (k_x, k_y)
@@ -51,7 +52,7 @@ let mom_report = momentum_calc_ehh(trion, P, k, SA[0.0, 0.0])
     hlines!(ax, [k_2[2]], color=:white, linewidth=0.5)
 end
 
-ω = 1.8
+ω = 1.6
 σ = 20.0fs
 
 broaden = gaussian_broadening(σ)
@@ -94,7 +95,5 @@ let mom_report = momentum_calc_ehh(trion, P, k, SA[0.0, 0.0])
 end
 
 println(sum(Asq_with_constraint))
-
-save("ehh-ring-and-peak-contribution-example.png", f)
 
 f
