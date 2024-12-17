@@ -73,7 +73,7 @@ dispersion_k2_zero = map(k1_list) do k
     momentum_set = momentum_calc_eeh_e1(trion, P, k, k_2)
     k_h = momentum_set.k_h
     k_e2 = momentum_set.k_e2
-    E_trion_eeh(trion, P) - E_residue_ehh_e1(trion, k_e2, k_h)
+    E_trion_eeh(trion, P) - E_residue_eeh_e1(trion, k_e2, k_h)
 end
 lines!(ax, kx_list, dispersion_k2_zero, color=colorant"lightskyblue")
 
@@ -84,7 +84,7 @@ dispersion_k1_zero = map(k1_list) do k
     momentum_set = momentum_calc_eeh_e2(trion, P, k, k_1)
     k_h = momentum_set.k_h
     k_e1 = momentum_set.k_e1
-    E_trion_eeh(trion, P) - E_residue_ehh_e2(trion, k_e1, k_h)
+    E_trion_eeh(trion, P) - E_residue_eeh_e2(trion, k_e1, k_h)
 end
 lines!(ax, kx_list, dispersion_k1_zero, color=colorant"lightskyblue")
 

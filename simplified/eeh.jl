@@ -64,7 +64,7 @@ function momentum_calc_eeh_e2(
 end
 
 
-function E_residue_ehh_e1(
+function E_residue_eeh_e1(
     trion::Intervalley2DChandraTrion,
     k_e2::SVector{2, Float64},
     k_h::SVector{2, Float64}
@@ -72,7 +72,7 @@ function E_residue_ehh_e1(
     E_c2(trion, k_e2) + E_v1(trion, k_h)
 end
 
-function E_residue_ehh_e2(
+function E_residue_eeh_e2(
     trion::Intervalley2DChandraTrion,
     k_e1::SVector{2, Float64},
     k_h::SVector{2, Float64}
@@ -112,7 +112,7 @@ function trion_ARPES_eeh(
             k_e2 = momentum_set.k_e2
             k_1 = momentum_set.k_1
             k_h = momentum_set.k_h
-            broaden(ω - E_trion_eeh(trion, P) + E_residue_ehh_e1(trion, k_e2, k_h)) * abs(wfn(k_1, k_2))^2
+            broaden(ω - E_trion_eeh(trion, P) + E_residue_eeh_e1(trion, k_e2, k_h)) * abs(wfn(k_1, k_2))^2
         end
     end
     
@@ -125,7 +125,7 @@ function trion_ARPES_eeh(
             k_e2 = momentum_set.k_e2
             k_2 = momentum_set.k_2
             k_h = momentum_set.k_h
-            broaden(ω - E_trion_eeh(trion, P) + E_residue_ehh_e2(trion, k_e1, k_h)) * abs(wfn(k_1, k_2))^2
+            broaden(ω - E_trion_eeh(trion, P) + E_residue_eeh_e2(trion, k_e1, k_h)) * abs(wfn(k_1, k_2))^2
         end
     end
     
