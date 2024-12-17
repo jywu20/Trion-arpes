@@ -45,14 +45,23 @@ P = P_ratio * w
 # The exciton momentum is set to zero
 Q = SA[0.0, 0.0]
 
-kx_list = LinRange(-0.7, 1.7, 50)
+# When P = w, we don't need to worry about the grid not being large enough.
+# What we want is to make sure that k_1's such that k_1 = 0 or k_2 = 0
+# are included in the k-grid,
+# and when P=w, k_2 = 0, if and only if k_1 = -k_e.
+# So for each k_e in the k-path scanned, -k_1 must be in the k-grid.
+# But in this program, the k-path is a part of the k_grid,
+# and it has mirror symmetry, so the condition is satisfied by default.
+# When we are tilting the momentum of the trion away from P=w things can be slightly different.
+kx_list = LinRange(-0.5, 0.5, 200)
 ikx_Γ = argmin(abs.(kx_list))
+ikx_tilted = argmin(abs.(kx_list .- -0.25))
 k1_list = [SA[kx, 0.0] for kx in kx_list]
 k1_grid = reshape(map(Iterators.product(kx_list, kx_list)) do (k_x, k_y)
     SA[k_x, k_y]
 end, length(k1_list)^2)
-ω_list = LinRange(0, 3.3, 50) #LinRange(-8, 5, 200)
-ω_list_plot = LinRange(-0.3, 3.3, 50)
+ω_list = LinRange(0, 3.0, 200) #LinRange(-8, 5, 200)
+ω_list_plot = LinRange(-0.3, 3.0, 200)
 
 E_c1_curve = map(k1_list) do k_h
     -E_v(exciton, k_h)
@@ -63,10 +72,10 @@ end
 
 electron_color = colorant"deepskyblue2"
 hole_color = colorant"coral2"
-shifted_valence_color = colorant"salmon1"
-shifted_valence_doubled_color = colorant"gold1"
+shifted_valence_color = colorant"crimson"
+shifted_valence_doubled_color = colorant"darkorange"
 set_theme!(fontsize=20)
-f = Figure(size=(1000, 400))
+f = Figure(size=(1100, 400))
 
 #endregion
 ##########################################
@@ -89,13 +98,14 @@ let
     ##########################################
     #region Plotting the exciton
     
-    ax = Axis(f[1, 1], ylabel="Energy (eV)")
-    Label(f[1, 1, TopLeft()], "(a)")
+    ax = Axis(f[1, 1], ylabel="Energy (eV)", xlabel="Momentum (Å⁻¹)")
+    Label(f[1, 1, TopLeft()], "(a)", padding = (0, 15, 15, 0))
 
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
     lines!(ax, kx_list, dispersion, color=shifted_valence_color, linestyle=:dash)
     lines!(ax, kx_list, E_c1_curve, color=hole_color)
     lines!(ax, kx_list, E_v1_curve, color=electron_color)
+    vlines!(ax, kx_list[ikx_Γ], linestyle=:dot, color=:gray)
 
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
@@ -106,11 +116,24 @@ let
     ##########################################
     #region Plotting the exciton ARPES intensity with a fixed momentum
 
-    ax = Axis(f[1, 2], aspect=0.25, xlabel="Intensity")
+    ax = Axis(f[1, 2], xlabel="Intensity", xticks=([0.0], [" "]), xtickcolor=:white)
+    Label(f[1, 2, TopLeft()], "(b)", padding = (0, 15, 15, 0))
+
+    # Usually we can just hide x decorations,
+    # but here to align the label "Intensity" with the label "Momentum",
+    # we have to make the x ticks and the x tick labels invisible
+    # so that they still occupy their space.
+    #hidexdecorations!(ax, label = false)
+    
     lines!(ax, Akω_total[ikx_Γ, :], ω_list)
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
-    hidexdecorations!(ax, label = false)
+    # Note that in a Makie plot there are two aspect ratios:
+    # the first is the aspect ratio of a cell in the Figure,
+    # and the second is the aspect ratio of an Axis in the cell.
+    # If we set the latter, then unwanted empty spaces will appear around the Axis.
+    # Here we set the width of column 2 to be 0.25 times the height of row 1.
+    colsize!(f.layout, 2, Aspect(1, 0.25))
 
     #endregion
     ##########################################
@@ -148,14 +171,16 @@ let
     ##########################################
     #region Plotting of trion
 
-    ax = Axis(f[1, 3])
-    Label(f[1, 3, TopLeft()], "(b)")
+    ax = Axis(f[1, 3], xlabel="Momentum (Å⁻¹)")
+    Label(f[1, 3, TopLeft()], "(c)", padding = (0, 15, 15, 0))
 
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
     lines!(ax, kx_list, E_c1_curve, color=hole_color)
     lines!(ax, kx_list, E_v1_curve, color=electron_color)
     lines!(ax, kx_list, dispersion_k_zero, label=L"k_1=0", color=shifted_valence_color, linestyle=:dash)
     lines!(ax, kx_list, dispersion_k_equal, label=L"k_1=k_2", color=shifted_valence_doubled_color, linestyle=:dash)
+    vlines!(ax, kx_list[ikx_Γ], linestyle=:dot, color=:gray)
+    vlines!(ax, kx_list[ikx_tilted], linestyle=:dot, color=:gray)
 
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
@@ -167,14 +192,28 @@ let
     ##########################################
     #region Plotting the trion ARPES intensity with a fixed momentum
 
-    ax = Axis(f[1, 4], aspect=0.25, xlabel="Intensity")
+    # The reason not to use hidexdecorations is discussed in f[1, 2]
+    ax = Axis(f[1, 4], aspect=0.25, xlabel="Intensity", xticks=([0.0], [" "]), xtickcolor=:white)
+    Label(f[1, 4, TopLeft()], "(d)", padding = (0, 15, 15, 0))
+
     lines!(ax, Akω_total[ikx_Γ, :], ω_list)
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
-    hidexdecorations!(ax, label = false)
+    #hidexdecorations!(ax, label = false)
+    colsize!(f.layout, 4, Aspect(1, 0.25))
+
+    ax = Axis(f[1, 5], aspect=0.25, xlabel="Intensity", xticks=([0.0], [" "]), xtickcolor=:white)
+    Label(f[1, 5, TopLeft()], "(e)", padding = (0, 15, 15, 0))
+    
+    lines!(ax, Akω_total[ikx_tilted, :], ω_list)
+    ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
+    hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
+    #hidexdecorations!(ax, label = false)
+    colsize!(f.layout, 5, Aspect(1, 0.25))
 
     #endregion
     ##########################################
 end
 
+save("eeh-no-momentum-display.png", f)
 f
