@@ -8,5 +8,6 @@
 
 # Figures for the paper
 
-- [Comparison between the ARPES signature of an exciton and the ehh trion](eeh-no-momentum-display.md)
-- [The role of the wave function structural factor and the energy conservation relation in the ehh trion](momentum-conservation-factor.md)
+- [Comparison between the ARPES signature of an exciton and the ehh trion](ehh-no-momentum-display.md)
+- [The ARPES image of a $\vb{P} \neq \vb{w}$ trion](ehh-shifted-momentum-display.md)
+- [The role of the wave function structural factor and the energy conservation relation in the ehh trion](ehh-momentum-conservation-factor.md)

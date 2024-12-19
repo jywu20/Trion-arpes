@@ -41,15 +41,15 @@ A_k1k2 = wfn(trion)
 k = SVector{2, Float64}([0.3, -0.1])
 P = 1.2w + SA[0.0, 0.1]
 
-kx_list = LinRange(-0.5, 0.5, 200)
-ky_list = LinRange(-0.5, 0.5, 200)
+kx_list = LinRange(-0.5, 0.5, 500)
+ky_list = LinRange(-0.5, 0.5, 500)
 k1_grid = map(Iterators.product(kx_list, ky_list)) do (k_x, k_y)
     SA[k_x, k_y]
 end
 ω_list = LinRange(0, 3.0, 200) #LinRange(-8, 5, 200)
 
 set_theme!(fontsize=20)
-f = Figure(size=(700, 1000))
+f = Figure(size=(630, 1000), figure_padding=0.0)
 
 #endregion
 ##########################################
@@ -188,5 +188,5 @@ let
     colsize!(f.layout, 2, Aspect(1, 1))
 end
 
-save("momentum-conservation-factor.png", f)
+save("ehh-momentum-conservation-factor.png", f)
 f

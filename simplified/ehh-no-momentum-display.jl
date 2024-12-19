@@ -215,5 +215,5 @@ let
     ##########################################
 end
 
-save("eeh-no-momentum-display.png", f)
+save("ehh-no-momentum-display.png", f)
 f
