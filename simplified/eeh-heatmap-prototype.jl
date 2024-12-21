@@ -26,7 +26,7 @@ trion = Intervalley2DChandraTrion(
     b = 25.2
 )
 
-P_ratio = 0.8
+P_ratio = 1.2
 P = P_ratio * w
 
 M = trion.m_h + 2trion.m_e
@@ -87,6 +87,12 @@ dispersion_k1_zero = map(k1_list) do k
     E_trion_eeh(trion, P) - E_residue_eeh_e2(trion, k_e1, k_h)
 end
 lines!(ax, kx_list, dispersion_k1_zero, color=colorant"lightskyblue")
+
+# The maximal frequency that can be achieved
+dispersion_k1_max = map(k1_list) do k
+    E_trion_eeh(trion, P) - trion.E_g - inv_eV * norm(P - w - k)^2 / 2(trion.m_h + trion.m_e)
+end
+lines!(ax, kx_list, dispersion_k1_max)
 
 ylims!(ax, (minimum(ω_list), maximum(ω_list)))
 hidedecorations!(ax, ticks = false, ticklabels = false, label = false)

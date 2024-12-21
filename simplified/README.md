@@ -11,3 +11,4 @@
 - [Comparison between the ARPES signature of an exciton and the ehh trion](ehh-no-momentum-display.md)
 - [The ARPES image of a $\vb{P} \neq \vb{w}$ trion](ehh-shifted-momentum-display.md)
 - [The role of the wave function structural factor and the energy conservation relation in the ehh trion](ehh-momentum-conservation-factor.md)
+- [The ARPES image of negative trions, zero or finite momentum](eeh-display.md)
