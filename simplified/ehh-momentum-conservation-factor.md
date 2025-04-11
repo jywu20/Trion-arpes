@@ -2,3 +2,7 @@
 The output is 
 
 ![](ehh-momentum-conservation-factor.png)
+
+We can also do it in a more compact way using [`ehh-momentum-conservation-factor-compact.jl`](ehh-momentum-conservation-factor-compact.jl):
+
+![](ehh-momentum-conservation-factor-compact.png)
