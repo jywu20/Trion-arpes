@@ -41,15 +41,16 @@ A_k1k2 = wfn(trion)
 k = SVector{2, Float64}([0.3, -0.1])
 P = 1.2w + SA[0.0, 0.1]
 
-kx_list = LinRange(-0.5, 0.5, 500)
-ky_list = LinRange(-0.5, 0.5, 500)
+kx_list = LinRange(-0.3, 0.3, 500)
+ky_list = LinRange(-0.3, 0.3, 500)
 k1_grid = map(Iterators.product(kx_list, ky_list)) do (k_x, k_y)
     SA[k_x, k_y]
 end
 ω_list = LinRange(0, 3.0, 200) #LinRange(-8, 5, 200)
 
 set_theme!(fontsize=20)
-f = Figure(size=(600, 800), figure_padding=0.0)
+label_shift = 0.05
+f = Figure(size=(600, 850), figure_padding=0.0)
 
 #endregion
 ##########################################
@@ -89,7 +90,7 @@ let
     heatmap!(ax, kx_list, ky_list, Asq,
         colorrange=(minimum(Asq), maximum(Asq))
     )
-    text!(ax, -0.45, 0.45, text="(a)", color=:white, align=(:center, :center),)
+    text!(ax, minimum(kx_list) + label_shift, maximum(ky_list) - label_shift, text="(a)", color=:white, align=(:center, :center),)
     cross_mark(ax, k_1_max, 0.1)
     cross_mark(ax, k_2_max, 0.1)
     hidexdecorations!(ax)
@@ -98,7 +99,7 @@ let
     heatmap!(ax, kx_list, ky_list, E_residue, 
         colorrange=(minimum(E_residue), maximum(E_residue))
     )
-    text!(ax, -0.45, 0.45, text="(b)", color=:white, align=(:center, :center),)
+    text!(ax, minimum(kx_list) + label_shift, maximum(ky_list) - label_shift, text="(b)", color=:white, align=(:center, :center),)
     cross_mark(ax, k_1_max, 0.1)
     cross_mark(ax, k_2_max, 0.1)
     hidexdecorations!(ax)
@@ -112,7 +113,7 @@ let
     aspect=1)
     Asq_with_constraint = E_residue .* Asq
     heatmap!(ax, kx_list, ky_list, Asq_with_constraint)
-    text!(ax, -0.45, 0.45, text="(c)", color=:white, align=(:center, :center),)
+    text!(ax, minimum(kx_list) + label_shift, maximum(ky_list) - label_shift, text="(c)", color=:white, align=(:center, :center),)
     cross_mark(ax, k_1_max, 0.1)
     cross_mark(ax, k_2_max, 0.1)
 
@@ -120,7 +121,7 @@ let
     ##########################################
 
     # The width of column 1 should be the same as the height of row 1
-    colsize!(f.layout, 1, Aspect(1, 1))
+    colsize!(f.layout, 1, Relative(0.45))
 end
 
 # The k_1 = k_2 case
@@ -158,7 +159,7 @@ let
     heatmap!(ax, kx_list, ky_list, Asq,
         colorrange=(minimum(Asq), maximum(Asq))
     )
-    text!(ax, -0.45, 0.45, text="(d)", color=:white, align=(:center, :center),)
+    text!(ax, minimum(kx_list) + label_shift, maximum(ky_list) - label_shift, text="(d)", color=:white, align=(:center, :center),)
     cross_mark(ax, k_1_max, 0.1)
     cross_mark(ax, k_2_max, 0.1)
     hidexdecorations!(ax)
@@ -168,7 +169,7 @@ let
     heatmap!(ax, kx_list, ky_list, E_residue, 
         colorrange=(minimum(E_residue), maximum(E_residue))
     )
-    text!(ax, -0.45, 0.45, text="(e)", color=:white, align=(:center, :center),)
+    text!(ax, minimum(kx_list) + label_shift, maximum(ky_list) - label_shift, text="(e)", color=:white, align=(:center, :center),)
     cross_mark(ax, k_1_max, 0.1)
     cross_mark(ax, k_2_max, 0.1)
     hidexdecorations!(ax)
@@ -183,7 +184,7 @@ let
     aspect=1)
     Asq_with_constraint = E_residue .* Asq
     heatmap!(ax, kx_list, ky_list, Asq_with_constraint)
-    text!(ax, -0.45, 0.45, text="(f)", color=:white, align=(:center, :center),)
+    text!(ax, minimum(kx_list) + label_shift, maximum(ky_list) - label_shift, text="(f)", color=:white, align=(:center, :center),)
     cross_mark(ax, k_1_max, 0.1)
     cross_mark(ax, k_2_max, 0.1)
     hideydecorations!(ax)
@@ -192,10 +193,13 @@ let
     ##########################################
 
     # The width of column 2 should be the same as the height of row 1
-    colsize!(f.layout, 2, Aspect(1, 1))
+    colsize!(f.layout, 2, Relative(0.45))
 end
 
+Label(f[3, 1:2, Bottom()], rich(rich("k", subscript("x", font=:regular), font=:italic), " (Å⁻¹)"), tellwidth=false, tellheight=false, padding=(0, 0, 0, 5))
+Label(f[1:3, 1, Left()], rich(rich("k", subscript("y", font=:regular), font=:italic), " (Å⁻¹)"), tellwidth=false, tellheight=false, padding=(0, 70, 0, 0), rotation=π/2)
+
 colgap!(f.layout, 5)
-rowgap!(f.layout, 5)
+rowgap!(f.layout, -60)
 save("ehh-momentum-conservation-factor-compact.png", f)
 f
