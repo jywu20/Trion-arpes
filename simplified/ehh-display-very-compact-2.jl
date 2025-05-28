@@ -80,6 +80,9 @@ center_line_color = colorant"gray45"
 tilted_line_color = colorant"lightgray"
 linecut_width = 0.15
 panel_width = 0.7
+binding_starting_bar_pos = -0.45
+binding_starting_bar_width = 0.05
+binding_annotation_displacement = 0.04
 
 set_theme!(fontsize=20)
 f = Figure(size=(800, 800))
@@ -107,7 +110,12 @@ let
     
     gl = f[1, 1] = GridLayout()
 
-    ax = Axis(gl[1, 1], ylabel="Energy (eV)", xticks=[-0.4, 0.0, 0.4])
+    ax = Axis(gl[1, 1], 
+        ylabel="Energy (eV)", xticks=[-0.4, 0.0, 0.4],
+        yticks=([0, exciton.E_g], ["VBM", "CBM"]),
+        xtickalign = 1.0,
+        ytickalign = 1.0,
+    )
     Label(gl[1, 1, TopLeft()], "(a)", padding = (0, 15, 15, 0))
     Label(gl[1, 1, Bottom()], "Momentum (Å⁻¹)", padding=(0, 0, 0, caption_padding))
 
@@ -117,6 +125,12 @@ let
     lines!(ax, kx_list, E_v1_curve, color=electron_color)
     vlines!(ax, kx_list[ikx_Γ], linestyle=:dot, color=center_line_color)
     hlines!(ax, exciton.E_g - exciton.E_B, linestyle=:dot, color=center_line_color)
+    
+    #lines!(ax, [binding_starting_bar_pos - binding_starting_bar_width, binding_starting_bar_pos + binding_starting_bar_width], [exciton.E_g, exciton.E_g], color=:black)
+    arrows!(ax, [binding_starting_bar_pos], [exciton.E_g], [0.0], [-0.9exciton.E_B], color=:black)
+    text!(ax, binding_starting_bar_pos + binding_annotation_displacement, exciton.E_g - exciton.E_B/2, 
+        text=rich("E", subscript("B,X", font=:regular), font=:italic)
+    ) 
 
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
@@ -192,7 +206,11 @@ let
 
     gl = f[1, 2] = GridLayout()
 
-    ax = Axis(gl[1, 1], xticks=[-0.4, 0.0, 0.4])
+    ax = Axis(gl[1, 1], xticks=[-0.4, 0.0, 0.4], 
+        yticks=([0, exciton.E_g], ["", ""]),
+        xtickalign = 1.0,
+        ytickalign = 1.0,
+    )
     colsize!(gl, 1, Aspect(1, panel_width))
     # Because labels of line cuts are removed, relabeling is needed.
     Label(gl[1, 1, TopLeft()], "(b)", padding = (0, 15, 15, 0))
@@ -207,6 +225,9 @@ let
     vlines!(ax, kx_list[ikx_tilted], linestyle=:dot, color=tilted_line_color)
     hlines!(ax, trion.E_g - trion.E_B, linestyle=:dot, color=center_line_color)
 
+    arrows!(ax, [binding_starting_bar_pos], [trion.E_g], [0.0], [-0.9trion.E_B], color=:black)
+    text!(ax, binding_starting_bar_pos + binding_annotation_displacement, trion.E_g - trion.E_B/2, text=rich("E", subscript("B,T", font=:regular), font=:italic)) 
+
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
     axislegend(ax)
@@ -217,7 +238,7 @@ let
     ##########################################
     #region Plotting the trion ARPES intensity with a fixed momentum
 
-    ax = Axis(gl[1, 2], xticks=([0.0], [" "]), xtickcolor=:white)
+    ax = Axis(gl[1, 2], xticks=([0.0], [" "]), xtickcolor=:white,)
     hideydecorations!(ax)
     # Labels of line cuts are removed.
     #Label(gl[1, 3, Top()], "(e)", padding = (0, 15, 15, 0), halign=:left)
@@ -271,7 +292,11 @@ let
     
     gl = f[2, 1] = GridLayout()
 
-    ax = Axis(gl[1, 1], ylabel="Energy (eV)", xticks=[-0.4, 0.0, 0.4])
+    ax = Axis(gl[1, 1], ylabel="Energy (eV)", xticks=[-0.4, 0.0, 0.4],
+        yticks=([0, exciton.E_g], ["VBM", "CBM"]),
+        xtickalign = 1.0,
+        ytickalign = 1.0,
+    )
     Label(gl[1, 1, TopLeft()], "(c)", padding = (0, 15, 15, 0))
     Label(gl[1, 1, Bottom()], "Momentum (Å⁻¹)", padding=(0, 0, 0, caption_padding))
 
@@ -283,6 +308,13 @@ let
     M = m_e + m_h
     vlines!(ax, m_e / M * Q[1], linestyle=:dot, color=center_line_color)
     hlines!(ax, inv_eV * m_e / 2M^2 * norm(Q)^2 + exciton.E_g - exciton.E_B, linestyle=:dot, color=center_line_color)
+    
+    #arrows!(ax, [binding_starting_bar_pos], [exciton.E_g], [0.0], [-0.9exciton.E_B], color=:black)
+    #text!(ax, binding_starting_bar_pos + binding_annotation_displacement, exciton.E_g - exciton.E_B/2, 
+    #    text=rich("E", subscript("B,X", font=:regular), font=:italic)
+    #) 
+
+    ikx_center = argmin(abs.(kx_list .- m_e / M * Q[1]))
 
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
@@ -293,10 +325,7 @@ let
     ##########################################
     #region Plotting the exciton ARPES intensity with a fixed momentum
 
-    ax = Axis(gl[1, 2], xticks=([0.0], [" "]), xtickcolor=:white,
-    topspinecolor=:white,
-    rightspinecolor=:white,
-    bottomspinecolor=:white,)
+    ax = Axis(gl[1, 2], xticks=([0.0], [" "]), )
     # Labels of line cuts are removed.
     #Label(gl[1, 2, Top()], "(b)", padding = (0, 0, 15, 0), halign=:left)
     #Label(gl[1, 2, Bottom()], "Intensity", padding=(0, 0, 0, caption_padding))
@@ -307,8 +336,8 @@ let
     # so that they still occupy their space.
     #hidexdecorations!(ax, label = false)
     
-    #lines!(ax, Akω_total[ikx_Γ, :], ω_list)
-    #ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
+    lines!(ax, Akω_total[ikx_center, :], ω_list, color=center_line_color)
+    ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hidexdecorations!(ax, ticks = false, ticklabels = false, label = false)
     hideydecorations!(ax)
     # Note that in a Makie plot there are two aspect ratios:
@@ -363,7 +392,11 @@ let
     #region Plotting of trion
 
     gl = f[2, 2] = GridLayout()
-    ax = Axis(gl[1, 1], xticks=[-0.4, 0.0, 0.4])
+    ax = Axis(gl[1, 1], xticks=[-0.4, 0.0, 0.4], 
+        yticks=([0, exciton.E_g], ["", ""]),
+        xtickalign = 1.0,
+        ytickalign = 1.0,
+    )
     colsize!(gl, 1, Aspect(1, panel_width))
 
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
@@ -373,12 +406,19 @@ let
     lines!(ax, kx_list, dispersion_k_equal, label=L"k_1=k_2", color=shifted_valence_doubled_color, linestyle=:dash)
     
     M = m_e + 2m_h
-    vlines!(ax, m_e / M * (P - w)[1], linestyle=:dot, color=center_line_color)
     hlines!(ax, inv_eV * m_e / 2M^2 * norm(P - w)^2 + trion.E_g - trion.E_B, linestyle=:dot, color=center_line_color)
+
+    ik_center = argmin(abs.(kx_list .- m_e / M * (P - w)[1]))
+    ikx_tilted = argmin(abs.(kx_list .- (m_e / M * (P - w)[1] -0.25)))
+    vlines!(ax, m_e / M * (P - w)[1], linestyle=:dot, color=center_line_color)
+    vlines!(ax, kx_list[ikx_tilted], linestyle=:dot, color=tilted_line_color)
+    
+    #arrows!(ax, [binding_starting_bar_pos], [trion.E_g], [0.0], [-0.9trion.E_B], color=:black)
+    #text!(ax, binding_starting_bar_pos + binding_annotation_displacement, trion.E_g - trion.E_B/2, text=rich("E", subscript("B,T", font=:regular), font=:italic)) 
 
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
-    axislegend(ax, position=:lt)
+    axislegend(ax, position=:rb)
     #colsize!(f.layout, 3, Aspect(1, panel_width))
     
     # Because labels of line cuts are removed, relabeling is needed.
@@ -386,21 +426,16 @@ let
     Label(gl[1, 1, Bottom()], "Momentum (Å⁻¹)", padding=(0, 0, 0, caption_padding))
 
     # The statements below are for keeping panel (d) in the correct position.
-    # Hide the frames for now.
-    ax = Axis(gl[1, 2], xticks=([0.0], [" "]), xtickcolor=:white,
-    #leftspinecolor=:white,
-    topspinecolor=:white,
-    rightspinecolor=:white,
-    bottomspinecolor=:white,
-    )
+
+    ax = Axis(gl[1, 2], xticks=([0.0], [" "]), xtickcolor=:white,)
+    lines!(ax, Akω_total[ikx_tilted, :], ω_list, color=tilted_line_color)
+    ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hideydecorations!(ax)
     colsize!(gl, 2, Aspect(1, linecut_width))
-    ax = Axis(gl[1, 3], xticks=([0.0], [" "]), xtickcolor=:white,
-    leftspinecolor=:white,
-    topspinecolor=:white,
-    rightspinecolor=:white,
-    bottomspinecolor=:white,
-    )
+
+    ax = Axis(gl[1, 3], xticks=([0.0], [" "]), xtickcolor=:white,)
+    lines!(ax, Akω_total[ik_center, :], ω_list, color=center_line_color)
+    ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hideydecorations!(ax)
     colsize!(gl, 3, Aspect(1, linecut_width))
     colgap!(gl, 0)
@@ -413,5 +448,5 @@ end
 #rowsize!(f.layout, 1, Fixed(200))
 #rowsize!(f.layout, 2, Fixed(200))
 
-save("ehh-display-very-compact.png", f)
+save("ehh-display-very-compact-2.png", f)
 f
