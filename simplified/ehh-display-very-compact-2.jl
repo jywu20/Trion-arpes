@@ -115,9 +115,12 @@ let
         yticks=([0, exciton.E_g], ["VBM", "CBM"]),
         xtickalign = 1.0,
         ytickalign = 1.0,
+        title="Q=0",
+        titlefont = :regular,
     )
     Label(gl[1, 1, TopLeft()], "(a)", padding = (0, 15, 15, 0))
-    Label(gl[1, 1, Bottom()], "Momentum (Å⁻¹)", padding=(0, 0, 0, caption_padding))
+    # To compress the image even further: hide the captions of the a and b panels
+    #Label(gl[1, 1, Bottom()], "Momentum (Å⁻¹)", padding=(0, 0, 0, caption_padding))
 
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
     lines!(ax, kx_list, dispersion, color=shifted_valence_color, linestyle=:dash)
@@ -144,7 +147,7 @@ let
     ax = Axis(gl[1, 2], xticks=([0.0], [" "]), xtickcolor=:white)
     # Labels of line cuts are removed.
     #Label(gl[1, 2, Top()], "(b)", padding = (0, 0, 15, 0), halign=:left)
-    Label(gl[1, 2, Bottom()], "Intensity", padding=(0, 0, 0, caption_padding))
+    #Label(gl[1, 2, Bottom()], "Intensity", padding=(0, 0, 0, caption_padding))
 
     # Usually we can just hide x decorations,
     # but here to align the label "Intensity" with the label "Momentum",
@@ -210,11 +213,13 @@ let
         yticks=([0, exciton.E_g], ["", ""]),
         xtickalign = 1.0,
         ytickalign = 1.0,
+        title="P=w",
+        titlefont = :regular,
     )
     colsize!(gl, 1, Aspect(1, panel_width))
     # Because labels of line cuts are removed, relabeling is needed.
     Label(gl[1, 1, TopLeft()], "(b)", padding = (0, 15, 15, 0))
-    Label(gl[1, 1, Bottom()], "Momentum (Å⁻¹)", padding=(0, 0, 0, caption_padding))
+    #Label(gl[1, 1, Bottom()], "Momentum (Å⁻¹)", padding=(0, 0, 0, caption_padding))
 
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
     lines!(ax, kx_list, E_c1_curve, color=hole_color)
@@ -263,7 +268,7 @@ let
 
     colgap!(gl, 0)
 
-    Label(gl[1, 2:3, Bottom()], "Intensity", tellwidth=false, tellheight=false, padding=(0, 0, 0, caption_padding))
+    #Label(gl[1, 2:3, Bottom()], "Intensity", tellwidth=false, tellheight=false, padding=(0, 0, 0, caption_padding))
 
     #endregion
     ##########################################
@@ -296,6 +301,8 @@ let
         yticks=([0, exciton.E_g], ["VBM", "CBM"]),
         xtickalign = 1.0,
         ytickalign = 1.0,
+        title="Q=0.2w",
+        titlefont = :regular,
     )
     Label(gl[1, 1, TopLeft()], "(c)", padding = (0, 15, 15, 0))
     Label(gl[1, 1, Bottom()], "Momentum (Å⁻¹)", padding=(0, 0, 0, caption_padding))
@@ -340,6 +347,7 @@ let
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
     hidexdecorations!(ax, ticks = false, ticklabels = false, label = false)
     hideydecorations!(ax)
+    Label(gl[1, 2, Bottom()], "Intensity", padding=(0, 0, 0, caption_padding))
     # Note that in a Makie plot there are two aspect ratios:
     # the first is the aspect ratio of a cell in the Figure,
     # and the second is the aspect ratio of an Axis in the cell.
@@ -396,6 +404,8 @@ let
         yticks=([0, exciton.E_g], ["", ""]),
         xtickalign = 1.0,
         ytickalign = 1.0,
+        title="P=1.2w",
+        titlefont = :regular,
     )
     colsize!(gl, 1, Aspect(1, panel_width))
 
@@ -440,6 +450,7 @@ let
     colsize!(gl, 3, Aspect(1, linecut_width))
     colgap!(gl, 0)
 
+    Label(gl[1, 2:3, Bottom()], "Intensity", tellwidth=false, tellheight=false, padding=(0, 0, 0, caption_padding))
 
     #endregion
     ##########################################
