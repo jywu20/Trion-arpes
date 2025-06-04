@@ -88,7 +88,7 @@ let
         ##########################################
         #region Plotting the k_1 = 0 case
         
-        ax = Axis(f[1, 1], title=L"|A|^2", titlefont=:regular, aspect=1)
+        ax = Axis(f[1, 1], title=rich("|", rich("A", font=:italic), "|", superscript("2")), titlefont=:regular, aspect=1)
         heatmap!(ax, kx_list, ky_list, Asq,
             colorrange=(minimum(Asq), maximum(Asq))
         )
@@ -97,7 +97,7 @@ let
         cross_mark(ax, k_2_max, 0.1)
         hidexdecorations!(ax)
         
-        ax = Axis(f[1, 2], title=L"$\delta$ factor", titlefont=:regular, aspect=1)
+        ax = Axis(f[1, 2], title=rich(rich("δ", font=:italic), "(", rich("ω", font=:italic), "-", rich("E", font=:italic), subscript("trion"), "+", rich("E", font=:italic), subscript("residue"), ")"), titlefont=:regular, aspect=1)
         heatmap!(ax, kx_list, ky_list, E_residue, 
             colorrange=(minimum(E_residue), maximum(E_residue))
         )
@@ -108,12 +108,9 @@ let
         hideydecorations!(ax)
     
         ax = Axis(f[1, 3], 
-            # title=rich(
-            #     "Final contribution from one ",
-            #     rich("k", font=:italic),
-            #     subscript("1")
-            # ),
-        aspect=1)
+            title=rich("|", rich("A", font=:italic), "|", superscript("2"), rich("δ", font=:italic), "(", rich("ω", font=:italic), "-", "Δ", rich("E", font=:italic), ")"),
+            aspect=1,
+            titlefont=:regular)
         Asq_with_constraint = E_residue .* Asq
         heatmap!(ax, kx_list, ky_list, Asq_with_constraint)
         text!(ax, minimum(kx_list) + label_shift, maximum(ky_list) - label_shift, color=:white, align=(:center, :center),)
@@ -316,7 +313,7 @@ Label(f[4, 1:3, Bottom()], rich(rich("k", subscript("x", font=:regular), font=:i
 Label(f[1:4, 1, Left()], rich(rich("k", subscript("y", font=:regular), font=:italic), " (Å⁻¹)"), tellwidth=false, tellheight=false, padding=(0, 70, 0, 0), rotation=π/2)
 
 colgap!(f.layout, 5)
-rowgap!(f.layout, -60)
+rowgap!(f.layout, -120)
 
 save("ehh-momentum-conservation-factor-compact-2.png", f)
 f
