@@ -37,6 +37,9 @@ k1_grid = reshape(map(Iterators.product(kx_list, kx_list)) do (k_x, k_y)
 end, length(k1_list)^2)
 ω_list = LinRange(-0.3, 3.0, 200)
 
+binding_starting_pos = -0.3
+binding_annotation_displacement = 0.04
+
 electron_color = colorant"deepskyblue2"
 hole_color = colorant"coral2"
 shifted_valence_color = colorant"crimson"
@@ -81,13 +84,26 @@ let
     
     gl = f[1, 1] = GridLayout()
 
-    ax = Axis(gl[1, 1], ylabel="Energy (eV)", xlabel="Momentum (Å⁻¹)")
+    ax = Axis(gl[1, 1], ylabel="Energy (eV)", xlabel="Momentum (Å⁻¹)", 
+        yticks=([0, trion.E_g], ["VBM", "CBM"]),
+        # Inward ticks
+        xtickalign = 1.0,
+        ytickalign = 1.0,
+        title="P=w",
+        titlefont=:regular,
+        xticks=([0, w[1]], ["", ""]),
+    )
     Label(gl[1, 1, TopLeft()], "(a)", padding = (0, 15, 15, 0))
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
+    
+    arrows!(ax, [binding_starting_pos], [trion.E_g], [0.0], [-0.9trion.E_B], color=:black)
+    text!(ax, binding_starting_pos + binding_annotation_displacement, trion.E_g - trion.E_B / 2, 
+        text=rich("E", subscript("B,T", font=:regular), font=:italic)
+    )
 
     ylims!(ax, (minimum(ω_list), maximum(ω_list)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
-    hidexdecorations!(ax)
+    #hidexdecorations!(ax)
 
     #endregion
     ##########################################
@@ -194,7 +210,15 @@ let
     
     gl = f[2, 1] = GridLayout()
 
-    ax = Axis(gl[1, 1], ylabel="Energy (eV)", xlabel="Momentum (Å⁻¹)")
+    ax = Axis(gl[1, 1], ylabel="Energy (eV)", xlabel="Momentum (Å⁻¹)", 
+        xticks=([0, w[1]], ["K", "K'"]),
+        yticks=([0, trion.E_g], ["VBM", "CBM"]),
+        # Inward ticks
+        xtickalign = 1.0,
+        ytickalign = 1.0,
+        title="P=1.2w",
+        titlefont=:regular,
+    )
     Label(gl[1, 1, TopLeft()], "(b)", padding = (0, 15, 15, 0))
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
 

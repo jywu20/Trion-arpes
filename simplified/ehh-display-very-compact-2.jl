@@ -111,8 +111,9 @@ let
     gl = f[1, 1] = GridLayout()
 
     ax = Axis(gl[1, 1], 
-        ylabel="Energy (eV)", xticks=[-0.4, 0.0, 0.4],
+        ylabel="Energy (eV)", xticks=([-0.4, 0.0, 0.4], ["", "", ""]),
         yticks=([0, exciton.E_g], ["VBM", "CBM"]),
+        # Make ticks inward
         xtickalign = 1.0,
         ytickalign = 1.0,
         title="Q=0",
@@ -209,8 +210,9 @@ let
 
     gl = f[1, 2] = GridLayout()
 
-    ax = Axis(gl[1, 1], xticks=[-0.4, 0.0, 0.4], 
+    ax = Axis(gl[1, 1], xticks=([-0.4, 0.0, 0.4], ["", "", ""]), 
         yticks=([0, exciton.E_g], ["", ""]),
+        # Make ticks inward
         xtickalign = 1.0,
         ytickalign = 1.0,
         title="P=w",
@@ -299,6 +301,7 @@ let
 
     ax = Axis(gl[1, 1], ylabel="Energy (eV)", xticks=[-0.4, 0.0, 0.4],
         yticks=([0, exciton.E_g], ["VBM", "CBM"]),
+        # Make ticks inward
         xtickalign = 1.0,
         ytickalign = 1.0,
         title="Q=0.2w",
@@ -402,6 +405,7 @@ let
     gl = f[2, 2] = GridLayout()
     ax = Axis(gl[1, 1], xticks=[-0.4, 0.0, 0.4], 
         yticks=([0, exciton.E_g], ["", ""]),
+        # Make ticks inward
         xtickalign = 1.0,
         ytickalign = 1.0,
         title="P=1.2w",

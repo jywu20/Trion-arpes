@@ -18,3 +18,8 @@ This is done in [`ehh-display-very-compact.jl`](ehh-display-very-compact.jl).
 The output is shown below:
 
 ![](ehh-display-very-compact.png)
+
+To make the frequency positions of the signatures more clear,
+we use [`ehh-display-very-compact-2.jl`](ehh-display-very-compact-2.jl) to plot 
+
+![](ehh-display-very-compact-2.png)
