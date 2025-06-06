@@ -84,7 +84,7 @@ let
     
     gl = f[1, 1] = GridLayout()
 
-    ax = Axis(gl[1, 1], ylabel="Energy (eV)", xlabel="Momentum (Å⁻¹)", 
+    ax = Axis(gl[1, 1], ylabel="Energy (eV)", 
         yticks=([0, trion.E_g], ["VBM", "CBM"]),
         # Inward ticks
         xtickalign = 1.0,
