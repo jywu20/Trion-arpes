@@ -99,10 +99,10 @@ let
     Label(gl[1, 1, TopLeft()], "(a)", padding = (0, 15, 15, 0))
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
     
-    arrows!(ax, [binding_starting_pos], [trion.E_g], [0.0], [-0.9trion.E_B], color=:black)
-    text!(ax, binding_starting_pos + binding_annotation_displacement, trion.E_g - trion.E_B / 2, 
-        text=rich("E", subscript("B,T", font=:regular), font=:italic)
-    )
+    #arrows!(ax, [binding_starting_pos], [trion.E_g], [0.0], [-0.9trion.E_B], color=:black)
+    #text!(ax, binding_starting_pos + binding_annotation_displacement, trion.E_g - trion.E_B / 2, 
+    #    text=rich("E", subscript("B,T", font=:regular), font=:italic)
+    #)
 
     ylims!(ax, (minimum(ω_list), maximum(ω_list)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
