@@ -80,7 +80,8 @@ function trion_ARPES_ehh(
     kpath::Vector{SVector{2, Float64}},
     freq_list::LinRange{Float64, Int64},
     wfn,
-    broaden
+    broaden,
+    E_residue_correction::Float64 = 0.0
 )
     tmap(Iterators.product(kpath, freq_list)) do (k, ω)
         sum(kgrid) do k_1
@@ -88,7 +89,7 @@ function trion_ARPES_ehh(
             k_h1 = momentum_set.k_h1
             k_h2 = momentum_set.k_h2 
             k_2  = momentum_set.k_2
-            broaden(ω - E_trion_ehh(trion, P) + E_residue_ehh(trion, k_h1, k_h2)) * abs(wfn(k_1, k_2))^2
+            broaden(ω - E_trion_ehh(trion, P) + E_residue_ehh(trion, k_h1, k_h2) + E_residue_correction) * abs(wfn(k_1, k_2))^2
         end
     end
 end

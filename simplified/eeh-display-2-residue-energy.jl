@@ -17,6 +17,9 @@ panel_width = 1.6
 linecut_width = 0.15
 k_tilt = 0.1
 
+# Exciton binding causes the energy of the final state to go downwards
+E_residue_correction = -0.71 
+
 w_side = 4π / (3 * 3.144817974)
 w = SVector{2, Float64}([w_side, 0.0])
 trion = Intervalley2DChandraTrion(
@@ -35,7 +38,7 @@ k1_list = [SA[kx, 0.0] for kx in kx_list]
 k1_grid = reshape(map(Iterators.product(kx_list, kx_list)) do (k_x, k_y)
     SA[k_x, k_y]
 end, length(k1_list)^2)
-ω_list = LinRange(-0.3, 3.0, 200)
+ω_list = LinRange(-0.3, 3.3, 200)
 
 binding_starting_pos = -0.3
 binding_annotation_displacement = 0.04
@@ -74,7 +77,7 @@ let
     broaden = gaussian_broadening(20fs)
     Ak1k2 = wfn(trion)
 
-    Akω_total = trion_ARPES_eeh(trion, P, k1_grid, k1_list, ω_list, Ak1k2, broaden)
+    Akω_total = trion_ARPES_eeh(trion, P, k1_grid, k1_list, ω_list, Ak1k2, broaden, E_residue_correction)
 
     #endregion
     ##########################################
@@ -120,7 +123,7 @@ let
         vlines!(ax, k_e1[1] - k_tilt, linestyle=:dot, color=tilted_line_color)
         argmin(abs.(kx_list .- k_e1[1])), argmin(abs.(kx_list .- (k_e1[1] - k_tilt)))
     end
-    hlines!(ax, inv_eV * trion.m_e * norm(P - w)^2 / 2M^2 + trion.E_g - trion.E_B, linestyle=:dot, color=center_line_color)
+    hlines!(ax, inv_eV * trion.m_e * norm(P - w)^2 / 2M^2 + trion.E_g - trion.E_B - E_residue_correction, linestyle=:dot, color=center_line_color)
 
     # When e1 is driven out, k_1 is fixed,
     # and k_2 changes freely, so we set k_2 = 0 to maximize the ARPES intensity.
@@ -129,7 +132,7 @@ let
         momentum_set = momentum_calc_eeh_e1(trion, P, k, k_2)
         k_h = momentum_set.k_h
         k_e2 = momentum_set.k_e2
-        E_trion_eeh(trion, P) - E_residue_eeh_e1(trion, k_e2, k_h)
+        E_trion_eeh(trion, P) - E_residue_eeh_e1(trion, k_e2, k_h) - E_residue_correction
     end
     lines!(ax, kx_list, dispersion_k2_zero, color=shifted_valence_color, linestyle=:dash)
 
@@ -140,16 +143,16 @@ let
         momentum_set = momentum_calc_eeh_e2(trion, P, k, k_1)
         k_h = momentum_set.k_h
         k_e1 = momentum_set.k_e1
-        E_trion_eeh(trion, P) - E_residue_eeh_e2(trion, k_e1, k_h)
+        E_trion_eeh(trion, P) - E_residue_eeh_e2(trion, k_e1, k_h) - E_residue_correction
     end
     lines!(ax, kx_list, dispersion_k1_zero, color=shifted_valence_color, linestyle=:dash)
 
     # The maximal frequency that can be achieved
     dispersion_k1_max = map(k1_list) do k
-        E_trion_eeh(trion, P) - trion.E_g - inv_eV * norm(P - w - k)^2 / 2(trion.m_h + trion.m_e)
+        E_trion_eeh(trion, P) - trion.E_g - inv_eV * norm(P - w - k)^2 / 2(trion.m_h + trion.m_e) - E_residue_correction
     end
     dispersion_k2_max = map(k1_list) do k
-        E_trion_eeh(trion, P) - trion.E_g - inv_eV * norm(P - k)^2 / 2(trion.m_h + trion.m_e)
+        E_trion_eeh(trion, P) - trion.E_g - inv_eV * norm(P - k)^2 / 2(trion.m_h + trion.m_e) - E_residue_correction
     end
     lines!(ax, kx_list, dispersion_k1_max, color=shifted_effective_mass_color, linestyle=:dash)
     lines!(ax, kx_list, dispersion_k2_max, color=shifted_effective_mass_color, linestyle=:dash)
@@ -200,7 +203,7 @@ let
     broaden = gaussian_broadening(20fs)
     Ak1k2 = wfn(trion)
 
-    Akω_total = trion_ARPES_eeh(trion, P, k1_grid, k1_list, ω_list, Ak1k2, broaden)
+    Akω_total = trion_ARPES_eeh(trion, P, k1_grid, k1_list, ω_list, Ak1k2, broaden, E_residue_correction)
 
     #endregion
     ##########################################
@@ -240,7 +243,7 @@ let
         vlines!(ax, k_e1[1] - k_tilt, linestyle=:dot, color=tilted_line_color)
         argmin(abs.(kx_list .- k_e1[1])), argmin(abs.(kx_list .- (k_e1[1] - k_tilt)))
     end
-    hlines!(ax, inv_eV * trion.m_e * norm(P - w)^2 / 2M^2 + trion.E_g - trion.E_B, linestyle=:dot, color=center_line_color)
+    hlines!(ax, inv_eV * trion.m_e * norm(P - w)^2 / 2M^2 + trion.E_g - trion.E_B - E_residue_correction, linestyle=:dot, color=center_line_color)
 
     # When e1 is driven out, k_1 is fixed,
     # and k_2 changes freely, so we set k_2 = 0 to maximize the ARPES intensity.
@@ -249,7 +252,7 @@ let
         momentum_set = momentum_calc_eeh_e1(trion, P, k, k_2)
         k_h = momentum_set.k_h
         k_e2 = momentum_set.k_e2
-        E_trion_eeh(trion, P) - E_residue_eeh_e1(trion, k_e2, k_h)
+        E_trion_eeh(trion, P) - E_residue_eeh_e1(trion, k_e2, k_h) - E_residue_correction
     end
     lines!(ax, kx_list, dispersion_k2_zero, color=shifted_valence_color, linestyle=:dash)
 
@@ -260,16 +263,16 @@ let
         momentum_set = momentum_calc_eeh_e2(trion, P, k, k_1)
         k_h = momentum_set.k_h
         k_e1 = momentum_set.k_e1
-        E_trion_eeh(trion, P) - E_residue_eeh_e2(trion, k_e1, k_h)
+        E_trion_eeh(trion, P) - E_residue_eeh_e2(trion, k_e1, k_h) - E_residue_correction
     end
     lines!(ax, kx_list, dispersion_k1_zero, color=shifted_valence_color, linestyle=:dash)
 
     # The maximal frequency that can be achieved
     dispersion_k1_max = map(k1_list) do k
-        E_trion_eeh(trion, P) - trion.E_g - inv_eV * norm(P - w - k)^2 / 2(trion.m_h + trion.m_e)
+        E_trion_eeh(trion, P) - trion.E_g - inv_eV * norm(P - w - k)^2 / 2(trion.m_h + trion.m_e) - E_residue_correction
     end
     dispersion_k2_max = map(k1_list) do k
-        E_trion_eeh(trion, P) - trion.E_g - inv_eV * norm(P - k)^2 / 2(trion.m_h + trion.m_e)
+        E_trion_eeh(trion, P) - trion.E_g - inv_eV * norm(P - k)^2 / 2(trion.m_h + trion.m_e) - E_residue_correction
     end
     lines!(ax, kx_list, dispersion_k1_max, color=shifted_effective_mass_color, linestyle=:dash)
     lines!(ax, kx_list, dispersion_k2_max, color=shifted_effective_mass_color, linestyle=:dash)
@@ -310,5 +313,5 @@ let
     ##########################################
 end
 
-save("eeh-display-2.png", f)
+save("eeh-display-2-residue-energy.png", f)
 f

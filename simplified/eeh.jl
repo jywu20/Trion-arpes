@@ -101,7 +101,8 @@ function trion_ARPES_eeh(
     kpath::Vector{SVector{2, Float64}},
     freq_list::LinRange{Float64, Int64},
     wfn,
-    broaden
+    broaden,
+    E_residue_correction::Float64 = 0.0
 )
     # ARPES signature from peak 1,
     # where we move k_2 freely
@@ -112,7 +113,7 @@ function trion_ARPES_eeh(
             k_e2 = momentum_set.k_e2
             k_1 = momentum_set.k_1
             k_h = momentum_set.k_h
-            broaden(ω - E_trion_eeh(trion, P) + E_residue_eeh_e1(trion, k_e2, k_h)) * abs(wfn(k_1, k_2))^2
+            broaden(ω - E_trion_eeh(trion, P) + E_residue_eeh_e1(trion, k_e2, k_h) + E_residue_correction) * abs(wfn(k_1, k_2))^2
         end
     end
     
@@ -125,7 +126,7 @@ function trion_ARPES_eeh(
             k_e2 = momentum_set.k_e2
             k_2 = momentum_set.k_2
             k_h = momentum_set.k_h
-            broaden(ω - E_trion_eeh(trion, P) + E_residue_eeh_e2(trion, k_e1, k_h)) * abs(wfn(k_1, k_2))^2
+            broaden(ω - E_trion_eeh(trion, P) + E_residue_eeh_e2(trion, k_e1, k_h) + E_residue_correction) * abs(wfn(k_1, k_2))^2
         end
     end
     

@@ -23,3 +23,8 @@ To make the frequency positions of the signatures more clear,
 we use [`ehh-display-very-compact-2.jl`](ehh-display-very-compact-2.jl) to plot 
 
 ![](ehh-display-very-compact-2.png)
+
+Finally, we may want to incorporate the interactive corrections within the figure,
+and this is done using [`ehh-display-very-compact-2-residue-energy.jl`](ehh-display-very-compact-2-residue-energy.jl):
+
+![](ehh-display-very-compact-2-residue-energy.png)
