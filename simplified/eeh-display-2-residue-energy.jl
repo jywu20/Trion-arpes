@@ -15,7 +15,7 @@ center_line_color = colorant"gray45"
 tilted_line_color = colorant"lightgray"
 panel_width = 1.6
 linecut_width = 0.15
-k_tilt = 0.1
+k_tilt = 0.15
 
 # Exciton binding causes the energy of the final state to go downwards
 E_residue_correction = -0.71 
