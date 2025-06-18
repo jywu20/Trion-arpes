@@ -128,10 +128,11 @@ let
     lines!(ax, kx_list, dispersion, color=shifted_valence_color, linestyle=:dash)
     lines!(ax, kx_list, E_c1_curve, color=hole_color)
     lines!(ax, kx_list, E_v1_curve, color=electron_color)
-    vlines!(ax, kx_list[ikx_Γ], linestyle=:dot, color=center_line_color)
-    hlines!(ax, exciton.E_g - exciton.E_B, linestyle=:dot, color=center_line_color)
+    vlines!(ax, kx_list[ikx_Γ], linestyle=:dash, color=center_line_color)
+    hlines!(ax, exciton.E_g - exciton.E_B, linestyle=:dash, color=center_line_color)
     
-    #lines!(ax, [binding_starting_bar_pos - binding_starting_bar_width, binding_starting_bar_pos + binding_starting_bar_width], [exciton.E_g, exciton.E_g], color=:black)
+    lines!(ax, [binding_starting_bar_pos - binding_starting_bar_width, binding_starting_bar_pos + binding_starting_bar_width], [exciton.E_g, exciton.E_g], color=:black)
+    #hlines!(ax, [minimum(kx_list), minimum(kx_list) + 2(binding_starting_bar_pos - minimum(kx_list))], [exciton.E_g, exciton.E_g])
     arrows!(ax, [binding_starting_bar_pos], [exciton.E_g], [0.0], [-0.9exciton.E_B], color=:black)
     text!(ax, binding_starting_bar_pos + binding_annotation_displacement, exciton.E_g - exciton.E_B/2, 
         text=rich("E", subscript("B,X", font=:regular), font=:italic)
@@ -229,10 +230,11 @@ let
     lines!(ax, kx_list, E_v1_curve, color=electron_color)
     lines!(ax, kx_list, dispersion_k_zero, label=L"k_1=0", color=shifted_valence_color, linestyle=:dash)
     lines!(ax, kx_list, dispersion_k_equal, label=L"k_1=k_2", color=shifted_valence_doubled_color, linestyle=:dash)
-    vlines!(ax, kx_list[ikx_Γ], linestyle=:dot, color=center_line_color)
+    vlines!(ax, kx_list[ikx_Γ], linestyle=:dash, color=center_line_color)
     vlines!(ax, kx_list[ikx_tilted], linestyle=:dot, color=tilted_line_color)
-    hlines!(ax, trion.E_g - trion.E_B - E_residue_correction, linestyle=:dot, color=center_line_color)
+    hlines!(ax, trion.E_g - trion.E_B - E_residue_correction, linestyle=:dash, color=center_line_color)
 
+    lines!(ax, [binding_starting_bar_pos - binding_starting_bar_width, binding_starting_bar_pos + binding_starting_bar_width], [exciton.E_g, exciton.E_g], color=:black)
     arrows!(ax, [binding_starting_bar_pos], [trion.E_g], [0.0], [-0.9trion.E_B], color=:black)
     arrows!(ax, [binding_starting_bar_pos], [trion.E_g - trion.E_B], [0.0], [-0.9exciton.E_B], color=:black)
     text!(ax, binding_starting_bar_pos + binding_annotation_displacement, trion.E_g - trion.E_B/2, text=rich("E", subscript("B,T", font=:regular), font=:italic)) 
@@ -319,8 +321,8 @@ let
     lines!(ax, kx_list, E_v1_curve, color=electron_color)
     
     M = m_e + m_h
-    vlines!(ax, m_e / M * Q[1], linestyle=:dot, color=center_line_color)
-    hlines!(ax, inv_eV * m_e / 2M^2 * norm(Q)^2 + exciton.E_g - exciton.E_B, linestyle=:dot, color=center_line_color)
+    vlines!(ax, m_e / M * Q[1], linestyle=:dash, color=center_line_color)
+    hlines!(ax, inv_eV * m_e / 2M^2 * norm(Q)^2 + exciton.E_g - exciton.E_B, linestyle=:dash, color=center_line_color)
     
     #arrows!(ax, [binding_starting_bar_pos], [exciton.E_g], [0.0], [-0.9exciton.E_B], color=:black)
     #text!(ax, binding_starting_bar_pos + binding_annotation_displacement, exciton.E_g - exciton.E_B/2, 
@@ -423,11 +425,11 @@ let
     lines!(ax, kx_list, dispersion_k_equal, label=L"k_1=k_2", color=shifted_valence_doubled_color, linestyle=:dash)
     
     M = m_e + 2m_h
-    hlines!(ax, inv_eV * m_e / 2M^2 * norm(P - w)^2 + trion.E_g - trion.E_B - E_residue_correction, linestyle=:dot, color=center_line_color)
+    hlines!(ax, inv_eV * m_e / 2M^2 * norm(P - w)^2 + trion.E_g - trion.E_B - E_residue_correction, linestyle=:dash, color=center_line_color)
 
     ik_center = argmin(abs.(kx_list .- m_e / M * (P - w)[1]))
     ikx_tilted = argmin(abs.(kx_list .- (m_e / M * (P - w)[1] -0.25)))
-    vlines!(ax, m_e / M * (P - w)[1], linestyle=:dot, color=center_line_color)
+    vlines!(ax, m_e / M * (P - w)[1], linestyle=:dash, color=center_line_color)
     vlines!(ax, kx_list[ikx_tilted], linestyle=:dot, color=tilted_line_color)
     
     #arrows!(ax, [binding_starting_bar_pos], [trion.E_g], [0.0], [-0.9trion.E_B], color=:black)

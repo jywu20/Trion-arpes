@@ -43,8 +43,8 @@ end, length(k1_list)^2)
 binding_starting_pos = -0.3
 binding_annotation_displacement = 0.04
 
-electron_color = colorant"deepskyblue2"
-hole_color = colorant"coral2"
+electron_color = :black #colorant"deepskyblue2"
+hole_color = :black #colorant"coral2"
 shifted_valence_color = colorant"crimson"
 shifted_effective_mass_color = colorant"darkorange"
 set_theme!(fontsize=20)
@@ -98,11 +98,6 @@ let
     )
     Label(gl[1, 1, TopLeft()], "(a)", padding = (0, 15, 15, 0))
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
-    
-    #arrows!(ax, [binding_starting_pos], [trion.E_g], [0.0], [-0.9trion.E_B], color=:black)
-    #text!(ax, binding_starting_pos + binding_annotation_displacement, trion.E_g - trion.E_B / 2, 
-    #    text=rich("E", subscript("B,T", font=:regular), font=:italic)
-    #)
 
     ylims!(ax, (minimum(ω_list), maximum(ω_list)))
     hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
@@ -118,12 +113,12 @@ let
     # calculated by setting k_1 = 0 or k_2 = 0.
     ik_e1, ikx_tilted = let k_e1 = - trion.m_e / M * w + trion.m_e / M * P
         k_e2 = (trion.m_e + trion.m_h) / M * w + trion.m_e / M * P
-        vlines!(ax, k_e1[1], linestyle=:dot, color=center_line_color)
-        vlines!(ax, k_e2[1], linestyle=:dot, color=center_line_color)
+        vlines!(ax, k_e1[1], linestyle=:dash, color=center_line_color)
+        vlines!(ax, k_e2[1], linestyle=:dash, color=center_line_color)
         vlines!(ax, k_e1[1] - k_tilt, linestyle=:dot, color=tilted_line_color)
         argmin(abs.(kx_list .- k_e1[1])), argmin(abs.(kx_list .- (k_e1[1] - k_tilt)))
     end
-    hlines!(ax, inv_eV * trion.m_e * norm(P - w)^2 / 2M^2 + trion.E_g - trion.E_B - E_residue_correction, linestyle=:dot, color=center_line_color)
+    hlines!(ax, inv_eV * trion.m_e * norm(P - w)^2 / 2M^2 + trion.E_g - trion.E_B - E_residue_correction, linestyle=:dash, color=center_line_color)
 
     # When e1 is driven out, k_1 is fixed,
     # and k_2 changes freely, so we set k_2 = 0 to maximize the ARPES intensity.
@@ -161,6 +156,25 @@ let
     lines!(ax, kx_list, E_c2_curve, color=electron_color)
     lines!(ax, kx_list, E_v1_curve, color=hole_color)
     lines!(ax, kx_list, E_v2_curve, color=hole_color)
+
+    #endregion
+    ##########################################
+
+    ##########################################
+    #region Labeling
+
+    arrows!(ax, [binding_starting_pos], [trion.E_g], [0.0], [-0.9trion.E_B], color=:black)
+    text!(ax, binding_starting_pos + binding_annotation_displacement, trion.E_g - 0.9 * trion.E_B, 
+        text=rich("E", subscript("B,T", font=:regular), font=:italic)
+    )
+
+    arrows!(ax, [w_side/2], [trion.E_g - trion.E_B], [0.0], [0.85trion.E_B], color=:black)
+    text!(ax, w_side/2 + binding_annotation_displacement, trion.E_g - 0.7 * trion.E_B, 
+        text=rich("E", subscript("B,X", font=:regular), font=:italic)
+    )
+
+    lines!(ax, [binding_starting_pos*1.2, w_side/2 - 0.2*binding_starting_pos], [trion.E_g - trion.E_B, trion.E_g - trion.E_B], linestyle=:dot, color=center_line_color)
+    lines!(ax, [minimum(kx_list), minimum(kx_list) + 2(binding_starting_pos - minimum(kx_list))], [trion.E_g, trion.E_g], color=:black)
 
     #endregion
     ##########################################
@@ -238,12 +252,12 @@ let
     # calculated by setting k_1 = 0 or k_2 = 0.
     ik_e1, ikx_tilted = let k_e1 = - trion.m_e / M * w + trion.m_e / M * P
         k_e2 = (trion.m_e + trion.m_h) / M * w + trion.m_e / M * P
-        vlines!(ax, k_e1[1], linestyle=:dot, color=center_line_color)
-        vlines!(ax, k_e2[1], linestyle=:dot, color=center_line_color)
+        vlines!(ax, k_e1[1], linestyle=:dash, color=center_line_color)
+        vlines!(ax, k_e2[1], linestyle=:dash, color=center_line_color)
         vlines!(ax, k_e1[1] - k_tilt, linestyle=:dot, color=tilted_line_color)
         argmin(abs.(kx_list .- k_e1[1])), argmin(abs.(kx_list .- (k_e1[1] - k_tilt)))
     end
-    hlines!(ax, inv_eV * trion.m_e * norm(P - w)^2 / 2M^2 + trion.E_g - trion.E_B - E_residue_correction, linestyle=:dot, color=center_line_color)
+    hlines!(ax, inv_eV * trion.m_e * norm(P - w)^2 / 2M^2 + trion.E_g - trion.E_B - E_residue_correction, linestyle=:dash, color=center_line_color)
 
     # When e1 is driven out, k_1 is fixed,
     # and k_2 changes freely, so we set k_2 = 0 to maximize the ARPES intensity.
