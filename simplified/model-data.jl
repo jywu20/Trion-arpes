@@ -30,7 +30,10 @@ so the two radii are to be manually picked.
     b::Float64
 end
 
-@kwdef struct IntraValley2DExciton
+
+abstract type TwoBandTMDExciton end
+
+@kwdef struct IntraValley2DExciton <: TwoBandTMDExciton
     # The two-band model
     m_e::Float64
     m_h::Float64
@@ -42,7 +45,7 @@ end
     a::Float64
 end
 
-@kwdef struct InterValley2DExciton
+@kwdef struct InterValley2DExciton <: TwoBandTMDExciton
     # The two-band model
     m_e::Float64
     m_h::Float64

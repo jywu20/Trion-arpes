@@ -1,0 +1,101 @@
+# Plot the ARPES heatmap;
+
+include("units.jl")
+include("qp-bands.jl")
+include("broadening.jl")
+include("exciton.jl")
+include("ehh.jl")
+include("wfn.jl")
+include("arpes.jl")
+include("overlap.jl")
+using CairoMakie
+using LaTeXStrings
+using Colors
+
+caption_padding = 35
+
+broaden = gaussian_broadening(20fs)
+electron_color = colorant"deepskyblue2"
+hole_color = colorant"coral2"
+
+m_h = 0.21
+m_e = 0.37
+E_g = 2.84
+w_side = 4π / (3 * 3.144817974)
+w = SVector{2, Float64}([w_side, 0.0])
+trion = Intervalley2DChandraTrion(
+    m_h = m_h,
+    m_e = m_e,
+    w = w,
+    E_g = E_g,
+    E_B = 0.75, # Binding energy for the ehh trion mode
+    a = 10.3,
+    b = 25.2
+)
+exciton_direct = IntraValley2DExciton(
+    m_h = m_h,
+    m_e = m_e,
+    E_g = E_g,
+    E_B = 0.71,
+    a = 10.4
+)
+
+# The trion momentum is set to be w
+P_ratio = 1.0
+P = P_ratio * w
+
+# The exciton momentum is set to zero
+Q = SA[0.0, 0.0]
+
+rk, Avck = read_ex_wfc("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5", SVector{3, Float64}(0.333333333333333, 0.3333333333333, 0))
+
+let f = Figure(size=(1000, 500))
+    ax = Axis(f[1, 1])
+    scatter!(ax, rk[1, :], rk[2, :], color=abs.(Avck[1, 1, :, 1]), colormap=reverse(cgrad(:grayC)))
+    colsize!(f.layout, 1, Aspect(1, 1))
+    
+    ax = Axis(f[1, 2])
+    Avck_norm = map(1 : size(Avck)[3]) do ik
+        norm(Avck[:, :, ik, 1])^2
+    end
+    scatter!(ax, rk[1, :], rk[2, :], color=Avck_norm, colormap=reverse(cgrad(:grayC)))
+    colsize!(f.layout, 2, Aspect(1, 1))
+    f
+end
+
+ω_list = LinRange(-0.3, 3.0, 200) 
+kx_list = LinRange(-0.35, 1.7, 250) 
+k1_list = [SA[kx, 0.0] for kx in kx_list]
+Avck = Avck[:, :, :, 1:2]
+
+E_c1_curve = map(k1_list) do k_h
+    -E_v1(trion, k_h)
+end
+E_v1_curve = map(k1_list) do k_e
+    E_c1(trion, k_e)
+end
+E_c2_curve = map(k1_list) do k_h
+    -E_v2(trion, k_h)
+end
+E_v2_curve = map(k1_list) do k_e
+    E_c2(trion, k_e)
+end
+
+let f = Figure()
+    Ak1k2 = wfn(trion)
+    Akω_total = trion_ARPES_eeh(trion, exciton_direct, P, rk, k1_list, ω_list, Avck, Ak1k2, broaden)
+
+    ax = Axis(f[1, 1])
+    colsize!(f.layout, 1, Aspect(1, 1))
+    
+    lines!(ax, kx_list, E_c1_curve, color=electron_color)
+    lines!(ax, kx_list, E_c2_curve, color=electron_color)
+    lines!(ax, kx_list, E_v1_curve, color=hole_color)
+    lines!(ax, kx_list, E_v2_curve, color=hole_color)
+
+    heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
+    ylims!(ax, (minimum(ω_list), maximum(ω_list)))
+    save("eeh-heatmap-prototype-discrete-final.png", f)
+
+    f
+end
