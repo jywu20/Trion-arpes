@@ -30,3 +30,17 @@ we get
 ![](exciton-bands.png)
 
 This means the solver works as expected.
+
+# With the lowest exciton modes 
+
+Run [`eeh-heatmap-prototype-discrete-final.jl`](eeh-heatmap-prototype-discrete-final.jl), and we get 
+
+![](eeh-heatmap-prototype-discrete-final.png)
+
+The reason why we have different ARPES signatures at the two different valleys
+is that when the electron at the K valley is excited,
+the residue state is an exciton with momentum K,
+meaning that the parabolic-linear splitting is absent;
+on the other hand, when the electron at the K' valley is excited,
+the residue state is a exciton near Γ point,
+and the parabolic-linear exciton band structure appears in the ARPES signature.

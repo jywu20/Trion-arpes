@@ -133,7 +133,9 @@ let f = Figure()
     Ak1k2 = wfn(trion)
     Akω_total = trion_ARPES_eeh(trion, P, Ak1k2, TwoBandTMDExciton, 
         [IntraValley2DExcitonHybridLow(exciton_direct), IntraValley2DExcitonHybridHigh(exciton_direct), exciton_K], 
-        [Avck_A1s_bright, Avck_A1s_bright, Avck_A1s_bright], [rk, rk, rk .+ [w_side, 0, 0]], 
+        # Note that we should NOT use the K momentum from the BGW run and convert it into Cartesian coordinates,
+        # because it's in 1/au and not 1/Å. 
+        [Avck_A1s_bright/2, Avck_A1s_bright/2, Avck_A1s_bright], [rk, rk, rk .+ [w_side, 0, 0]], 
         k1_list, ω_list, broaden)
 
     ax = Axis(f[1, 1])
