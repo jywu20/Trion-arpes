@@ -18,7 +18,7 @@ function read_ex_wfc(name::String, k_shift::SVector{3, Float64})
     # Unit conversion: relation between a and b
     @assert abs(read(fid_ex["mf_header/crystal/alat"]) - 2π / read(fid_ex["mf_header/crystal/blat"])) < 1e-7
 
-    # Shift the origin of the coordinate system to K point
+    # Shift the origin of the coordinate system to the center of the momentum patch in question.
     ik_K = -1
     for i in 1 : size(rk)[2]
         if norm(rk[:, i] - k_shift) < 1e-4
@@ -40,69 +40,40 @@ function read_ex_wfc(name::String, k_shift::SVector{3, Float64})
     (rk, Avck)
 end
 
-# Without k path interpolation 
+"""
+Caveats:
+- To avoid the problem of k path interpolation, the exciton modes given to this function 
+  are to be represented by "valleys" in the exciton band structure:
+  the structures of the exciton wave functions are assumed to be roughly the same in these valleys,
+  and the only momentum resolved quantity is the exciton energy 
+  (to be calculated by the `E_exciton(exciton, Q)` function).
+- Following this, user should be aware of the valley structure of exciton wave functions supplied to the function:
+  for instance, if we assume that the two electrons are in K and K' vallyes 
+  and the hole is in the K valley,
+  then we should NOT supply the K'-K' Q=0 exciton wave function to the calculation,
+  or otherwise the function will mistaken the hole in K valley in the residue state of the trion
+  and the hole in the K' valley in the exciton mode.
+  That the holes in the exciton and in the trion residue state are in the same valley should be manually checked.
+- It is suggested to use patched sampled exciton wave functions for better momentum spatial resolution.
+
+The last dimension of `Avcks` is the exciton mode:
+it's possible to have multiple exciton modes withe degenerate energies.
+"""
 function trion_ARPES_eeh(
     trion::Intervalley2DChandraTrion,
-    exciton::IntraValley2DExciton,
     P::SVector{2, Float64},
-    rk::Matrix{Float64},
-    kpath::Vector{SVector{2, Float64}},
-    freq_list::LinRange{Float64, Int64},
-    Avck::Array{ComplexF64, 4},
     wfn,
-    broaden
-)
-    tmap(Iterators.product(kpath, freq_list)) do (k, ω)
-        # Exciton momentum. 
-        # Note that due to BerkeleyGW's convention - see http://manual.berkeleygw.org/4.0/kernel-overview/ --
-        # the total momentum of the exciton is -Q, and 
-        # if the momentum of the conduction band electron is ke,
-        # then the momentum of the valence band *electron* is ke + Q,
-        # and thus the momentum of the valence band hole is - ke - Q.
-        Q = P - k
-        trans_mat = sum(1 : size(rk)[2]) do ik
-            k_e_in_ex = SVector{2, Float64}(rk[1:2, ik])
-            res = 0
-
-            let momentum_set = momentum_calc_eeh_rel(trion, P, k, k_e_in_ex)
-                k_1 = momentum_set.k_1
-                k_2 = momentum_set.k_2
-
-                for iS in 1 : size(Avck)[4]
-                    # [1, 1, ik, iS] means we're working on the lowest conduction band and highest valence band
-                    res += Avck[1, 1, ik, iS]' * wfn(k_1, k_2) 
-                end
-            end
-            
-            let momentum_set = momentum_calc_eeh_rel(trion, P, k_e_in_ex, k)
-                k_1 = momentum_set.k_1
-                k_2 = momentum_set.k_2
-
-                for iS in 1 : size(Avck)[4]
-                    res += Avck[1, 1, ik, iS]' * wfn(k_1, k_2) 
-                end
-            end
-
-            res
-        end
-        
-        broaden(ω - E_trion_eeh(trion, P) + E_exciton(exciton, Q)) * abs2(trans_mat)
-    end
-end
-
-function trion_ARPES_eeh(
-    trion::Intervalley2DChandraTrion,
-    excitons::Vector{IntraValley2DExciton},
-    P::SVector{2, Float64},
-    rk::Matrix{Float64},
-    kpath::Vector{SVector{2, Float64}},
-    freq_list::LinRange{Float64, Int64},
+    ::Type{T},
+    excitons::Vector{T},
     Avcks::Vector{Array{ComplexF64, 4}},
-    wfn,
+    rks::Vector{Matrix{Float64}},
+    kpath::Vector{SVector{2, Float64}},
+    freq_list::LinRange{Float64, Int64},
     broaden
-)
+) where {T <: TwoBandTMDExciton}
     tmap(Iterators.product(kpath, freq_list)) do (k, ω)
-        sum(1 : size(Avcks)) do iS
+        sum(1 : size(Avcks)[1]) do iS
+            rk = rks[iS]
             Avck = Avcks[iS]
             exciton = excitons[iS]
             # Exciton momentum. 
@@ -120,11 +91,11 @@ function trion_ARPES_eeh(
                     k_1 = momentum_set.k_1
                     k_2 = momentum_set.k_2
 
+                    # There may be several exciton modes with degenerate energies
                     for iS′ in 1 : size(Avck)[4]
                         # [1, 1, ik, iS] means we're working on the lowest conduction band and highest valence band
                         res += Avck[1, 1, ik, iS′]' * wfn(k_1, k_2) 
                     end
-                    
                 end
                 
                 let momentum_set = momentum_calc_eeh_rel(trion, P, k_e_in_ex, k)
@@ -132,7 +103,7 @@ function trion_ARPES_eeh(
                     k_2 = momentum_set.k_2
 
                     for iS′ in 1 : size(Avck)[4]
-                        res += Avck[1, 1, ik, iS′]' * wfn(k_1, k_2) 
+                        res -= Avck[1, 1, ik, iS′]' * wfn(k_1, k_2) 
                     end
                 end
 

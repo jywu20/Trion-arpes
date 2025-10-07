@@ -8,9 +8,6 @@ include("ehh.jl")
 include("wfn.jl")
 include("arpes.jl")
 include("overlap.jl")
-include("exciton-band-gamma.jl")
-include("exciton-band-k.jl")
-include("bgw-crystal.jl")
 using CairoMakie
 using LaTeXStrings
 using Colors
@@ -35,25 +32,12 @@ trion = Intervalley2DChandraTrion(
     a = 10.3,
     b = 25.2
 )
-
-exciton_direct = IntraValley2DExcitonHybrid(
-    A = 0.6,
-    m_e = 0.37,
-    m_h = 0.21,
-    α = -0.9,
-    β = 4,
+exciton_direct = IntraValley2DExciton(
+    m_h = m_h,
+    m_e = m_e,
     E_g = E_g,
     E_B = 0.71,
-)
-
-exciton_K = InterValley2DExcitonHybrid(
-    m_e = 0.37,
-    m_h = 0.21,
-    α = -0.9,
-    β = 4,
-    E_g = E_g,
-    E_B = 0.71,
-    w = w
+    a = 10.4
 )
 
 # The trion momentum is set to be w
@@ -63,9 +47,7 @@ P = P_ratio * w
 # The exciton momentum is set to zero
 Q = SA[0.0, 0.0]
 
-k_K = SVector{3, Float64}(0.333333333333333, 0.3333333333333, 0)
-rk, Avck = read_ex_wfc("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5", k_K)
-k_K_real = read_b("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5") * k_K
+rk, Avck = read_ex_wfc("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5", SVector{3, Float64}(0.333333333333333, 0.3333333333333, 0))
 
 let f = Figure(size=(1500, 500))
     iS = 2
@@ -131,10 +113,7 @@ end
 
 let f = Figure()
     Ak1k2 = wfn(trion)
-    Akω_total = trion_ARPES_eeh(trion, P, Ak1k2, TwoBandTMDExciton, 
-        [IntraValley2DExcitonHybridLow(exciton_direct), IntraValley2DExcitonHybridHigh(exciton_direct), exciton_K], 
-        [Avck_A1s_bright, Avck_A1s_bright, Avck_A1s_bright], [rk, rk, rk .+ [w_side, 0, 0]], 
-        k1_list, ω_list, broaden)
+    Akω_total = trion_ARPES_eeh(trion, P, Ak1k2, IntraValley2DExciton, [exciton_direct], [Avck_A1s_bright], [rk], k1_list, ω_list, broaden)
 
     ax = Axis(f[1, 1])
     colsize!(f.layout, 1, Aspect(1, 1))
@@ -147,7 +126,7 @@ let f = Figure()
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
     ylims!(ax, (minimum(ω_list), maximum(ω_list)))
     hidedecorations!(ax, ticklabels = false, ticks = false)
-    save("eeh-heatmap-prototype-discrete-final.png", f)
+    save("eeh-heatmap-prototype-discrete-final-single-exciton.png", f)
 
     f
 end
