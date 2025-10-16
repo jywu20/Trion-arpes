@@ -149,7 +149,7 @@ let f = Figure()
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
     ylims!(ax, (minimum(ω_list), maximum(ω_list)))
     hidedecorations!(ax, ticklabels = false, ticks = false)
-    save("eeh-heatmap-prototype-discrete-final.png", f)
+    save("eeh-heatmap-prototype-discrete-final-multiband.png", f)
 
     f
 end
