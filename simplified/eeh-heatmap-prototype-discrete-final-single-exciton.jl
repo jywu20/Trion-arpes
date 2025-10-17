@@ -49,8 +49,8 @@ Q = SA[0.0, 0.0]
 
 rk, Avck = read_ex_wfc("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5", SVector{3, Float64}(0.333333333333333, 0.3333333333333, 0))
 
-let f = Figure(size=(1500, 500))
-    iS = 2
+let f = Figure(size=(2000, 500))
+    iS = 10
     ax = Axis(f[1, 1])
     scatter!(ax, rk[1, :], rk[2, :], color=abs.(Avck[1, 1, :, iS]), colormap=reverse(cgrad(:grayC)))
     colsize!(f.layout, 1, Aspect(1, 1))
@@ -65,8 +65,20 @@ let f = Figure(size=(1500, 500))
     hidedecorations!(ax, ticklabels = false, ticks = false)
     
     ax = Axis(f[1, 3])
-    scatter!(ax, rk[1, :], rk[2, :], color=abs.(Avck[1, 1, :, iS] + Avck[1, 2, :, iS]), colormap=reverse(cgrad(:grayC)))
-    colsize!(f.layout, 2, Aspect(1, 1))
+    Avck_iS_first_two_bands = Avck[1, 1, :, iS] + Avck[1, 2, :, iS]
+    scatter!(ax, rk[1, :], rk[2, :], color=abs.(Avck_iS_first_two_bands), 
+        colormap=reverse(cgrad(:grayC)),
+    )
+    colsize!(f.layout, 3, Aspect(1, 1))
+    hidedecorations!(ax, ticklabels = false, ticks = false)
+
+    ax = Axis(f[1, 4])
+    intensity_limit = maximum(abs.(Avck_iS_first_two_bands))
+    scatter!(ax, rk[1, :], rk[2, :], color=real.(Avck_iS_first_two_bands), 
+        colormap=cgrad(:balance),
+        colorrange=(-intensity_limit, intensity_limit),
+    )
+    colsize!(f.layout, 4, Aspect(1, 1))
     hidedecorations!(ax, ticklabels = false, ticks = false)
     
     save("exciton-patch.png", f)

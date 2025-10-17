@@ -1,4 +1,5 @@
 using StaticArrays
+using Dierckx
 using LinearAlgebra
 include("units.jl")
 include("model-data.jl")
@@ -45,4 +46,19 @@ end
 
 function E_exciton(ex::IntraValley2DExcitonHybridHigh, Q::SVector{2, Float64})
     solve(ex.data, Q, 0.0).values[2] + ex.data.E_g - ex.data.E_B
+end
+
+struct Homogeneous2DExciton <: TwoBandTMDExciton
+    Q_norm::Vector{Float64}
+    band::Vector{Float64}
+    extrapolate::Spline1D
+end
+
+function Homogeneous2DExciton(Q_norm, band)
+    Homogeneous2DExciton(Q_norm, band, Spline1D(Q_norm, band, bc="extrapolate"))
+end
+
+function E_exciton(ex::Homogeneous2DExciton, Q::SVector{2, Float64})
+    Q_norm = norm(Q)
+    ex.extrapolate(Q_norm)
 end
