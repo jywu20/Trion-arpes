@@ -59,7 +59,7 @@ Q_list = [
 
 a = read_a("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5") * au_in_angstrom
 Q_length_list = map(Q_list) do Q
-    Q[1] * 2π / a * sqrt(3)
+    (2 / sqrt(3)) * Q[1] * 2π / a * sqrt(3)
 end
 
 # Read eigenvalues from a file
@@ -87,6 +87,19 @@ neigs = length(all_eigs[1])
 @assert all(length(e) == neigs for e in all_eigs) "Files have inconsistent number of eigenvalues!"
 
 eig_matrix = hcat(all_eigs...) 
+
+# Scissor shifts for convergence 
+#shift = -0.0546272
+shift = 0 # The trion binding energy we use here should be lower than the exciton binding energy, 
+# so we have to use slightly unconverged exciton energies.
+# This can be solved by obtaining a better estimation of the trion energy
+# but I won't bother.
+shift_2p_like = 0.0221814
+shift_2s_like = 0.0828396
+
+eig_matrix .+= shift
+eig_matrix[3:6, :] .+= shift_2p_like
+eig_matrix[7:end, :] .+= shift_2s_like
 
 #endregion
 ############################################
@@ -165,16 +178,17 @@ E_v2_curve = map(k1_list) do k_e
     E_c2(trion, k_e)
 end
 
-S_list = [3, 4, 5, 6, 7, 8]
+S_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+#S_list = [1, 2]
 
 let f = Figure()
     Ak1k2 = wfn(trion)
     Akω_total = trion_ARPES_eeh(trion, P, Ak1k2, TwoBandTMDExciton, 
         [
-            IntraValley2DExcitonHybridLow(exciton_direct),
-            IntraValley2DExcitonHybridHigh(exciton_direct),
+            #IntraValley2DExcitonHybridLow(exciton_direct),
+            #IntraValley2DExcitonHybridHigh(exciton_direct),
             (map(S_list) do iS
-                Homogeneous2DExciton(Q_length_list, eig_matrix[4, eachindex(Q_length_list)])
+                Homogeneous2DExciton(Q_length_list, eig_matrix[iS, eachindex(Q_length_list)])
             end)...,
             #Homogeneous2DExciton(Q_length_list, eig_matrix[4, eachindex(Q_length_list)]),
             exciton_K
@@ -184,13 +198,13 @@ let f = Figure()
         [
             Avck_A1s_bright/2, 
             Avck_A1s_bright/2, 
-            (map(S_list) do iS
+            (map(S_list[3:end]) do iS
                 fetch_S(Avck, iS)
             end)...,
             Avck_A1s_bright,
         ], [
-            rk, 
-            rk, 
+            #rk, 
+            #rk, 
             fill(rk, length(S_list))..., 
             rk .+ [w_side, 0, 0],
         ], 
