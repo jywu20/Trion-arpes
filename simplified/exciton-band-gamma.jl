@@ -52,13 +52,14 @@ struct Homogeneous2DExciton <: TwoBandTMDExciton
     Q_norm::Vector{Float64}
     band::Vector{Float64}
     extrapolate::Spline1D
+    shift::SVector{2, Float64}
 end
 
-function Homogeneous2DExciton(Q_norm, band)
-    Homogeneous2DExciton(Q_norm, band, Spline1D(Q_norm, band, bc="extrapolate"))
+function Homogeneous2DExciton(Q_norm, band; shift::SVector{2, Float64} = @SVector [0.0, 0.0])
+    Homogeneous2DExciton(Q_norm, band, Spline1D(Q_norm, band, bc="extrapolate"), shift)
 end
 
 function E_exciton(ex::Homogeneous2DExciton, Q::SVector{2, Float64})
-    Q_norm = norm(Q)
+    Q_norm = norm(Q - ex.shift)
     ex.extrapolate(Q_norm)
 end

@@ -43,8 +43,9 @@ k_K = SVector{3, Float64}(0.333333333333333, 0.3333333333333, 0)
 rk, Avck = read_ex_wfc("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5", k_K)
 k_K_real = read_B("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5") * k_K
 
-files = ["finite-Q/eigenval_$(i)_likespin_plus_v_new" for i in 0:11]
-Q_list = [
+files_0 = ["finite-Q-0/eigenval_$(i)_likespin_plus_v_new" for i in 0:11]
+files_K = ["finite-Q-K/eigenval_$(i)_unlikespin_plus_v_new" for i in 0:13]
+Q_list_0 = [
     [0.0,0.0],
     [0.0005,0.0005],
     [0.001,0.001],
@@ -57,10 +58,31 @@ Q_list = [
     [0.02,0.02]
 ]
 
+Q_list_K = [
+    [-0.02, -0.02],
+    [-0.015, -0.015],
+    [-0.01, -0.01],
+    [-0.005, -0.005],
+    [-0.003, -0.003],
+    [-0.001, -0.001],
+    [0.001, 0.001],
+    [0.003, 0.003],
+    [0.005, 0.005],
+    [0.0075, 0.0075],
+    [0.01, 0.01],
+    [0.012, 0.012],
+    [0.015, 0.015],
+    [0.02, 0.02]
+]
+
 a = read_a("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5") * au_in_angstrom
-Q_length_list = map(Q_list) do Q
+Q_length_list_0 = map(Q_list_0) do Q
     (2 / sqrt(3)) * Q[1] * 2π / a * sqrt(3)
 end
+Q_length_list_K = map(Q_list_K) do Q
+    (2 / sqrt(3)) * Q[1] * 2π / a * sqrt(3) 
+end
+
 
 # Read eigenvalues from a file
 function read_eigs(filename)
@@ -79,14 +101,16 @@ function read_eigs(filename)
 end
 
 # Read all eigenvalue lists
-all_eigs = [read_eigs(f) for f in files]
+all_eigs_0 = [read_eigs(f) for f in files_0]
+all_eigs_K = [read_eigs(f) for f in files_K]
 
 # Ensure all files have the same number of eigenvalues
-nfiles = length(all_eigs)
-neigs = length(all_eigs[1])
-@assert all(length(e) == neigs for e in all_eigs) "Files have inconsistent number of eigenvalues!"
+nfiles = length(all_eigs_0)
+neigs = length(all_eigs_0[1])
+@assert all(length(e) == neigs for e in all_eigs_0) "Files have inconsistent number of eigenvalues!"
 
-eig_matrix = hcat(all_eigs...) 
+eig_matrix_0 = hcat(all_eigs_0...) 
+eig_matrix_K = hcat(all_eigs_K...) 
 
 # Scissor shifts for convergence 
 #shift = -0.0546272
@@ -97,9 +121,17 @@ shift = 0 # The trion binding energy we use here should be lower than the excito
 shift_2p_like = 0.0221814
 shift_2s_like = 0.0828396
 
-eig_matrix .+= shift
-eig_matrix[3:6, :] .+= shift_2p_like
-eig_matrix[7:end, :] .+= shift_2s_like
+eig_matrix_0 .+= shift
+eig_matrix_0[3:6, :] .+= shift_2p_like
+eig_matrix_0[7:end, :] .+= shift_2s_like
+
+shift_2p_unlike = 0.0233762
+shift_2s_unlike = 0.0746934
+
+eig_matrix_K .+= shift
+eig_matrix_K[2:3, :] .+= shift_2p_unlike
+eig_matrix_K[2:3, :] .-= (eig_matrix_K[2:3, :] .- eig_matrix_K[2, 1]) * 0.2
+eig_matrix_K[4:end, :] .+= shift_2s_unlike
 
 #endregion
 ############################################
@@ -178,35 +210,48 @@ E_v2_curve = map(k1_list) do k_e
     E_c2(trion, k_e)
 end
 
-S_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-#S_list = [1, 2]
+S_list_0 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+S_list_K = [1, 2, 3, 4, 5, 6, 7, 8]
+#S_list_K = [1]
 
 let f = Figure()
     Ak1k2 = wfn(trion)
-    Akω_total = trion_ARPES_eeh(trion, P, Ak1k2, TwoBandTMDExciton, 
+    Akω_total = trion_ARPES_eeh(trion, P, Ak1k2, Homogeneous2DExciton, 
         [
             #IntraValley2DExcitonHybridLow(exciton_direct),
             #IntraValley2DExcitonHybridHigh(exciton_direct),
-            (map(S_list) do iS
-                Homogeneous2DExciton(Q_length_list, eig_matrix[iS, eachindex(Q_length_list)])
+            (map(S_list_0) do iS
+                Homogeneous2DExciton(Q_length_list_0, eig_matrix_0[iS, eachindex(Q_length_list_0)])
             end)...,
-            #Homogeneous2DExciton(Q_length_list, eig_matrix[4, eachindex(Q_length_list)]),
-            exciton_K
+            #Homogeneous2DExciton(Q_length_list_0, eig_matrix_0[4, eachindex(Q_length_list_0)]),
+            #exciton_K
+            map(S_list_K) do iS
+                Homogeneous2DExciton(Q_length_list_K, eig_matrix_K[iS, eachindex(Q_length_list_K)], shift=w)
+            end...,
         ], 
         # Note that we should NOT use the K momentum from the BGW run and convert it into Cartesian coordinates,
         # because it's in 1/au and not 1/Å. 
         [
-            Avck_A1s_bright/2, 
-            Avck_A1s_bright/2, 
-            (map(S_list[3:end]) do iS
+            # There should be a 1/2 factor for the first two wave functions,
+            # because the lowest K and K' excitons are hybridized and the form of the resulting wave function 
+            # has been analytically found in https://journals.aps.org/prl/pdf/10.1103/PhysRevLett.115.176801.
+            # Still, we expect similar hybridization to happen in higher states,
+            # where we don't really know the coefficients.
+            # Therefore we just omit the 1/2 factor to avoid introducing non physical intensity difference
+            # between the low and high excitons.
+            Avck_A1s_bright, 
+            Avck_A1s_bright, 
+            (map(S_list_0[3:end]) do iS
                 fetch_S(Avck, iS)
             end)...,
-            Avck_A1s_bright,
+            (map(S_list_K) do iS
+                fetch_S(Avck, iS)
+            end)...,
         ], [
             #rk, 
             #rk, 
-            fill(rk, length(S_list))..., 
-            rk .+ [w_side, 0, 0],
+            fill(rk, length(S_list_0))..., 
+            fill(rk .+ [w_side, 0, 0], length(S_list_K))...,
         ], 
         k1_list, ω_list, broaden)
 
