@@ -28,3 +28,6 @@ Finally, we may want to incorporate the interactive corrections within the figur
 and this is done using [`ehh-display-very-compact-2-residue-energy.jl`](ehh-display-very-compact-2-residue-energy.jl):
 
 ![](ehh-display-very-compact-2-residue-energy.png)
+
+Note: all figures except the last are plotted using the 3D trion wave function
+which is theoretically wrong although it doesn't make things qualitatively wrong.

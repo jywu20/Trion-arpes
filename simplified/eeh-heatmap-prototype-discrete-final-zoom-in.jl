@@ -193,7 +193,7 @@ end
 #endregion 
 ##########################################
 
-ω_list = LinRange(-0.3, 3.0, 200) 
+ω_list = LinRange(2.0, 3.0, 200) 
 kx_list = LinRange(-0.35, 1.7, 250) 
 k1_list = [SA[kx, 0.0] for kx in kx_list]
 
@@ -211,12 +211,12 @@ E_v2_curve = map(k1_list) do k_e
 end
 
 S_list_0 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ]
-S_list_K = [1, 2, 3, 4, 5, 6,  ]
+S_list_K = [1, 2, 3, 4, 5, 6, ]
 #S_list_0 = [1, 2, 3, 4, 5, 6,  ]
 #S_list_K = [1, 2, 3, 4, 5, 6, ]
 
 
-let f = Figure()
+let f = Figure(size=(800, 400))
     Ak1k2 = wfn(trion)
     Akω_total = trion_ARPES_eeh(trion, P, Ak1k2, Homogeneous2DExciton, 
         [
@@ -234,17 +234,16 @@ let f = Figure()
         # Note that we should NOT use the K momentum from the BGW run and convert it into Cartesian coordinates,
         # because it's in 1/au and not 1/Å. 
         [
-            # There should be a 1/sqrt(2) factor for the first two wave functions,
+            # There should be a 1/2 factor for the first two wave functions,
             # because the lowest K and K' excitons are hybridized and the form of the resulting wave function 
             # has been analytically found in https://journals.aps.org/prl/pdf/10.1103/PhysRevLett.115.176801.
-            # We expect similar hybridization to happen in higher states,
-            # provided that the long range exchange doesn't couple more than two states together.
-            # There can be a non-trivial phase factor between the K-K and K'-K' components,
-            # but since the K'-K' component can't be detected (the hole resides at K),
-            # the phase is irrelevant.
-            (map(S_list_0[1:end]) do iS
+            # Still, we expect similar hybridization to happen in higher states,
+            # where we don't really know the coefficients.
+            # Therefore we just omit the 1/2 factor to avoid introducing non physical intensity difference
+            # between the low and high excitons.
+            map(S_list_0[1:end]) do iS
                 fetch_S(Avck, Int(ceil(iS / 2))) / sqrt(2)
-            end)...,
+            end...,
             (map(S_list_K) do iS
                 fetch_S(Avck, iS)
             end)...,
@@ -257,7 +256,7 @@ let f = Figure()
         k1_list, ω_list, broaden)
 
     ax = Axis(f[1, 1])
-    colsize!(f.layout, 1, Aspect(1, 1))
+    #colsize!(f.layout, 1, Aspect(1, 1))
     
     lines!(ax, kx_list, E_c1_curve, color=electron_color)
     lines!(ax, kx_list, E_c2_curve, color=electron_color)
@@ -283,7 +282,7 @@ let f = Figure()
 
     ylims!(ax, (minimum(ω_list), maximum(ω_list)))
     hidedecorations!(ax, ticklabels = false, ticks = false)
-    save("eeh-heatmap-prototype-discrete-final.png", f)
+    save("eeh-heatmap-prototype-discrete-final-zoom-in.png", f)
 
     f
 end
