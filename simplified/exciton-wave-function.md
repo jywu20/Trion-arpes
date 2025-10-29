@@ -70,6 +70,14 @@ we expect to see patches and holes in these two panels.
 Adding them together, we get the full wave function amplitudes
 for like-spin or unlike-spin excitons.
 
+Before doing so, be reminded that because of the random phase factors included into the single electron wave functions in DFT,
+the $A_{vc\vb{k}}$ values also have random phase factors.
+Here we assume that the lowest 1s states are "real",
+i.e. in them, no phase difference exists between different $\vb{k}$ points
+if we require the phase difference between single-electron wave functions at different $\vb{k}$ points to be small enough,
+and extract the phase factors by calculating $A^{1s}_{vc\vb{k}} / \abs{A^{1s}_{vc\vb{k}}}$.
+This is demonstrate in [this script](phase.jl).
+
 In the Q=0 calculation,
 below is an illustration of the structure of an unlike-spin A exciton:
 
@@ -77,6 +85,8 @@ below is an illustration of the structure of an unlike-spin A exciton:
 
 Note that the intensity of the $v = 1, c = 1$ transition is absent near the K valley,
 meaning that the electron constituent has a spin opposite to that of the valence band.
+The random gauge factor in this wave function is *not* eliminated,
+because the $A^{1s}$ exciton used above is the like-spin exciton, and not the unlike-spin exciton.
 
 Below is an illustration of the structure of a like-spin A exciton:
 
@@ -89,3 +99,6 @@ Below is an illustration of the structure of a B exciton:
 
 ![](exciton-0-patch-3.png)
 
+Below is an illustration of the structure of a A2p exciton:
+
+![](exciton-0-patch-6.png)
