@@ -185,9 +185,11 @@ Avck_A1s_bright = reshape(Avck_A1s_bright, (1, 1, length(Avck_A1s_bright), 1))
 println(size(Avck_A1s_bright))
 
 function fetch_S(Avck::Array{ComplexF64, 4}, iS::Int)
+    phase_factor = Avck[:, :, :, 2] ./ abs.(Avck[:, :, :, 2])
     Avck_S = Avck[:, :, :, iS]
     Avck_S = Avck_S[1, 1, :] + Avck_S[1, 2, :]
-    reshape(Avck_S, (1, 1, length(Avck_S), 1))
+    A_vck_S = reshape(Avck_S, (1, 1, length(Avck_S), 1)) ./ phase_factor
+    A_vck_S ./ (A_vck_S[1] / abs(Avck_S[1]))
 end
 
 #endregion 
@@ -210,11 +212,15 @@ E_v2_curve = map(k1_list) do k_e
     E_c2(trion, k_e)
 end
 
-S_list_0 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ]
-S_list_K = [1, 2, 3, 4, 5, 6, ]
+S_list_0 = [1, 2, 3, 4, 5, 6, 7, 8, ]
+S_list_K = [1, 2, 3, 4,  ]
 #S_list_0 = [1, 2, 3, 4, 5, 6,  ]
 #S_list_K = [1, 2, 3, 4, 5, 6, ]
 
+A1s_like = fetch_S(Avck, 2)
+A2p_like_1 = fetch_S(Avck, 8)
+A2p_like_2 = fetch_S(Avck, 6)
+A2s_like = fetch_S(Avck, 10)
 
 let f = Figure(size=(800, 400))
     Ak1k2 = wfn(trion)
@@ -241,10 +247,10 @@ let f = Figure(size=(800, 400))
             # where we don't really know the coefficients.
             # Therefore we just omit the 1/2 factor to avoid introducing non physical intensity difference
             # between the low and high excitons.
-            map(S_list_0[1:end]) do iS
-                fetch_S(Avck, Int(ceil(iS / 2))) / sqrt(2)
-            end...,
-            (map(S_list_K) do iS
+            (map([2, 2, 6, 6, 8, 8, 10, 10]) do iS
+                fetch_S(Avck, iS) / sqrt(2)
+            end)...,
+            (map([2, 7, 8, 10]) do iS
                 fetch_S(Avck, iS)
             end)...,
         ], [
