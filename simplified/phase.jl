@@ -33,7 +33,7 @@ A2s_like = fetch_S(Avck, 10)
 phase_factor = A1s_like ./ abs.(A1s_like)
 
 let f = Figure(size=(900, 400))
-    Avck_plot = A2p_like_2 ./ phase_factor
+    Avck_plot = A2p_like_1 ./ phase_factor
     Avck_plot ./= Avck_plot[1] / abs.(Avck_plot[1])
     intensity_limit = maximum(abs.(Avck_plot))
     
