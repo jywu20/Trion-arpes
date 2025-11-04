@@ -24,9 +24,10 @@ and reliable predictions of the effective masses need
 1. A large number of empty bands, and 
 2. a large cutoff energy, and 
 3. $G_1 W_0$ self-consistency.
+Following this protocol they get some smaller effective masses, listed in [`constants.md`](constants.md).
 
 In the benchmark in [`broadened-bands.jl`](broadened-bands.jl),
-however, the first-principles calculation we use is indeed a not fully converged $G_0 W_0$ calculation,
+the first-principles calculation we use is indeed a not fully converged $G_0 W_0$ calculation,
 which seems to be consistent with the conditions in [PRB 86,115409 (2012)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.86.115409).
 
 One possible issue is that our calculation is more converged in the sense that
@@ -34,13 +35,13 @@ in our calculation, the k-grid used is 24 24 1 and the number of empty bands is 
 (actually it's 6000, but our calculation considers SOC,
 while [PRL 111,216805 (2013)](https://journals.aps.org/prl/pdf/10.1103/PhysRevLett.111.216805) doesn't,
 so essentially the number of bands the latter uses is twice as many as the number of bands in our calculation).
-So possibly, a difference between the curvatures in [PRB 86,115409 (2012)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.86.115409) and in our calculation is still there,
+So possibly, we should expect differences betwee [PRB 86,115409 (2012)](https://journals.aps.org/prb/pdf/10.1103/PhysRevB.86.115409) and our calculation, 
 and if the bands calculated according to the effective masses in the former 
-and the bands calculated in the latter are identical,
-then actually we are *wrong* in how we treat the two-band model.
+and the bands calculated in the latter are indeed identical,
+then something else is *wrong*. 
 We do note that the usual problem of underconvergence is the size of the band gap;
 on the other hand, the structure of the wave functions at the valleys can change drastically when we change the momentum,
-so it's conceivable that self-consistency mode is more important in determining the effective mass,
+so it's conceivable that self-consistency mode is the main factor in changing the effective mass,
 which then means we shouldn't worry too much about convergence.
 
 Going back to the benchmark, by running [`broadened-bands.jl`](broadened-bands.jl) 

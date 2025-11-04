@@ -58,7 +58,7 @@ Q = SA[0.0, 0.0]
 # When we are tilting the momentum of the trion away from P=w things can be slightly different.
 kx_list = LinRange(-0.5, 0.5, 200)
 ikx_Γ = argmin(abs.(kx_list))
-ikx_tilted = argmin(abs.(kx_list .- -0.25))
+ikx_tilted = argmin(abs.(kx_list .- -0.2))
 k1_list = [SA[kx, 0.0] for kx in kx_list]
 k1_grid = reshape(map(Iterators.product(kx_list, kx_list)) do (k_x, k_y)
     SA[k_x, k_y]
@@ -428,7 +428,7 @@ let
     hlines!(ax, inv_eV * m_e / 2M^2 * norm(P - w)^2 + trion.E_g - trion.E_B - E_residue_correction, linestyle=:dash, color=center_line_color)
 
     ik_center = argmin(abs.(kx_list .- m_e / M * (P - w)[1]))
-    ikx_tilted = argmin(abs.(kx_list .- (m_e / M * (P - w)[1] -0.25)))
+    ikx_tilted = argmin(abs.(kx_list .- (m_e / M * (P - w)[1] -0.2)))
     vlines!(ax, m_e / M * (P - w)[1], linestyle=:dash, color=center_line_color)
     vlines!(ax, kx_list[ikx_tilted], linestyle=:dot, color=tilted_line_color)
     

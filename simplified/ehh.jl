@@ -93,3 +93,4 @@ function trion_ARPES_ehh(
         end
     end
 end
+

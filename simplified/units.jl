@@ -20,3 +20,4 @@ const inv_eV = 7.61996422
 # 1fs / (1eV / ħ) = 1.5193.
 # Therefore, n fs = 1.5193n (eV / ħ).
 const fs = 1.5193    
+const au_in_angstrom = 0.52917725

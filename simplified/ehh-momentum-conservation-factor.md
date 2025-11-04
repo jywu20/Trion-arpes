@@ -11,3 +11,6 @@ We can also include negative trion signaturs into the figure.
 This is created using [`ehh-momentum-conservation-factor-compact-2.jl`](ehh-momentum-conservation-factor-compact-2.jl):
 
 ![](ehh-momentum-conservation-factor-compact-2.png)
+
+Note that except the last image, all the images in this file were generated with the 3D trion wave function (which is strictly speaking wrong),
+although there is no qualitative difference caused by that.

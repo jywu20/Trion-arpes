@@ -3,9 +3,11 @@ include("units.jl")
 include("qp-bands.jl")
 using ThreadTools
 
-# Momentum conversion when the electron detected in ARPES comes from peak 1.
-# Note that in this case k_1 is known from k,
-# and it's k_2 that needs further specification.
+"""
+Momentum conversion when the electron detected in ARPES comes from peak 1.
+Note that in this case k_1 is known from k,
+and it's k_2 that needs further specification.
+"""
 function momentum_calc_eeh_e1(
     trion::Intervalley2DChandraTrion,
     P  :: SVector{2, Float64},
@@ -63,6 +65,34 @@ function momentum_calc_eeh_e2(
     )
 end
 
+"""
+Similar to `momentum_calc_eeh_e1` but calculates all the momentum variables 
+from P, ke1, ke2.
+"""
+function momentum_calc_eeh_rel(
+    trion::Intervalley2DChandraTrion,
+    P  :: SVector{2, Float64},
+    k_e1:: SVector{2, Float64},
+    k_e2:: SVector{2, Float64},
+)
+    m_e = trion.m_e
+    m_h = trion.m_h
+    M = m_h + 2m_e # This is different from the total mass of the positive trion!
+    w = trion.w
+
+    k_1 = k_e1 + m_e / M * (w - P)
+    k_2 = k_e2 - (m_e + m_h) / M * w - m_e / M * P 
+    k_h = P - k_e1 - k_e2
+
+    (
+        k_h = k_h,
+        k_e1 = k_e1,
+        k_e2 = k_e2,
+        P = P,
+        k_1 = k_1,
+        k_2 = k_2,
+    )
+end
 
 function E_residue_eeh_e1(
     trion::Intervalley2DChandraTrion,
