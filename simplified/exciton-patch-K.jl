@@ -66,6 +66,10 @@ for iS in 1:24
         hidedecorations!(ax, ticklabels = false, ticks = false)
         
         Avck_iS_first_two_bands = Avck[1, 1, :, iS] + Avck[1, 2, :, iS]
+        Avck_1s = Avck[1, 1, :, 2] + Avck[1, 2, :, 2]
+        phase_factors = Avck_1s ./ abs.(Avck_1s)
+        Avck_iS_first_two_bands = Avck_iS_first_two_bands ./ phase_factors
+        Avck_iS_first_two_bands ./= Avck_iS_first_two_bands[1] / abs(Avck_iS_first_two_bands[1])
         ax = Axis(f[1, 3], title="norm = $(norm(Avck_iS_first_two_bands))")
         scatter!(ax, rk[1, :], rk[2, :], color=abs.(Avck_iS_first_two_bands), 
             colormap=reverse(cgrad(:grayC)),

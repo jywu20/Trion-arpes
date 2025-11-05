@@ -222,7 +222,7 @@ A2p_like_1 = fetch_S(Avck, 8)
 A2p_like_2 = fetch_S(Avck, 6)
 A2s_like = fetch_S(Avck, 10)
 
-let f = Figure(size=(800, 400))
+let f = Figure(size=(600, 400))
     Ak1k2 = wfn(trion)
     Akω_total = trion_ARPES_eeh(trion, P, Ak1k2, Homogeneous2DExciton, 
         [
@@ -250,7 +250,7 @@ let f = Figure(size=(800, 400))
             (map([2, 2, 6, 6, 8, 8, 10, 10]) do iS
                 fetch_S(Avck, iS) / sqrt(2)
             end)...,
-            (map([2, 7, 8, 10]) do iS
+            (map([2, 6, 8, 10]) do iS
                 fetch_S(Avck, iS)
             end)...,
         ], [

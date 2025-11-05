@@ -256,7 +256,7 @@ let f = Figure()
             (map([2, 2, 6, 6, 8, 8, 10, 10]) do iS
                 fetch_S(Avck, iS) / sqrt(2)
             end)...,
-            (map([2, 7, 8, 10]) do iS
+            (map([2, 6, 8, 10]) do iS
                 fetch_S(Avck, iS)
             end)...,
         ], [
