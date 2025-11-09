@@ -49,8 +49,8 @@ Q = SA[0.0, 0.0]
 
 rk, Avck = read_ex_wfc("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5", SVector{3, Float64}(0.333333333333333, 0.3333333333333, 0))
 
-for iS in 1:24
-    let f = Figure(size=(2000, 500))
+for iS in 1:10
+    let f = Figure(size=(2500, 500))
         ax = Axis(f[1, 1], title="S = $iS")
         scatter!(ax, rk[1, :], rk[2, :], color=abs.(Avck[1, 1, :, iS]), colormap=reverse(cgrad(:grayC)), colorrange=(0, 1),)
         colsize!(f.layout, 1, Aspect(1, 1))
@@ -80,13 +80,22 @@ for iS in 1:24
         
         #Colorbar(f[1, 4], colormap=reverse(cgrad(:grayC)), )
 
-        ax = Axis(f[1, 4])
+        ax = Axis(f[1, 4], title="norm = $(norm(real.(Avck_iS_first_two_bands)))")
         intensity_limit = maximum(abs.(Avck_iS_first_two_bands))
         scatter!(ax, rk[1, :], rk[2, :], color=real.(Avck_iS_first_two_bands), 
             colormap=cgrad(:balance),
             colorrange=(-intensity_limit, intensity_limit),
         )
         colsize!(f.layout, 4, Aspect(1, 1))
+        hidedecorations!(ax, ticklabels = false, ticks = false)
+        
+        ax = Axis(f[1, 5], title="norm = $(norm(imag.(Avck_iS_first_two_bands)))")
+        intensity_limit = maximum(abs.(Avck_iS_first_two_bands))
+        scatter!(ax, rk[1, :], rk[2, :], color=imag.(Avck_iS_first_two_bands), 
+            colormap=cgrad(:balance),
+            colorrange=(-intensity_limit, intensity_limit),
+        )
+        colsize!(f.layout, 5, Aspect(1, 1))
         hidedecorations!(ax, ticklabels = false, ticks = false)
         
         save("exciton-0-patch-$iS.png", f)
