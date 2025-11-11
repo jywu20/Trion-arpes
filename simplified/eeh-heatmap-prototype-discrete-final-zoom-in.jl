@@ -17,7 +17,7 @@ using Colors
 
 caption_padding = 35
 
-broaden = gaussian_broadening(20fs)
+broaden = gaussian_broadening(40fs)
 electron_color = colorant"deepskyblue2"
 hole_color = colorant"coral2"
 

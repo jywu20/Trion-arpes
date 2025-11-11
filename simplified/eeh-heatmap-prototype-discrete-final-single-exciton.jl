@@ -107,6 +107,7 @@ Avck_A1s_bright = Avck[:, :, :, iS]
 # we can just do the follows:
 Avck_A1s_bright = Avck_A1s_bright[1, 1, :] + Avck_A1s_bright[1, 2, :]
 Avck_A1s_bright = reshape(Avck_A1s_bright, (1, 1, length(Avck_A1s_bright), 1))
+Avck_A1s_bright = abs.(Avck_A1s_bright) .* (1.0 + 0.0im)
 println(norm(Avck_A1s_bright))
 
 ω_list = LinRange(-0.3, 3.0, 200) 

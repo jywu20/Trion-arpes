@@ -6,4 +6,7 @@ we get
 
 ![](eeh-heatmap-prototype-discrete-final.png)
 
-To make 
+To make the figure look more "elaborated", run [`eeh-heatmap-prototype-discrete-final-zoom-in-display.jl`](eeh-heatmap-prototype-discrete-final-zoom-in-display.jl),
+and we get 
+
+![](eeh-heatmap-prototype-discrete-final-zoom-in-display.png)
