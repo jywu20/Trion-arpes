@@ -31,7 +31,13 @@ trion = Intervalley2DChandraTrion(
     m_e = m_e,
     w = w,
     E_g = E_g,
-    E_B = 0.75, # Binding energy for the ehh trion mode
+    # Binding energy for the ehh trion mode
+    # should be E_B = 0.76 = 2.84 - 2.08, 
+    # however, here we're using Diana's exciton energy band data, 
+    # the lowest exciton frequency at Q = 0 is 2.11 eV (run this script and the first line of console output is this number),
+    # and to maintain 2.13 - 2.08 = 0.05 eV difference between the lowest exciton mode and the trion mode,
+    # we need to manually shift 0.75 upwards by 2.13 - 2.11 = 0.02 eV.
+    E_B = 0.78,
     a = 10.3,
     b = 25.2
 )
@@ -132,6 +138,9 @@ eig_matrix_K .+= shift
 eig_matrix_K[2:3, :] .+= shift_2p_unlike
 eig_matrix_K[2:3, :] .-= (eig_matrix_K[2:3, :] .- eig_matrix_K[2, 1]) * 0.2
 eig_matrix_K[4:end, :] .+= shift_2s_unlike
+
+println(minimum(eig_matrix_0[1, :]))
+println(minimum(eig_matrix_K[1, :]))
 
 #endregion
 ############################################

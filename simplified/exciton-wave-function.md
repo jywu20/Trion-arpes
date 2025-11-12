@@ -102,3 +102,9 @@ Below is an illustration of the structure of a B exciton:
 Below is an illustration of the structure of a A2p exciton:
 
 ![](exciton-0-patch-6.png)
+
+We also compare the first-principles 1s exciton wave function with the hydrogen atom solution.
+For the exciton radius, see [here](constants.md).
+Running [`exciton-radius.jl`](exciton-radius.jl), we get 
+
+![](exciton-radius.png)
