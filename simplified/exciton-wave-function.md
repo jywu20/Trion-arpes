@@ -108,3 +108,7 @@ For the exciton radius, see [here](constants.md).
 Running [`exciton-radius.jl`](exciton-radius.jl), we get 
 
 ![](exciton-radius.png)
+
+Putting all wave functions together by running [`exciton-patch-0-SI.jl`](exciton-patch-0-SI.jl), we get 
+
+![](exciton-0-patch-SI.png)
