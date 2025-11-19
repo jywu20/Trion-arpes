@@ -10,3 +10,8 @@ To make the figure look more "elaborated", run [`eeh-heatmap-prototype-discrete-
 and we get 
 
 ![](eeh-heatmap-prototype-discrete-final-zoom-in-display.png)
+
+Or we can try to break the y axis:
+run [`eeh-heatmap-prototype-discrete-final-zoom-in-display-fold.jl`](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold.jl), and we get 
+
+![](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold.png)
