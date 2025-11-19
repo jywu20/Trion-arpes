@@ -208,16 +208,16 @@ end
 kx_list = LinRange(-0.35, 1.7, 250) 
 k1_list = [SA[kx, 0.0] for kx in kx_list]
 
-E_c1_curve = map(k1_list) do k_h
+E_v1_curve = map(k1_list) do k_h
     -E_v1(trion, k_h)
 end
-E_v1_curve = map(k1_list) do k_e
+E_c1_curve = map(k1_list) do k_e
     E_c1(trion, k_e)
 end
-E_c2_curve = map(k1_list) do k_h
+E_v2_curve = map(k1_list) do k_h
     -E_v2(trion, k_h)
 end
-E_v2_curve = map(k1_list) do k_e
+E_c2_curve = map(k1_list) do k_e
     E_c2(trion, k_e)
 end
 
@@ -283,8 +283,6 @@ let f = Figure(size=(600, 400))
     
     lines!(ax, kx_list, E_c1_curve, color=electron_color)
     lines!(ax, kx_list, E_c2_curve, color=electron_color)
-    lines!(ax, kx_list, E_v1_curve, color=hole_color)
-    lines!(ax, kx_list, E_v2_curve, color=hole_color)
 
     heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
 
@@ -307,6 +305,10 @@ let f = Figure(size=(600, 400))
     hidedecorations!(ax, ticklabels = false, ticks = false, label=false)
     hidexdecorations!(ax)
     hidespines!(ax, :b)
+
+    text!(ax, w_side / 2, 2E_g - trion.E_B - minimum(eig_matrix_0[1, :]), text="1s")
+    text!(ax, w_side / 2, 2E_g - trion.E_B - minimum(eig_matrix_0[3, :]) - 0.04, text="2p")
+    text!(ax, w_side / 2, 2E_g - trion.E_B - minimum(eig_matrix_0[7, :]) - 0.04, text="2s")
     
     ax = Axis(f[2, 1],
         xlabel="Momentum (Å⁻¹)",
@@ -315,6 +317,8 @@ let f = Figure(size=(600, 400))
         xtickalign = 1.0,
         ytickalign = 1.0,
     )
+    lines!(ax, kx_list, E_v1_curve, color=hole_color)
+    lines!(ax, kx_list, E_v2_curve, color=hole_color)
     xlims!(ax, (minimum(kx_list), maximum(kx_list)))
     ylims!(ax, (-0.1, 0.5))
     hidedecorations!(ax, ticklabels = false, ticks = false, label=false)
