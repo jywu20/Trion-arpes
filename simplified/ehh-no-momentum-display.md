@@ -31,3 +31,7 @@ and this is done using [`ehh-display-very-compact-2-residue-energy.jl`](ehh-disp
 
 Note: all figures except the last are plotted using the 3D trion wave function
 which is theoretically wrong although it doesn't make things qualitatively wrong.
+
+Run [`ehh-display-very-compact-2-residue-energy-ionization.jl`](ehh-display-very-compact-2-residue-energy-ionization.jl) to get 
+
+![](ehh-display-very-compact-2-residue-energy-ionization.png)
