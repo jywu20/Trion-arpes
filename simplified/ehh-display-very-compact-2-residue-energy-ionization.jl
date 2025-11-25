@@ -20,7 +20,7 @@ broaden = gaussian_broadening(20fs)
 
 m_h = 0.21
 m_e = 0.37
-E_g = 2.84
+E_g = 2.67
 w_side = 4π / (3 * 3.144817974)
 w = SVector{2, Float64}([w_side, 0.0])
 trion = Intervalley2DChandraTrion(
@@ -113,7 +113,7 @@ let
 
     ax = Axis(gl[1, 1], 
         ylabel="Energy (eV)", xticks=([-0.4, 0.0, 0.4], ["", "", ""]),
-        yticks=([0, exciton.E_g], ["VBM", "CBM"]),
+        #yticks=([0, exciton.E_g], ["VBM", "CBM"]), 
         # Make ticks inward
         xtickalign = 1.0,
         ytickalign = 1.0,
@@ -213,7 +213,7 @@ let
     gl = f[1, 2] = GridLayout()
 
     ax = Axis(gl[1, 1], xticks=([-0.4, 0.0, 0.4], ["", "", ""]), 
-        yticks=([0, exciton.E_g], ["", ""]),
+        #yticks=([0, exciton.E_g], ["", ""]),
         # Make ticks inward
         xtickalign = 1.0,
         ytickalign = 1.0,
@@ -239,7 +239,7 @@ let
     text!(ax, binding_starting_bar_pos + binding_annotation_displacement, trion.E_g - trion.E_B - exciton.E_B / 2, text=rich("IE = ", rich("E", subscript("B,T", font=:regular), font=:italic), "+", rich("E", subscript("hh", font=:regular), font=:italic))) 
 
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
-    hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
+    hidedecorations!(ax, ticks = false, #=ticklabels = false,=# label = false)
     axislegend(ax)
 
     #endregion
@@ -303,7 +303,7 @@ let
     gl = f[2, 1] = GridLayout()
 
     ax = Axis(gl[1, 1], ylabel="Energy (eV)", xticks=([-0.4, 0.0, 0.4], ["K-0.4", "K", "K+0.4"]),
-        yticks=([0, exciton.E_g], ["VBM", "CBM"]),
+        #yticks=([0, exciton.E_g], ["VBM", "CBM"]),
         # Make ticks inward
         xtickalign = 1.0,
         ytickalign = 1.0,
@@ -407,7 +407,7 @@ let
 
     gl = f[2, 2] = GridLayout()
     ax = Axis(gl[1, 1], xticks=([-0.4, 0.0, 0.4], ["K-0.4", "K", "K+0.4"]), 
-        yticks=([0, exciton.E_g], ["", ""]),
+        #yticks=([0, exciton.E_g], ["", ""]),
         # Make ticks inward
         xtickalign = 1.0,
         ytickalign = 1.0,
@@ -434,7 +434,7 @@ let
     #text!(ax, binding_starting_bar_pos + binding_annotation_displacement, trion.E_g - trion.E_B/2, text=rich("E", subscript("B,T", font=:regular), font=:italic)) 
 
     ylims!(ax, (minimum(ω_list_plot), maximum(ω_list_plot)))
-    hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
+    hidedecorations!(ax, ticks = false, #=ticklabels = false,=# label = false)
     axislegend(ax, position=:rt)
     #colsize!(f.layout, 3, Aspect(1, panel_width))
     

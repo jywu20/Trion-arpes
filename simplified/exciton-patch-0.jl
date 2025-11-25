@@ -49,7 +49,7 @@ Q = SA[0.0, 0.0]
 
 rk, Avck = read_ex_wfc("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5", SVector{3, Float64}(0.333333333333333, 0.3333333333333, 0))
 
-for iS in 1:10
+for iS in 1:30
     let f = Figure(size=(2500, 500))
         ax = Axis(f[1, 1], title="S = $iS")
         scatter!(ax, rk[1, :], rk[2, :], color=abs.(Avck[1, 1, :, iS]), colormap=reverse(cgrad(:grayC)), colorrange=(0, 1),)

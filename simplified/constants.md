@@ -9,6 +9,8 @@ From Table I, we find:
 - the effective mass of the hole: 0.21 electron mass
 - band gap:  2.84 eV
 
+The band gap should be 2.67 eV according to https://journals.aps.org/prb/pdf/10.1103/PhysRevB.93.235435
+
 # Comparison of (unconverged) trion and exciton BSE in Nat. Comm.  2117 (2017)
 
 Parameters about trion binding are from [Nat. Comm.  2117 (2017)](https://www.nature.com/articles/s41467-017-02286-6).
