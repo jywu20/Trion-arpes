@@ -1,6 +1,9 @@
 Running [`exciton-patch-0.jl`](exciton-patch-0.jl) and [`exciton-patch-0.jl`](exciton-patch-0.jl),
 we get all the `exciton-*.png` files.
 What we want to do is to pair these wave functions to exciton bands in https://arxiv.org/pdf/1507.03336.
+Run [`plot.py`](plot.py) to get 
+
+![](optbs_lowE.png)
 
 This is related to several non-trivial facts related to the excitonic structure of TMD materials.
 
@@ -112,3 +115,5 @@ Running [`exciton-radius.jl`](exciton-radius.jl), we get
 Putting all wave functions together by running [`exciton-patch-0-SI.jl`](exciton-patch-0-SI.jl), we get 
 
 ![](exciton-0-patch-SI.png)
+
+To estimate the overlap matrix elements at different electronic momenta,

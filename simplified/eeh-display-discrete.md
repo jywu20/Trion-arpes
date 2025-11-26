@@ -17,3 +17,30 @@ run [`eeh-heatmap-prototype-discrete-final-zoom-in-display-fold.jl`](eeh-heatmap
 ![](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold.png)
 
 Run [`eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-fully-labeled.jl`](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-fully-labeled.jl) to have a fully labeled version with info like "this is the A series unlike-spin 1s exciton" included into the figure.
+
+We note that the intensity of the 2s peak seems to be higher than that of the 1s peak.
+This is not due to visual illusions.
+If we plot the exciton wave functions with respect to $\abs{\vb{k}}$,
+this is what we get for the 1s state:
+
+![](exciton-0-patch-2.png)
+
+and this is what we get for the 2s state:
+
+![](exciton-0-patch-10.png)
+
+And it can be observed that the absolute intensity of the negative center of the 2s wave function happens to be higher than that of the positive center of the 1s wave function.
+After computing the overlap between the exciton wave functions and the trion wave function,
+here is what we get for the 1s state (the third panel is the trion wave function):
+
+![](exciton-0-patch-overlap-2.png)
+
+and here is what we get for the 2s state (again, the third panel is the trion wave function):
+
+![](exciton-0-patch-overlap-10.png)
+
+Note that the structure of the trion wave function means that for the 2s state, it is the negative central part that contributes most to the overlap matrix element;
+the contribution from the positive part of the 2s exciton wave function being weak 
+means that there is almost no cancellation from the influences of the positive and negative parts of the 2s exciton wave function,
+which, together with the fact that the central part of the 2s exciton wave function has a higher intensity,
+means the overlap between the exciton and the trion wave functions should indeed be higher.

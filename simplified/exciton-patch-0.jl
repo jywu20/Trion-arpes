@@ -50,7 +50,7 @@ Q = SA[0.0, 0.0]
 rk, Avck = read_ex_wfc("../../MoS2/MoS2/4-absorption-120-no-sym-gw/eigenvectors.h5", SVector{3, Float64}(0.333333333333333, 0.3333333333333, 0))
 
 for iS in 1:30
-    let f = Figure(size=(2500, 500))
+    let f = Figure(size=(3000, 500))
         ax = Axis(f[1, 1], title="S = $iS")
         scatter!(ax, rk[1, :], rk[2, :], color=abs.(Avck[1, 1, :, iS]), colormap=reverse(cgrad(:grayC)), colorrange=(0, 1),)
         colsize!(f.layout, 1, Aspect(1, 1))
@@ -97,6 +97,9 @@ for iS in 1:30
         )
         colsize!(f.layout, 5, Aspect(1, 1))
         hidedecorations!(ax, ticklabels = false, ticks = false)
+        
+        ax = Axis(f[1, 6])
+        scatter!(ax, map(ik -> norm(rk[1:2, ik]), 1 : size(rk)[2]), real.(Avck_iS_first_two_bands))
         
         save("exciton-0-patch-$iS.png", f)
 
