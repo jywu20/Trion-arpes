@@ -233,7 +233,7 @@ S_list_K_spinor = [2, 6, 8, 10]
 
 S_list_0_spinor = []
 S_list_K_spinor = []
-for iS in 1 : 150 # The index is in Avck, i.e. my fully spinor calculation
+for iS in 1 : 400 # The index is in Avck, i.e. my fully spinor calculation
     # Remove B excitons
     if norm(Avck[1, 1, :, iS] + Avck[1, 2, :, iS]) < 0.8
         continue
