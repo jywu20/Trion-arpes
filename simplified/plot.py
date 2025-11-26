@@ -234,7 +234,7 @@ if use_shift:
     en[:, 1:3] += shift_2p_unlike
     en[:, 1:3] -= (en[:, 1:3] - en[0, 1]) * 0.2
     en[:, 3:] += shift_2s_unlike
-    en[:, 4:] += 1
+    en[:, 4:] += 1   # This removes all unlike-spin Q=K excitons from the band plot on the PRL paper
 
 ax.plot(qlen + 0.25, en, 'b')
 print(qlen + 0.25)
