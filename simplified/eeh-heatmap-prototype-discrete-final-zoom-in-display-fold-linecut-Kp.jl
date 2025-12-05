@@ -36,7 +36,7 @@ trion = Intervalley2DChandraTrion(
     # however, here we're using Diana's exciton energy band data, 
     # the lowest exciton frequency at Q = 0 is 2.11 eV (run this script and the first line of console output is this number),
     # and to maintain 2.13 - 2.08 = 0.05 eV difference between the lowest exciton mode and the trion mode,
-    # we need to manually shift 0.75 upwards by 2.13 - 2.11 = 0.02 eV.
+    # we need to manually shift 0.59 upwards by 2.13 - 2.11 = 0.02 eV.
     E_B = 0.61,
     a = 10.3,
     b = 25.2

@@ -18,9 +18,9 @@ using Printf
 
 caption_padding = 35
 
-broaden = gaussian_broadening(20fs)
-electron_color = colorant"deepskyblue2"
-hole_color = colorant"coral2"
+broaden = gaussian_broadening(50fs)
+electron_color = :black
+hole_color = :black
 
 m_h = 0.21
 m_e = 0.37
@@ -205,33 +205,28 @@ end
 #endregion 
 ##########################################
 
-ω_list = LinRange(-0.3, 3.0, 200) 
-kx_list = LinRange(-0.35, 1.7, 250) 
+ω_list = LinRange(1.45, 2.8, 200) 
+kx_list = LinRange(-0.3, 0.3, 85) 
 k1_list = [SA[kx, 0.0] for kx in kx_list]
 
-E_c1_curve = map(k1_list) do k_h
+E_v1_curve = map(k1_list) do k_h
     -E_v1(trion, k_h)
 end
-E_v1_curve = map(k1_list) do k_e
+E_c1_curve = map(k1_list) do k_e
     E_c1(trion, k_e)
 end
-E_c2_curve = map(k1_list) do k_h
+E_v2_curve = map(k1_list) do k_h
     -E_v2(trion, k_h)
 end
-E_v2_curve = map(k1_list) do k_e
+E_c2_curve = map(k1_list) do k_e
     E_c2(trion, k_e)
 end
 
-ik_K = argmin(map(i -> norm(rk[:, i]), 1 : size(rk)[2]))
-
-
-# 2 like-spin 1s states, 4 like-spin 2p states, 2 like-spin 2s states
 S_list_0 = [1, 2, 3, 4, 5, 6, 7, 8, ]
-# Similar to the Q=0 case, but without K/K' degeneracy
-S_list_K = [1, 2, 3, 4,   ]
-S_list_0_spinor = [2, 2, 6, 6, 8, 8, 10, 10]
-S_list_K_spinor = [2, 6, 8, 10]
-
+S_list_K = [1, 2, 3, 4,  ]
+#S_list_0 = [1, 2, 3, 4, 5, 6,  ]
+#S_list_K = [1, 2, 3, 4, 5, 6, ]
+ik_K = argmin(map(i -> norm(rk[:, i]), 1 : size(rk)[2]))
 S_list_0_spinor = []
 S_list_K_spinor = []
 for iS in 1 : 200 # The index is in Avck, i.e. my fully spinor calculation
@@ -259,7 +254,9 @@ A2p_like_1 = fetch_S(Avck, 8)
 A2p_like_2 = fetch_S(Avck, 6)
 A2s_like = fetch_S(Avck, 10)
 
-let f = Figure()
+set_theme!(fontsize=20)
+
+let f = Figure(size=(600, 400))
     Ak1k2 = wfn(trion)
     Akω_total = trion_ARPES_eeh(trion, P, Ak1k2, Homogeneous2DExciton, 
         [
@@ -277,17 +274,13 @@ let f = Figure()
         # Note that we should NOT use the K momentum from the BGW run and convert it into Cartesian coordinates,
         # because it's in 1/au and not 1/Å. 
         [
-            # There should be a 1/sqrt(2) factor for the first two wave functions,
+            # There should be a 1/2 factor for the first two wave functions,
             # because the lowest K and K' excitons are hybridized and the form of the resulting wave function 
             # has been analytically found in https://journals.aps.org/prl/pdf/10.1103/PhysRevLett.115.176801.
-            # We expect similar hybridization to happen in higher states,
-            # provided that the long range exchange doesn't couple more than two states together.
-            # There can be a non-trivial phase factor between the K-K and K'-K' components,
-            # but since the K'-K' component can't be detected (the hole resides at K),
-            # the phase is irrelevant.
-            # Also, note that the indexes of states in the exciton wave function calculation 
-            # and in Diana's exciton band energy calculation are differenta,
-            # and therefore manual alignment is necessary.
+            # Still, we expect similar hybridization to happen in higher states,
+            # where we don't really know the coefficients.
+            # Therefore we just omit the 1/2 factor to avoid introducing non physical intensity difference
+            # between the low and high excitons.
             (map(S_list_0_spinor) do iS
                 fetch_S(Avck, iS) / sqrt(2)
             end)...,
@@ -302,26 +295,106 @@ let f = Figure()
         ], 
         k1_list, ω_list, broaden)
 
-    ax = Axis(f[1, 1])
-    colsize!(f.layout, 1, Aspect(1, 1))
+    ax1 = Axis(f[1, 1], 
+        xlabel="Momentum (Å⁻¹)",
+        #yticks=([2.5, 2.7, E_g], ["2.5", "2.7", "CBM"]),
+        yticks=([1.5, 2.0, 2.5, 3.0]),
+        xtickalign = 1.0,
+        ytickalign = 1.0,
+    )
+    xlims!(ax1, (minimum(kx_list), maximum(kx_list)))
+    #colsize!(f.layout, 1, Aspect(1, 1))
     
-    lines!(ax, kx_list, E_c1_curve, color=electron_color)
-    lines!(ax, kx_list, E_c2_curve, color=electron_color)
-    lines!(ax, kx_list, E_v1_curve, color=hole_color)
-    lines!(ax, kx_list, E_v2_curve, color=hole_color)
+    lines!(ax1, kx_list, E_c1_curve, color=electron_color)
+    lines!(ax1, kx_list, E_c2_curve, color=electron_color)
 
-    heatmap!(ax, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
+    heatmap!(ax1, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
 
-    ylims!(ax, (minimum(ω_list), maximum(ω_list)))
-    hidedecorations!(ax, ticklabels = false, ticks = false)
+    kx_list_0 = LinRange(w_side-0.08, w_side+0.08, 100)
+    for S in 1:11
+        ex = Homogeneous2DExciton(Q_length_list_0, eig_matrix_0[S, eachindex(Q_length_list_0)])
+        lines!(ax1, kx_list_0, map(kx_list_0) do kx
+            E_trion_eeh(trion, P) - E_exciton(ex, (P - @SVector [kx, 0]))
+        end, color = colorant"darkorange", linestyle=:dash)
+    end
+    kx_list_K = LinRange(-0.08, 0.08, 100)
+    for S in 1:12
+        ex = Homogeneous2DExciton(Q_length_list_K, eig_matrix_K[S, eachindex(Q_length_list_K)], shift=w)
+        lines!(ax1, kx_list_K, map(kx_list_K) do kx
+            E_trion_eeh(trion, P) - E_exciton(ex, (P - @SVector [kx, 0]))
+        end, color = colorant"darkorange", linestyle=:dash)
+    end
+
+    ylims!(ax1, (minimum(ω_list), maximum(ω_list)))
+    hidedecorations!(ax1, ticklabels = false, ticks = false, label=false)
+    hidexdecorations!(ax1)
+    hidespines!(ax1, :b)
+    vlines!(ax1, 0, linestyle=:dot, color=colorant"gray64")
+
+    text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[1, :]), text="1s", align = (:center, :center), fontsize=15)
+    text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[3, :]), text="2p", align = (:center, :center), fontsize=15)
+    text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[4, :]), text="2s", align = (:center, :center), fontsize=15)
     
-    
-    ax = Axis(f[1, 2])
+    ax2 = Axis(f[2, 1],
+        xlabel="Momentum (Å⁻¹)",
+        xticks=([-0.2, 0.0, 0.2, w_side], ["K-0.2", "K", "K+0.2", "K'"]),
+        #yticks=([0], ["VBM"]),
+        yticks=([0], ["0"]),
+        xtickalign = 1.0,
+        ytickalign = 1.0,
+    )
+    lines!(ax2, kx_list, E_v1_curve, color=hole_color)
+    lines!(ax2, kx_list, E_v2_curve, color=hole_color)
+    xlims!(ax2, (minimum(kx_list), maximum(kx_list)))
+    ax2_ylim = (-0.1, 0.5)
+    ylims!(ax2, ax2_ylim)
+    hidedecorations!(ax2, ticklabels = false, ticks = false, label=false)
+    hidespines!(ax2, :t)
+
+    Label(f[1:2, 1, Left()], "Energy (eV)", tellwidth=false, tellheight=false, rotation=π/2, padding=(0, 80, 0, 0))
+
+
+    ax3 = Axis(f[1:2, 2])
     ik_0 = argmin(abs.(kx_list))
-    lines!(ax, Akω_total[ik_0, :], ω_list)
-    ylims!(ax, (minimum(ω_list), maximum(ω_list)))
+    hidedecorations!(ax3)
+    hidespines!(ax3, :l)
 
+    colgap!(f.layout, 0)
+    
+    colsize!(f.layout, 1, Fixed(200))
+    rowsize!(f.layout, 2, 50)
+    colsize!(f.layout, 2, 50)
+    
+    x_left = ax1.elements[:xoppositeline][1][][1][1]
+    x_right = ax1.elements[:xoppositeline][1][][2][1]
+    y_top = ax1.elements[:xoppositeline][1][][1][2]
+    y_bottom = ax1.elements[:xgridlines][1][][1][2]
+    ax1_height = y_top - y_bottom
+    
+    x_left = ax3.elements[:xoppositeline][1][][1][1]
+    x_right = ax3.elements[:xoppositeline][1][][2][1]
+    y_top = ax3.elements[:xoppositeline][1][][1][2]
+    y_bottom = ax3.elements[:xgridlines][1][][1][2]
+    ax3_height = y_top - y_bottom
 
-    save("eeh-heatmap-prototype-discrete-final-lots-of-bands.png", f)
+    ylims!(ax3, (maximum(ω_list) - (maximum(ω_list) - minimum(ω_list)) * ax3_height / ax1_height, maximum(ω_list)))
+
+    lines!(ax3, Akω_total[ik_0, :], ω_list, color = colorant"gray64")
+
+    x_left = ax2.elements[:xoppositeline][1][][1][1]
+    x_right = ax2.elements[:xoppositeline][1][][2][1]
+    y_top = ax2.elements[:xoppositeline][1][][1][2]
+    y_bottom = ax2.elements[:xgridlines][1][][1][2]
+    lines!(f.scene, [x_left - 10, x_left + 10], [y_top - 5, y_top + 5], color=:black)
+    lines!(f.scene, [x_right - 10, x_right + 10], [y_top - 5, y_top + 5], color=:black)
+    h_shift = ax1.elements[:xgridlines][1][][1][2] - ax2.elements[:xoppositeline][1][][1][2]
+    lines!(f.scene, [x_left - 10, x_left + 10], [y_top - 5 + h_shift, y_top + 5 + h_shift], color=:black)
+    lines!(f.scene, [x_right - 10, x_right + 10], [y_top - 5 + h_shift, y_top + 5 + h_shift], color=:black)
+
+    Label(f[2, 2, Bottom()], "Intensity", padding=(0, 0, 0, 30), tellwidth=false, tellheight=false,)
+
+    save("eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-linecut-K-lots-of-bands.png", f)
+
     f
 end
+
