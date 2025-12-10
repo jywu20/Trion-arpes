@@ -94,3 +94,31 @@ function trion_ARPES_ehh(
     end
 end
 
+function trion_ARPES_ehh(
+    trion::Intervalley2DChandraTrion,
+    P::SVector{2, Float64},
+    kgrid::Vector{SVector{2, Float64}},
+    kpath::Vector{SVector{2, Float64}},
+    freq_list::LinRange{Float64, Int64},
+    wfn,
+    scatter_rate,
+    broaden,
+    E_residue_correction::Float64 = 0.0
+)
+    tmap(Iterators.product(kpath, freq_list)) do (k, ω)
+        sum(kgrid) do k_1
+            momentum_set = momentum_calc_ehh(trion, P, k, k_1)
+            k_h1 = momentum_set.k_h1
+            k_h2 = momentum_set.k_h2 
+            k_2  = momentum_set.k_2
+            
+            E_hh = inv_eV * (
+                  norm(k_h1)^2 / 2trion.m_h 
+                + norm(k_h2 - trion.w)^2 / 2trion.m_h 
+                - norm(k_h1 + k_h2 - trion.w)^2 / 4trion.m_h
+            )
+
+            broaden(ω - E_trion_ehh(trion, P) + E_residue_ehh(trion, k_h1, k_h2) + E_residue_correction) * abs(wfn(k_1, k_2))^2 * scatter_rate(E_hh)
+        end
+    end
+end

@@ -59,3 +59,10 @@ we get
 ![](eeh-heatmap-prototype-discrete-final-lots-of-bands.png)
 
 Increasing the number of bands from 200 to 300 only makes the high-energy continuum wider.
+
+Run [`eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-linecut-K-lots-of-bands.jl`](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-linecut-K-lots-of-bands.jl) and [`eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-linecut-Kp-lots-of-bands.jl`](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-linecut-Kp-lots-of-bands.jl) to get the following plots:
+
+![](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-linecut-K-lots-of-bands.png)
+
+![](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-linecut-Kp-lots-of-bands.png)
+
