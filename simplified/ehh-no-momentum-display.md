@@ -35,3 +35,8 @@ which is theoretically wrong although it doesn't make things qualitatively wrong
 Run [`ehh-display-very-compact-2-residue-energy-ionization.jl`](ehh-display-very-compact-2-residue-energy-ionization.jl) to get 
 
 ![](ehh-display-very-compact-2-residue-energy-ionization.png)
+
+If we choose to not use a hard coded Ehh but a $Z(E)$ correction factor to the spectral weight factor to represent how Coulomb repulsion between the holes scatters the two holes to the free-hole-pair final state,
+we can run [`ehh-display-very-compact-2-residue-energy-distribution-ionization.jl`](ehh-display-very-compact-2-residue-energy-distribution-ionization.jl) and get 
+
+![](ehh-display-very-compact-2-residue-energy-distribution-ionization.png)

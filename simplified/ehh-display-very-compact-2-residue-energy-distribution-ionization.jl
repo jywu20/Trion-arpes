@@ -42,11 +42,14 @@ exciton = IntraValley2DExciton(
 )
 
 # See repulsion/trion_hole_explosion.ipynb
-σ = 0.7122748076054343
-μ = -1.8521341528622541
+#σ = 0.7122748076054343
+σ = 0.411
+#μ = -1.8521341528622541
+μ = -0.914
 energy_distribution = LogNormal(μ, σ)
 #E_residue_correction = 0.20220637350676315
-E_residue_correction = 0.09447032127312861
+#E_residue_correction = 0.09447032127312861
+E_residue_correction = exp(μ - σ^2)
 
 # The trion momentum is set to be w
 P_ratio = 1.0
@@ -193,6 +196,7 @@ let
 
     Akω_total = trion_ARPES_ehh(trion, P, k1_grid, k1_list, ω_list,
         Ak1k2, x -> pdf(energy_distribution, x), broaden, 0.0)
+    E_residue_correction = trion.E_g - trion.E_B - ω_list[argmax(Akω_total[ikx_Γ, :])] 
     dispersion_k_zero = map(k1_list) do k
         k_1 = SA[0.0, 0.0]
         momentum_set = momentum_calc_ehh(trion, P, k, k_1)
@@ -385,10 +389,15 @@ let
     ##########################################
     #region Calculation of trion
 
+    M = 2trion.m_h + trion.m_e
+    ik_center = argmin(abs.(kx_list .- m_e / M * (P - w)[1]))
+    ikx_tilted = argmin(abs.(kx_list .- (m_e / M * (P - w)[1] -0.2)))
+
     Ak1k2 = wfn(trion)
 
     Akω_total = trion_ARPES_ehh(trion, P, k1_grid, k1_list, ω_list, 
         Ak1k2, x -> pdf(energy_distribution, x), broaden, 0.0)
+    E_residue_correction = inv_eV * trion.m_e * norm(P - w)^2 / 2(2trion.m_h + trion.m_e)^2 + trion.E_g - trion.E_B - ω_list[argmax(Akω_total[ik_center, :])] 
     dispersion_k_zero = map(k1_list) do k
         k_1 = SA[0.0, 0.0]
         momentum_set = momentum_calc_ehh(trion, P, k, k_1)
@@ -434,8 +443,7 @@ let
     M = m_e + 2m_h
     hlines!(ax, inv_eV * m_e / 2M^2 * norm(P - w)^2 + trion.E_g - trion.E_B - E_residue_correction, linestyle=:dash, color=center_line_color)
 
-    ik_center = argmin(abs.(kx_list .- m_e / M * (P - w)[1]))
-    ikx_tilted = argmin(abs.(kx_list .- (m_e / M * (P - w)[1] -0.2)))
+    
     vlines!(ax, m_e / M * (P - w)[1], linestyle=:dash, color=center_line_color)
     vlines!(ax, kx_list[ikx_tilted], linestyle=:dot, color=tilted_line_color)
     
