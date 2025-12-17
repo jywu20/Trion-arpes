@@ -197,13 +197,14 @@ let
     Akω_total = trion_ARPES_ehh(trion, P, k1_grid, k1_list, ω_list,
         Ak1k2, x -> pdf(energy_distribution, x), broaden, 0.0)
     E_residue_correction = trion.E_g - trion.E_B - ω_list[argmax(Akω_total[ikx_Γ, :])] 
+    println("E_residue_correction, P=w: ", E_residue_correction)
     dispersion_k_zero = map(k1_list) do k
         k_1 = SA[0.0, 0.0]
         momentum_set = momentum_calc_ehh(trion, P, k, k_1)
         k_h1 = momentum_set.k_h1
         k_h2 = momentum_set.k_h2 
         k_2  = momentum_set.k_2
-        E_trion_ehh(trion, P) - E_residue_ehh(trion, k_h1, k_h2) - E_residue_correction
+        E_trion_ehh(trion, P) - E_residue_ehh(trion, k_h1, k_h2) #- E_residue_correction
     end
 
     dispersion_k_equal = map(k1_list) do k
@@ -404,7 +405,7 @@ let
         k_h1 = momentum_set.k_h1
         k_h2 = momentum_set.k_h2 
         k_2  = momentum_set.k_2
-        E_trion_ehh(trion, P) - E_residue_ehh(trion, k_h1, k_h2) - E_residue_correction
+        E_trion_ehh(trion, P) - E_residue_ehh(trion, k_h1, k_h2) #- E_residue_correction
     end
 
     dispersion_k_equal = map(k1_list) do k

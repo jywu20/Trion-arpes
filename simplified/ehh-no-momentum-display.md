@@ -40,3 +40,5 @@ If we choose to not use a hard coded Ehh but a $Z(E)$ correction factor to the s
 we can run [`ehh-display-very-compact-2-residue-energy-distribution-ionization.jl`](ehh-display-very-compact-2-residue-energy-distribution-ionization.jl) and get 
 
 ![](ehh-display-very-compact-2-residue-energy-distribution-ionization.png)
+
+The downward shift of the trion signature due to the Z(E) factor, 0.197 eV, is also reported when running the script.

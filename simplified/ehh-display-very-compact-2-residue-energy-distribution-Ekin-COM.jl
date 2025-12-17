@@ -41,12 +41,6 @@ exciton = IntraValley2DExciton(
     a = 10.4
 )
 
-# See repulsion/trion_hole_explosion.ipynb
-σ = 0.7122748076054343
-μ = -1.8521341528622541
-energy_distribution = LogNormal(μ, σ)
-#E_residue_correction = 0.20220637350676315
-E_residue_correction = 0.09447032127312861
 
 # The trion momentum is set to be w
 P_ratio = 1.0
@@ -92,11 +86,11 @@ binding_starting_bar_pos = -0.45
 binding_starting_bar_width = 0.05
 binding_annotation_displacement = 0.04
 
+σ = 0.411
+μ = -0.914
 σ = 0.7122748076054343
 μ = -1.8521341528622541
 energy_distribution = LogNormal(μ, σ)
-#E_residue_correction = 0.20220637350676315
-E_residue_correction = 0.09447032127312861
 
 set_theme!(fontsize=20)
 f = Figure(size=(400, 300))
@@ -118,16 +112,20 @@ let
         trion, w, 
         k1_grid, [SA[0.0, 0.0]], ω_list, wfn(trion),
         broaden, 0.0
-    )[1, :], label="No Z(E)")
+    )[1, :], label=rich("Without ", rich("Z", rich("(", font=:regular), "E", rich(")", font=:regular), font=:italic), rich=:regular))
     
     lines!(ax, Ekin_COM_list, trion_ARPES_ehh(
         trion, w, 
         k1_grid, [SA[0.0, 0.0]], ω_list, wfn(trion),
         x -> pdf(energy_distribution, x),
         broaden, 0.0
-    )[1, :], label="With Z(E)")
+    )[1, :], label=rich("With ", rich("Z", rich("(", font=:regular), "E", rich(")", font=:regular), font=:italic), rich=:regular))
 
-    lines!(ax, Ekin_COM_list, map(x -> pdf(energy_distribution, x), Ekin_COM_list), label="Z(E)")
+    lines!(ax, Ekin_COM_list, map(x -> pdf(energy_distribution, x), Ekin_COM_list), 
+        label=rich("Z", rich("(", font=:regular), "E", rich(")", font=:regular), font=:italic),
+    )
+    
+    hidedecorations!(ax, ticks = false, ticklabels = false, label = false)
     axislegend(ax)
     
     save("ehh-display-very-compact-2-residue-energy-distribution-Ekin-COM.png", f)
