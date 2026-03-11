@@ -33,12 +33,12 @@ trion = Intervalley2DChandraTrion(
     w = w,
     E_g = E_g,
     # Binding energy for the ehh trion mode
-    # should be E_B = 0.59 = 2.67 - 2.08, 
+    # should be E_B = 0.59 = 2.67 - 2.08 according to the band gap and the trion frequency from Nat. Comm. 2017 Dec 14;8(1):2117., 
     # however, here we're using Diana's exciton energy band data, 
-    # the lowest exciton frequency at Q = 0 is 2.11 eV (run this script and the first line of console output is this number),
-    # and to maintain 2.13 - 2.08 = 0.05 eV difference between the lowest exciton mode and the trion mode,
-    # we need to manually shift 0.59 upwards by 2.13 - 2.11 = 0.02 eV.
-    E_B = 0.61,
+    # the lowest exciton frequency at Q = 0 is 2.06 eV (run this script and the first line of console output is this number; note that this is the energy of the lowest optically active exciton mode, i.e. the A1s-like mode, which corresponds to the second lowest mode in the exciton band in PRL 115, 176801 (2015), because the lowest mode is a dark exciton mode),
+    # and to maintain 2.13 - 2.08 = 0.05 eV (the former is again from Nat Comm. 2017 Dec 14;8(1):2117) difference between the lowest exciton mode and the trion mode in Nat Comm. 2017 Dec 14;8(1):2117,
+    # we need to manually shift 0.59 upwards by 2.13 - 2.06 = 0.07 eV.
+    E_B = 0.66,
     a = 10.3,
     b = 25.2
 )
@@ -120,11 +120,8 @@ eig_matrix_0 = hcat(all_eigs_0...)
 eig_matrix_K = hcat(all_eigs_K...) 
 
 # Scissor shifts for convergence 
-#shift = -0.0546272
-shift = 0 # The trion binding energy we use here should be lower than the exciton binding energy, 
-# so we have to use slightly unconverged exciton energies.
-# This can be solved by obtaining a better estimation of the trion energy
-# but I won't bother.
+shift = -0.0546272
+
 shift_2p_like = 0.0221814
 shift_2s_like = 0.0828396
 
