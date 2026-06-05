@@ -240,6 +240,8 @@ for iS in 1 : 200 # The index is in Avck, i.e. my fully spinor calculation
     append!(S_list_0_spinor, iS)
     append!(S_list_0_spinor, iS)
     
+    # First column: the index of the exciton mode after dark modes are removed.
+    # Second column: the index of the exciton mode in the original Avck. 
     @printf "%3i  %3i  %8.6f   %8.6f   \n" length(S_list_0_spinor) iS eig_matrix_0[length(S_list_0_spinor), 7] (2E_g - trion.E_B - eig_matrix_0[length(S_list_0_spinor), 7])
 end
 S_list_0 = 1 : length(S_list_0_spinor)
