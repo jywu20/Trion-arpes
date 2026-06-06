@@ -69,7 +69,7 @@ for iS in 1:30
 
         intensity_limit = maximum(abs.(Avck_overlap_trion))
         
-        ax = Axis(f[1, 1], title = string(intensity_limit))
+        ax = Axis(f[1, 1], title = string(abs2(sum(Avck_overlap_trion))))
         scatter!(ax, rk[1, :], rk[2, :], color=real.(Avck_overlap_trion), 
             colormap=cgrad(:balance),
             colorrange=(-intensity_limit, intensity_limit),
