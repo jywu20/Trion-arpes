@@ -77,10 +77,11 @@ The above two images are generated using the correct exciton wave function phase
 We note that the gray frequency-dependent figures in all figures above are *not* momentum-integrated.
 For momentum-integrated EDC, run [`eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-K-lots-of-bands-integrated.jl`](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-K-lots-of-bands-integrated.jl) to get 
 
-![eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-K-lots-of-bands-integrated.png](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-K-lots-of-bands-integrated.png)
+![](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-K-lots-of-bands-integrated.png)
 
 and run [`eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-Kp-lots-of-bands-integrated.jl`](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-Kp-lots-of-bands-integrated.jl) to get 
 
 ![](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-Kp-lots-of-bands-integrated.png)
 
 Note that the linear exciton bands give the momentum integrated EDC an asymmetric line shape.
+The dotted line symbolizing the line cut has been removed from the figures.

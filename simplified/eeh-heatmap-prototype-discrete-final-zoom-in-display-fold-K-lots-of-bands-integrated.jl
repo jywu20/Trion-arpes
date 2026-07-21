@@ -310,8 +310,20 @@ let f = Figure(size=(600, 400))
     
     lines!(ax1, kx_list, E_c1_curve, color=electron_color)
     lines!(ax1, kx_list, E_c2_curve, color=electron_color)
+    
+    kx_zoom_in_left = -0.08
+    kx_zoom_in_right = +0.08
+    ω_zoom_in_top = 2.2
+    ω_zoom_in_bottom = 1.45 
 
-    heatmap!(ax1, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
+    kx_zoom_in_idxs = findall(kx -> kx >= kx_zoom_in_left && kx <= kx_zoom_in_right, kx_list)
+    ω_zoom_in_idxs = findall(ω -> ω >= ω_zoom_in_bottom && ω <= ω_zoom_in_top, ω_list)
+    
+    Akω_total_zoom_in = Akω_total[:, :]
+    zoom_in_factor = 20
+    Akω_total_zoom_in[kx_zoom_in_idxs, ω_zoom_in_idxs] .= Akω_total[kx_zoom_in_idxs, ω_zoom_in_idxs] .* zoom_in_factor
+
+    heatmap!(ax1, kx_list, ω_list, Akω_total_zoom_in, colormap=arpes_colormap(transparency_gradience))
 
     kx_list_0 = LinRange(w_side-0.08, w_side+0.08, 100)
     for S in 1:11
@@ -337,6 +349,13 @@ let f = Figure(size=(600, 400))
     text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[1, :]), text="1s", align = (:center, :center), fontsize=15)
     text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[3, :]), text="2p", align = (:center, :center), fontsize=15)
     text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[4, :]), text="2s", align = (:center, :center), fontsize=15)
+    
+    
+    lines!(ax1, [kx_zoom_in_left, kx_zoom_in_right], [ω_zoom_in_bottom, ω_zoom_in_bottom], linestyle=:dash, color=:gray)
+    lines!(ax1, [kx_zoom_in_left, kx_zoom_in_right], [ω_zoom_in_top, ω_zoom_in_top], linestyle=:dash, color=:gray)
+    lines!(ax1, [kx_zoom_in_left, kx_zoom_in_left], [ω_zoom_in_bottom, ω_zoom_in_top], linestyle=:dash, color=:gray)
+    lines!(ax1, [kx_zoom_in_right, kx_zoom_in_right], [ω_zoom_in_bottom, ω_zoom_in_top], linestyle=:dash, color=:gray)
+    text!(ax1, kx_zoom_in_right, ω_zoom_in_bottom, text="×$zoom_in_factor", align = (:right, :bottom), fontsize=15)
     
     ax2 = Axis(f[2, 1],
         xlabel="Momentum (Å⁻¹)",
