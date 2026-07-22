@@ -42,3 +42,7 @@ we can run [`ehh-display-very-compact-2-residue-energy-distribution-ionization.j
 ![](ehh-display-very-compact-2-residue-energy-distribution-ionization.png)
 
 The downward shift of the trion signature due to the Z(E) factor, 0.197 eV, is also reported when running the script.
+Replacing the momentum line cuts by the momentum integrated EDC, 
+running the script [`ehh-display-very-compact-2-residue-energy-distribution-ionization-integrated.jl`](ehh-display-very-compact-2-residue-energy-distribution-ionization-integrated.jl), we get 
+
+![](ehh-display-very-compact-2-residue-energy-distribution-ionization-integrated.png)

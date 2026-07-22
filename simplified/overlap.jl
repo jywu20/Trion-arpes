@@ -2,6 +2,7 @@ include("wfn.jl")
 include("eeh.jl")
 include("exciton.jl")
 using HDF5
+using LinearAlgebra
 
 function read_ex_wfc(name::String, k_shift::SVector{3, Float64})
     fid_ex = h5open(name)

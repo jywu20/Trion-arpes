@@ -204,7 +204,7 @@ end
 ##########################################
 
 ω_list = LinRange(1.45, 2.8, 200) 
-kx_list = LinRange(w_side-0.3, w_side+0.3, 85) 
+kx_list = LinRange(-0.3, 0.3, 85) 
 k1_list = [SA[kx, 0.0] for kx in kx_list]
 
 E_v1_curve = map(k1_list) do k_h
@@ -243,10 +243,13 @@ for iS in 1 : 200 # The index is in Avck, i.e. my fully spinor calculation
     append!(S_list_0_spinor, iS)
     append!(S_list_0_spinor, iS)
     
+    # First column: the index of the exciton mode after dark modes are removed.
+    # Second column: the index of the exciton mode in the original Avck. 
     @printf "%3i  %3i  %8.6f   %8.6f   \n" length(S_list_0_spinor) iS eig_matrix_0[length(S_list_0_spinor), 7] (2E_g - trion.E_B - eig_matrix_0[length(S_list_0_spinor), 7])
 end
 S_list_0 = 1 : length(S_list_0_spinor)
 S_list_K = 1 : length(S_list_K_spinor)
+
 
 A1s_like = fetch_S(Avck, 2)
 A2p_like_1 = fetch_S(Avck, 8)
@@ -281,6 +284,7 @@ let f = Figure(size=(600, 400))
             # Therefore we just omit the 1/2 factor to avoid introducing non physical intensity difference
             # between the low and high excitons.
             (map(S_list_0_spinor) do iS
+                # sqrt(2) factor is due to the duplication of the Q=0 wave function mentioned above.
                 fetch_S(Avck, iS) / sqrt(2)
             end)...,
             (map(S_list_K_spinor) do iS
@@ -296,9 +300,7 @@ let f = Figure(size=(600, 400))
 
     ax1 = Axis(f[1, 1], 
         xlabel="Momentum (Å⁻¹)",
-        #xticks=([-0.2, 0.0, 0.2, w_side], ["K-0.2", "K", "K+0.2", "K'"]),
         #yticks=([2.5, 2.7, E_g], ["2.5", "2.7", "CBM"]),
-        #yticks=([2.1, 2.3, 2.5, 2.7], ["2.1", "2.3", "2.5", "2.7"]),
         yticks=([1.5, 2.0, 2.5, 3.0]),
         xtickalign = 1.0,
         ytickalign = 1.0,
@@ -308,18 +310,30 @@ let f = Figure(size=(600, 400))
     
     lines!(ax1, kx_list, E_c1_curve, color=electron_color)
     lines!(ax1, kx_list, E_c2_curve, color=electron_color)
+    
+    kx_zoom_in_left = -0.08
+    kx_zoom_in_right = +0.08
+    ω_zoom_in_top = 2.2
+    ω_zoom_in_bottom = 1.45 
 
-    heatmap!(ax1, kx_list, ω_list, Akω_total, colormap=arpes_colormap(transparency_gradience))
+    kx_zoom_in_idxs = findall(kx -> kx >= kx_zoom_in_left && kx <= kx_zoom_in_right, kx_list)
+    ω_zoom_in_idxs = findall(ω -> ω >= ω_zoom_in_bottom && ω <= ω_zoom_in_top, ω_list)
+    
+    Akω_total_zoom_in = Akω_total[:, :]
+    zoom_in_factor = 20
+    Akω_total_zoom_in[kx_zoom_in_idxs, ω_zoom_in_idxs] .= Akω_total[kx_zoom_in_idxs, ω_zoom_in_idxs] .* zoom_in_factor
+
+    heatmap!(ax1, kx_list, ω_list, Akω_total_zoom_in, colormap=arpes_colormap(transparency_gradience))
 
     kx_list_0 = LinRange(w_side-0.08, w_side+0.08, 100)
-    for S in 1:24
+    for S in 1:11
         ex = Homogeneous2DExciton(Q_length_list_0, eig_matrix_0[S, eachindex(Q_length_list_0)])
         lines!(ax1, kx_list_0, map(kx_list_0) do kx
             E_trion_eeh(trion, P) - E_exciton(ex, (P - @SVector [kx, 0]))
         end, color = colorant"darkorange", linestyle=:dash)
     end
     kx_list_K = LinRange(-0.08, 0.08, 100)
-    for S in S_list_K
+    for S in 1:12
         ex = Homogeneous2DExciton(Q_length_list_K, eig_matrix_K[S, eachindex(Q_length_list_K)], shift=w)
         lines!(ax1, kx_list_K, map(kx_list_K) do kx
             E_trion_eeh(trion, P) - E_exciton(ex, (P - @SVector [kx, 0]))
@@ -329,19 +343,25 @@ let f = Figure(size=(600, 400))
     ylims!(ax1, (minimum(ω_list), maximum(ω_list)))
     hidedecorations!(ax1, ticklabels = false, ticks = false, label=false)
     hidexdecorations!(ax1)
-    hideydecorations!(ax1, ticks = false)
     hidespines!(ax1, :b)
-    vlines!(ax1, w_side, linestyle=:dot, color=colorant"gray64")
+    #vlines!(ax1, 0, linestyle=:dot, color=colorant"gray64")
 
-    text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[1, :]) - 0.03, text="1s", align = (:center, :center), fontsize=15)
-    text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[3, :]) - 0.03, text="2p", align = (:center, :center), fontsize=15)
-    text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[4, :]) - 0.03, text="2s", align = (:center, :center), fontsize=15)
+    text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[1, :]), text="1s", align = (:center, :center), fontsize=15)
+    text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[3, :]), text="2p", align = (:center, :center), fontsize=15)
+    text!(ax1, maximum(kx_list) - 0.1, 2E_g - trion.E_B - minimum(eig_matrix_K[4, :]), text="2s", align = (:center, :center), fontsize=15)
+    
+    
+    lines!(ax1, [kx_zoom_in_left, kx_zoom_in_right], [ω_zoom_in_bottom, ω_zoom_in_bottom], linestyle=:dash, color=:gray)
+    lines!(ax1, [kx_zoom_in_left, kx_zoom_in_right], [ω_zoom_in_top, ω_zoom_in_top], linestyle=:dash, color=:gray)
+    lines!(ax1, [kx_zoom_in_left, kx_zoom_in_left], [ω_zoom_in_bottom, ω_zoom_in_top], linestyle=:dash, color=:gray)
+    lines!(ax1, [kx_zoom_in_right, kx_zoom_in_right], [ω_zoom_in_bottom, ω_zoom_in_top], linestyle=:dash, color=:gray)
+    text!(ax1, kx_zoom_in_right, ω_zoom_in_bottom, text="×$zoom_in_factor", align = (:right, :bottom), fontsize=15)
     
     ax2 = Axis(f[2, 1],
         xlabel="Momentum (Å⁻¹)",
-        xticks=([-0.2 + w_side, w_side, 0.2 + w_side], ["K'-0.2", "K'", "K'+0.2"]),
+        xticks=([-0.2, 0.0, 0.2, w_side], ["K-0.2", "K", "K+0.2", "K'"]),
         #yticks=([0], ["VBM"]),
-        yticks=([0], [""]),
+        yticks=([0], ["0"]),
         xtickalign = 1.0,
         ytickalign = 1.0,
     )
@@ -351,14 +371,13 @@ let f = Figure(size=(600, 400))
     ax2_ylim = (-0.1, 0.5)
     ylims!(ax2, ax2_ylim)
     hidedecorations!(ax2, ticklabels = false, ticks = false, label=false)
-    hideydecorations!(ax1, ticks = false)
     hidespines!(ax2, :t)
 
-    #Label(f[1:2, 1, Left()], "Energy (eV)", tellwidth=false, tellheight=false, rotation=π/2, padding=(0, 80, 0, 0))
+    Label(f[1:2, 1, Left()], "Energy (eV)", tellwidth=false, tellheight=false, rotation=π/2, padding=(0, 80, 0, 0))
 
 
     ax3 = Axis(f[1:2, 2])
-    ik_0 = argmin(abs.(kx_list .- w_side))
+    ik_0 = argmin(abs.(kx_list))
     hidedecorations!(ax3)
     hidespines!(ax3, :l)
 
@@ -382,7 +401,7 @@ let f = Figure(size=(600, 400))
 
     ylims!(ax3, (maximum(ω_list) - (maximum(ω_list) - minimum(ω_list)) * ax3_height / ax1_height, maximum(ω_list)))
 
-    lines!(ax3, Akω_total[ik_0, :], ω_list, color = colorant"gray64")
+    lines!(ax3, vec(sum(Akω_total, dims=1)), ω_list, color = colorant"gray64")
 
     x_left = ax2.elements[:xoppositeline][1][][1][1]
     x_right = ax2.elements[:xoppositeline][1][][2][1]
@@ -396,7 +415,7 @@ let f = Figure(size=(600, 400))
 
     Label(f[2, 2, Bottom()], "Intensity", padding=(0, 0, 0, 30), tellwidth=false, tellheight=false,)
 
-    save("eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-linecut-Kp-lots-of-bands.png", f)
+    save("eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-K-lots-of-bands-integrated.png", f)
 
     f
 end

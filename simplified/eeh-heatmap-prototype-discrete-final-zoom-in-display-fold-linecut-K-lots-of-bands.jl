@@ -192,11 +192,12 @@ Avck_A1s_bright = reshape(Avck_A1s_bright, (1, 1, length(Avck_A1s_bright), 1))
 println(size(Avck_A1s_bright))
 
 function fetch_S(Avck::Array{ComplexF64, 4}, iS::Int)
-    phase_factor = Avck[:, :, :, 2] ./ abs.(Avck[:, :, :, 2])
+    phase_factor  = Avck[:, :, :, 2] ./ abs.(Avck[:, :, :, 2])
     Avck_S = Avck[:, :, :, iS]
+    Avck_S ./= phase_factor
     Avck_S = Avck_S[1, 1, :] + Avck_S[1, 2, :]
-    A_vck_S = reshape(Avck_S, (1, 1, length(Avck_S), 1)) ./ phase_factor
-    A_vck_S ./ (A_vck_S[1] / abs(Avck_S[1]))
+    Avck_S = Avck_S ./ (Avck_S[1] / abs(Avck_S[1]))
+    reshape(Avck_S, (1, 1, length(Avck_S), 1)) 
 end
 
 #endregion 
@@ -237,9 +238,13 @@ for iS in 1 : 200 # The index is in Avck, i.e. my fully spinor calculation
     end
 
     append!(S_list_K_spinor, iS)
+    # The exciton energies given in the eigenval_0_like files have a double degeneracy,
+    # so we have to replicate the exciton wave function to match this.
     append!(S_list_0_spinor, iS)
     append!(S_list_0_spinor, iS)
     
+    # First column: the index of the exciton mode after dark modes are removed.
+    # Second column: the index of the exciton mode in the original Avck. 
     @printf "%3i  %3i  %8.6f   %8.6f   \n" length(S_list_0_spinor) iS eig_matrix_0[length(S_list_0_spinor), 7] (2E_g - trion.E_B - eig_matrix_0[length(S_list_0_spinor), 7])
 end
 S_list_0 = 1 : length(S_list_0_spinor)
@@ -279,6 +284,7 @@ let f = Figure(size=(600, 400))
             # Therefore we just omit the 1/2 factor to avoid introducing non physical intensity difference
             # between the low and high excitons.
             (map(S_list_0_spinor) do iS
+                # sqrt(2) factor is due to the duplication of the Q=0 wave function mentioned above.
                 fetch_S(Avck, iS) / sqrt(2)
             end)...,
             (map(S_list_K_spinor) do iS
