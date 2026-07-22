@@ -72,7 +72,8 @@ Run [`eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-linecut-K-lots-o
 
 Note that there are subtleties in how the peak heights are calculated, because the exciton wave function involves two bands in the output of QE and the phase correction is non-trivial.
 Run [`exciton-patch-overlap-0.jl`](exciton-patch-overlap-0.jl) to see the overlap matrix elements visualized.
-The above two images are generated using the correct exciton wave function phase correction scheme.
+The above two images are generated using the correct exciton wave function phase correction scheme,
+while images before them are generated using scripts with the wrong phase correction scheme.
 
 We note that the gray frequency-dependent figures in all figures above are *not* momentum-integrated.
 For momentum-integrated EDC, run [`eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-K-lots-of-bands-integrated.jl`](eeh-heatmap-prototype-discrete-final-zoom-in-display-fold-K-lots-of-bands-integrated.jl) to get 

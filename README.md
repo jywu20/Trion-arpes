@@ -1,1 +1,3 @@
-Please ignore all the other folders and go to the `simplified` folder to access code and data used for plotting figures in *What is the signature of a trion in ARPES?*
+To access code and data for figures in *Signature of a trion in ARPES*,
+go to the `simplified` folder.
+For posters, see `presentation`.
